@@ -1,0 +1,133 @@
+{
+  "project": "moye",
+  "idea": "Moye: a Duolingo-style adaptive learning app for neurodivergent (ADHD, dyslexia) and neurotypical kids. Mascot Moyin the honey badger. Free stack: Supabase, PWA, browser speech.",
+  "track": "web2",
+  "team": 1,
+  "event": {
+    "name": "LovHack Season 3 (Devpost) - https://lovhack-season-3.devpost.com/",
+    "start": null,
+    "end": null,
+    "tz": "WAT",
+    "submissionUrl": "https://lovhack-season-3.devpost.com/"
+  },
+  "limits": {
+    "videoMaxSeconds": 180,
+    "videoMinSeconds": 0,
+    "repoMustBePublic": true,
+    "requiresOssLicense": false,
+    "aiDisclosureRequired": false,
+    "maxTeam": 4,
+    "minTeam": 1,
+    "requiredLicense": null,
+    "source": "rules",
+    "videoTargetSeconds": 153
+  },
+  "sponsors": [],
+  "theme": "aurora",
+  "accent": "#F59E0B",
+  "illustrations": "none",
+  "source": "heuristic",
+  "unknown": [
+    "limits.maxTeam",
+    "limits.minTeam",
+    "limits.requiredLicense",
+    "limits.repoMustBePublic",
+    "limits.requiresOssLicense",
+    "limits.aiDisclosureRequired",
+    "event.tz",
+    "event.end",
+    "event.start",
+    "sponsors"
+  ],
+  "wedge": {
+    "title": "Moye",
+    "sector": "EdTech · adaptive learning for ADHD and neurotypical kids",
+    "target_user": "Kids 6-12 who lose focus or feel shame in timed, streak-punishing learning apps; plus the parent/teacher who has to explain progress",
+    "painful_moment": "A child with ADHD loses a streak, gets a buzzer sound and a sad mascot, and quits; the teacher has no plain-language view of where they struggle.",
+    "unusual_constraint": "Calm by design: no timers, no guilt, daily cap with a done-for-today screen, all voice and AI offline-capable at zero API cost",
+    "proof_metric": "TARGET (unmeasured): mastery model moves a learner to the right difficulty within 8 questions on committed fixtures",
+    "essential_sponsor": "none chosen yet",
+    "essential_sponsor_role": "Pick one in docs/BOUNTIES.md.",
+    "adversarial_critique": {
+      "why_generic_risk": "Nothing similar in our startup data; show one real user's problem in the first ten seconds.",
+      "obvious_competitor": "Doing it by hand: spreadsheets, calls and WhatsApp.",
+      "unprovable_claim_risk": "Claiming results beyond the committed test cases; report only what the fixtures measure.",
+      "superficial_sponsor_risk": "No sponsor chosen yet.",
+      "hour_8_kill_criterion": "By hour 8 one full Focus Mode lesson runs end to end with adaptive difficulty, honey reward and done-for-today screen."
+    },
+    "demand_signals": [],
+    "archetype": "consumer-app"
+  },
+  "moat": {
+    "score": 10,
+    "reasons": [
+      "proof 0 (no similar launched product in our startup data)",
+      "west-africa +4 (open, but demand unproven)",
+      "global +2 (no direct competitor in our data)",
+      "why-now +4 (recently practical capability)"
+    ],
+    "angles": [
+      "Voice and text in Yoruba, Hausa, Igbo and Pidgin, for users who do not read English well",
+      "Works offline on a low-cost Android phone and syncs when the network returns",
+      "An agent that finishes the task end to end, not a chat box that suggests"
+    ],
+    "proxies": [],
+    "local": [],
+    "sector": "Education & EdTech"
+  },
+  "upgrades": {
+    "source": "user",
+    "features": [
+      {
+        "feature": "Spark streaks with freezes and rest-day tokens, no guilt copy",
+        "why": "ADHD-friendly streak",
+        "build_hours": 2,
+        "demo_visible": true
+      },
+      {
+        "feature": "Focus Mode: one question at a time, progress bar not timer, Moyin body-double animation",
+        "why": "core ADHD design",
+        "build_hours": 3,
+        "demo_visible": true
+      },
+      {
+        "feature": "Adaptive difficulty via Bayesian knowledge tracing per skill, no AI call",
+        "why": "meets students where they are",
+        "build_hours": 3,
+        "demo_visible": true
+      },
+      {
+        "feature": "Honey economy: variable rewards, cosmetics for Moyin's hive, daily cap, done-for-today screen",
+        "why": "addictive without predatory",
+        "build_hours": 3,
+        "demo_visible": true
+      },
+      {
+        "feature": "Interest themes (dinosaurs, football) re-skin the same questions",
+        "why": "engagement",
+        "build_hours": 2,
+        "demo_visible": true
+      },
+      {
+        "feature": "Parent/teacher weekly plain-language report",
+        "why": "teacher experience",
+        "build_hours": 3,
+        "demo_visible": true
+      },
+      {
+        "feature": "Dyslexia-friendly toggle (Lexend/OpenDyslexic, spacing, reduced motion)",
+        "why": "accessibility",
+        "build_hours": 1,
+        "demo_visible": true
+      }
+    ]
+  },
+  "displayName": "Moye",
+  "proofSummary": {
+    "casesVerified": 0,
+    "driftCaught": 0,
+    "digests": [],
+    "track": "web2",
+    "details": "0 cases verified; drift caught: 0"
+  }
+}

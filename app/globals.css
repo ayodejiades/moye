@@ -1,0 +1,542 @@
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components";
+@source "../lib";
+
+/* Moye Calm Design System (docs/SPEC.md §4) */
+:root {
+  --plum-900: #2A1B4D;
+  --plum-700: #5B3A9E;
+  --plum-500: #7C5CC4;
+  --plum-100: #EFE9FA;
+  --honey-500: #F5A524;
+  --honey-700: #B36B00;
+  --teal-500: #2BB7A3;
+  --teal-700: #12786B;
+  --rose-400: #E88AA6;
+  --paper: #FBF8FF;
+
+  /* Theme mappings */
+  --bg: var(--paper);
+  --fg: var(--plum-900);
+  --fg-muted: #594875;
+  --surface: #FFFFFF;
+  --surface-raised: var(--plum-100);
+  --border: #D8CCE8;
+  --accent: var(--plum-700);
+  --accent-contrast: #FFFFFF;
+  --radius: 1.25rem;
+  --radius-sm: 0.75rem;
+
+  /* Typography */
+  --font-body-size: 20px;
+  --font-question-size: 28px;
+  --font-letter-spacing: normal;
+  --font-family: var(--font-lexend, system-ui, -apple-system, sans-serif);
+}
+
+  /* OpenDyslexic Web Font Definition */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/dist/OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/dist/OpenDyslexic-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Comprehensive Dyslexia Accommodations (SPEC.md §4 & §5.7, BDA Guidelines) */
+.dyslexic-mode {
+  --font-letter-spacing: 0.06em;
+  letter-spacing: 0.06em;
+  word-spacing: 0.28em;
+  line-height: 1.85 !important;
+  --font-family: 'OpenDyslexic', var(--font-lexend), Comic Sans MS, -apple-system, sans-serif;
+  font-family: 'OpenDyslexic', var(--font-lexend), Comic Sans MS, -apple-system, sans-serif !important;
+
+  /* Anti-glare soothing tint (Irlen / Visual Stress relief) */
+  --paper: #FAF7EE;
+  --surface: #FFFDF8;
+  --border: #DFD3BF;
+  --plum-900: #22143D;
+  --plum-700: #523194;
+  --plum-100: #F3ECE0;
+}
+
+.font-opendyslexic,
+.font-opendyslexic * {
+  font-family: 'OpenDyslexic', var(--font-lexend), Comic Sans MS, -apple-system, sans-serif !important;
+}
+
+.font-lexend,
+.font-lexend * {
+  font-family: var(--font-lexend), system-ui, -apple-system, sans-serif;
+}
+
+.dyslexic-mode * {
+  letter-spacing: inherit;
+  word-spacing: inherit;
+}
+
+.dyslexic-mode h1,
+.dyslexic-mode h2,
+.dyslexic-mode h3,
+.dyslexic-mode p,
+.dyslexic-mode span,
+.dyslexic-mode button {
+  line-height: 1.85 !important;
+}
+
+/* Ensure headings do not clump with overly heavy ink weight */
+.dyslexic-mode h1,
+.dyslexic-mode h2,
+.dyslexic-mode h3 {
+  font-weight: 600 !important;
+  text-wrap: balance !important;
+}
+
+/* Card surfaces under dyslexia mode: warm, low-glare */
+.dyslexic-mode .bg-white {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+/* Option cards under dyslexia mode: left-aligned, clear borders, soothing contrast */
+.dyslexic-mode .btn-3d-card {
+  background-color: #FFFDF8 !important;
+  border-color: #D8CCA8 !important;
+  box-shadow: 0 4px 0 #D8CCA8 !important;
+}
+
+.dyslexic-mode .btn-3d-card:hover:not(:disabled) {
+  background-color: #F8F1DF !important;
+  border-color: var(--plum-500) !important;
+  box-shadow: 0 4px 0 var(--plum-500) !important;
+}
+
+.dyslexic-mode .btn-3d-card.selected {
+  background-color: #F5ECD4 !important;
+  border-color: var(--plum-700) !important;
+  box-shadow: 0 4px 0 var(--plum-700) !important;
+}
+
+/* Visual Stress Tints (Irlen / Scotopic relief) */
+.tint-cream {
+  --paper: #FAF7EE !important;
+  --surface: #FFFDF8 !important;
+  --border: #DFD3BF !important;
+}
+
+.tint-peach {
+  --paper: #FDF3EB !important;
+  --surface: #FFFBF7 !important;
+  --border: #E8D3C3 !important;
+}
+
+.tint-mint {
+  --paper: #EFF7F3 !important;
+  --surface: #F8FCF9 !important;
+  --border: #C8DFD4 !important;
+}
+
+.tint-sky {
+  --paper: #EFF5FA !important;
+  --surface: #F8FAFD !important;
+  --border: #C8D7E8 !important;
+}
+
+/* Interactive Reading Ruler / Focus Guide */
+.reading-ruler-guide {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  pointer-events: none;
+  background: rgba(245, 165, 36, 0.16);
+  border-top: 2px solid rgba(179, 107, 0, 0.6);
+  border-bottom: 2px solid rgba(179, 107, 0, 0.6);
+  border-radius: 8px;
+  transition: top 0.12s ease-out, height 0.12s ease-out;
+  z-index: 0;
+}
+
+/* Synchronized Karaoke Word Highlighting */
+.karaoke-word-active {
+  background-color: rgba(245, 165, 36, 0.38) !important;
+  color: var(--plum-900) !important;
+  border-radius: 4px;
+  padding: 1px 4px;
+  box-shadow: 0 1px 2px rgba(245, 165, 36, 0.25);
+  transition: background-color 0.08s ease;
+  display: inline-block;
+}
+
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-white: #ffffff;
+  --color-plum-900: var(--plum-900);
+  --color-plum-700: var(--plum-700);
+  --color-plum-500: var(--plum-500);
+  --color-plum-100: var(--plum-100);
+  --color-honey-500: var(--honey-500);
+  --color-honey-700: var(--honey-700);
+  --color-teal-500: var(--teal-500);
+  --color-teal-700: var(--teal-700);
+  --color-rose-400: var(--rose-400);
+  --color-paper: var(--paper);
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--plum-900);
+  font-size: var(--font-body-size);
+  line-height: 1.6;
+  font-family: var(--font-family);
+  letter-spacing: var(--font-letter-spacing);
+}
+
+button {
+  color: inherit;
+}
+
+/* 3D Chunky Buttons (SPEC.md §4) — explicit white text beats the
+   `button { color: inherit }` reset above, even when a text-* utility
+   only sets a parent colour. Direct text node inherits from the button. */
+.btn-3d-plum,
+.btn-3d-teal,
+.btn-3d-honey {
+  color: #FFFFFF !important;
+}
+.btn-3d-plum *,
+.btn-3d-teal *,
+.btn-3d-honey * {
+  color: inherit;
+}
+
+/* 3D Chunky Buttons (SPEC.md §4) */
+.btn-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 1rem;
+  min-height: 56px;
+  padding: 0.75rem 1.75rem;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 transparent !important;
+}
+
+.btn-3d-sm,
+.btn-3d-header {
+  min-height: 36px !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: 0.625rem !important;
+  box-shadow: 0 3px 0 var(--plum-900) !important;
+}
+
+.btn-3d-sm:active:not(:disabled),
+.btn-3d-header:active:not(:disabled) {
+  transform: translateY(2px) !important;
+  box-shadow: 0 0 0 transparent !important;
+}
+
+.btn-3d-plum {
+  background-color: var(--plum-700);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 var(--plum-900);
+}
+.btn-3d-plum:hover:not(:disabled) {
+  background-color: var(--plum-500);
+}
+
+.btn-3d-honey {
+  background-color: var(--honey-500);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 var(--honey-700);
+}
+.btn-3d-honey:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.btn-3d-teal {
+  background-color: var(--teal-500);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 var(--teal-700);
+}
+.btn-3d-teal:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.btn-3d-card {
+  background-color: #FFFFFF;
+  color: var(--plum-900);
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 0 var(--border);
+}
+.btn-3d-card:hover:not(:disabled) {
+  background-color: var(--plum-100);
+  border-color: var(--plum-500);
+  box-shadow: 0 4px 0 var(--plum-500);
+}
+.btn-3d-card.selected {
+  background-color: var(--plum-100);
+  border-color: var(--plum-700);
+  box-shadow: 0 4px 0 var(--plum-700);
+}
+
+/* =========================================================================
+   DUOLINGO-INSPIRED CHUNKY & SPRINGY MOTION SYSTEM (docs/SPEC.md §4)
+   Gentle, tactile, springy, respecting prefers-reduced-motion.
+   ========================================================================= */
+
+@keyframes duo-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes duo-speech-pop {
+  0% {
+    transform: scale(0.92) translateY(4px);
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(1.03) translateY(-2px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes duo-wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes duo-spark-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+    filter: drop-shadow(0 2px 8px rgba(245, 165, 36, 0.4));
+  }
+}
+
+@keyframes duo-burst-float-1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-2deg);
+  }
+}
+
+@keyframes duo-burst-float-2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(8deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(14deg);
+  }
+}
+
+@keyframes duo-burst-float-3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(-4deg);
+  }
+}
+
+@keyframes duo-peep {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Moyin leaping/traversing across the phone screens (Duolingo playful mascot motion) */
+@keyframes duo-mascot-traverse {
+  0% {
+    /* Screen 1: peeking behind phone 1 */
+    left: 4%;
+    top: 32%;
+    transform: scale(0.95) rotate(-14deg);
+    opacity: 1;
+    z-index: 5;
+  }
+  20% {
+    /* Leaping out of phone 1 over the gap */
+    left: 20%;
+    top: 14%;
+    transform: scale(1.1) rotate(6deg) translateY(-24px);
+    opacity: 1;
+    z-index: 30;
+  }
+  28% {
+    /* Land & peek behind Phone 2 */
+    left: 31%;
+    top: 36%;
+    transform: scale(0.95) rotate(-6deg);
+    opacity: 1;
+    z-index: 5;
+  }
+  48% {
+    /* Leap from Phone 2 to Phone 3 */
+    left: 48%;
+    top: 16%;
+    transform: scale(1.15) rotate(12deg) translateY(-30px);
+    opacity: 1;
+    z-index: 30;
+  }
+  56% {
+    /* Peek behind Phone 3 */
+    left: 61%;
+    top: 38%;
+    transform: scale(0.95) rotate(10deg);
+    opacity: 1;
+    z-index: 5;
+  }
+  76% {
+    /* Leap to Phone 4 */
+    left: 76%;
+    top: 18%;
+    transform: scale(1.1) rotate(-8deg) translateY(-24px);
+    opacity: 1;
+    z-index: 30;
+  }
+  84% {
+    /* Peek behind Phone 4 */
+    left: 88%;
+    top: 32%;
+    transform: scale(0.95) rotate(16deg);
+    opacity: 1;
+    z-index: 5;
+  }
+  94% {
+    /* Leap back across canvas */
+    left: 50%;
+    top: 8%;
+    transform: scale(0.85) rotate(-10deg) translateY(-36px);
+    opacity: 0.9;
+    z-index: 30;
+  }
+  100% {
+    left: 4%;
+    top: 32%;
+    transform: scale(0.95) rotate(-14deg);
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+.duo-moye-traveller {
+  animation: duo-mascot-traverse 14s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: left, top, transform;
+}
+.duo-moye-traveller:hover {
+  animation-play-state: paused;
+}
+
+/* Mascot floating idle movement */
+.duo-mascot-float {
+  animation: duo-float 3.6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.duo-burst-item-1 {
+  animation: duo-burst-float-1 3.2s ease-in-out infinite;
+}
+
+.duo-burst-item-2 {
+  animation: duo-burst-float-2 4.1s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+.duo-burst-item-3 {
+  animation: duo-burst-float-3 3.7s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+.duo-phone-peep {
+  animation: duo-peep 3.5s ease-in-out infinite;
+}
+
+/* Speech bubble bounce-in and float */
+.duo-speech-bubble {
+  animation: duo-speech-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Interactive bouncy card hover */
+.duo-card-hover {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.2s ease;
+}
+.duo-card-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* Subtle sparkle animation */
+.duo-sparkle {
+  animation: duo-spark-pulse 2.4s ease-in-out infinite;
+}
+
+/* Duolingo Wiggle on hover for pills & illustrations */
+.duo-hover-wiggle:hover {
+  animation: duo-wiggle 0.4s ease-in-out;
+}
+
+/* Respect prefers-reduced-motion as required by SPEC.md */
+@media (prefers-reduced-motion: reduce) {
+  .duo-mascot-float,
+  .duo-speech-bubble,
+  .duo-sparkle,
+  .duo-hover-wiggle,
+  .duo-burst-item-1,
+  .duo-burst-item-2,
+  .duo-burst-item-3,
+  .duo-phone-peep {
+    animation: none !important;
+  }
+  .duo-card-hover:hover {
+    transform: none !important;
+  }
+}
+
