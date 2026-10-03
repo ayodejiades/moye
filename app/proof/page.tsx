@@ -2,7 +2,7 @@
 
 import { ComfortButton } from "@/components/comfort-button";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { updatePKnown, simulateStudentTrace } from "@/lib/mastery";
 import { calculateStreakUpdate } from "@/lib/streak";
@@ -71,7 +71,12 @@ export default function HowMoyeDecidesPage() {
   // ==========================================
   // LIVE INVARIANT AUDIT SUITE
   // ==========================================
-  const [auditTimestamp, setAuditTimestamp] = useState<number>(() => Date.now());
+  // null on the server and on the first browser render so both match; set once mounted.
+  const [auditTimestamp, setAuditTimestamp] = useState<number | null>(null);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the clock only exists in the browser
+    setAuditTimestamp(Date.now());
+  }, []);
   const [isRunningAudit, setIsRunningAudit] = useState<boolean>(false);
 
   function triggerAudit() {
@@ -815,7 +820,7 @@ export default function HowMoyeDecidesPage() {
           </div>
 
           <div className="text-xs font-mono text-[var(--fg-muted)] flex items-center justify-between pt-1">
-            <span>Last audit verification timestamp: {new Date(auditTimestamp).toISOString()}</span>
+            <span>Last audit verification timestamp: {auditTimestamp === null ? "checking" : new Date(auditTimestamp).toISOString()}</span>
             <span className="text-teal-700 font-bold">All 4 Invariants Green</span>
           </div>
         </section>

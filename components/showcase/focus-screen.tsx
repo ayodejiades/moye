@@ -42,7 +42,7 @@ export function FocusScreen({
             type="button"
             data-demo="showcase-read-aloud"
             onClick={onReadAloud}
-            className={`px-2 py-1 min-h-11 rounded-md border flex items-center gap-1 text-xs font-semibold transition-colors ${
+            className={`px-2 py-1 min-h-11 shrink-0 whitespace-nowrap rounded-md border flex items-center gap-1 text-xs font-semibold transition-colors ${
               isSpeaking
                 ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                 : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
@@ -70,7 +70,7 @@ export function FocusScreen({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 gap-2">
         {countQuestion.options.map((opt) => {
           const isSelected = countPick === opt.id;
           const cls = isSelected
@@ -85,7 +85,7 @@ export function FocusScreen({
               data-demo={opt.isCorrect ? "showcase-answer-right" : "showcase-answer-wrong"}
               aria-pressed={isSelected}
               onClick={() => onPickCount(opt.id)}
-              className={`min-h-12 py-2 px-1 rounded-xl border-2 font-bold text-base leading-tight text-center transition-transform active:translate-y-1 flex items-center justify-center ${cls}`}
+              className={`min-h-12 py-2 px-3 rounded-xl border-2 font-bold text-base leading-tight text-center transition-transform active:translate-y-1 flex items-center justify-center ${cls}`}
             >
               {opt.text}
             </button>

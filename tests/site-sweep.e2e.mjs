@@ -78,6 +78,30 @@ function sweep(atBottom) {
     if (fs < 12 && !seen.has("fs" + key)) { seen.add("fs" + key); problems.push(`TINY ${fs}px ${lab(el)}`); }
   }
 
+  // 4b. text cut off by its own box (overflow hidden with no way to scroll)
+  for (const el of document.querySelectorAll("body *")) {
+    if (!visible(el) || el.closest("svg, [aria-hidden=true], .sr-only") || ![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+    const cs = getComputedStyle(el);
+    const clipX = /hidden|clip/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 2 && cs.textOverflow !== "ellipsis";
+    const clipY = /hidden|clip/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 2 && cs.display !== "inline";
+    if (clipX || clipY) problems.push(`CLIPPED ${lab(el)} (${el.scrollWidth}x${el.scrollHeight} inside ${el.clientWidth}x${el.clientHeight})`);
+  }
+
+  // 4c. headings, paragraphs and buttons inside a centred block that sit off centre
+  for (const c of document.querySelectorAll("section, main div")) {
+    if (c.closest("header, footer, nav") || getComputedStyle(c).textAlign !== "center" || !visible(c)) continue;
+    const cr = c.getBoundingClientRect(); if (cr.width < 200) continue;
+    for (const k of c.querySelectorAll(":scope > h1, :scope > h2, :scope > p, :scope > a, :scope > button")) {
+      if (!visible(k)) continue;
+      const r = k.getBoundingClientRect();
+      // Controls that share a row are centred as a group, so judge the group.
+      const row = [...c.children].filter((o) => { if (!visible(o)) return false; const q = o.getBoundingClientRect(); return Math.abs(q.top - r.top) < 6 || (q.top < r.bottom && q.bottom > r.top); });
+      const left = Math.min(...row.map((o) => o.getBoundingClientRect().left)), right = Math.max(...row.map((o) => o.getBoundingClientRect().right));
+      const off = Math.abs((left + right) / 2 - (cr.left + cr.width / 2));
+      if (off > 8) problems.push(`OFFCENTRE ${lab(k)} is ${Math.round(off)}px off the middle of its centred block`);
+    }
+  }
+
   // 5. sideways scroll
   const over = document.documentElement.scrollWidth - innerWidth;
   if (over > 0) problems.push(`SCROLLX page is ${over}px wider than the screen`);
@@ -86,12 +110,17 @@ function sweep(atBottom) {
 
 const SKIP_CLICK = /continue|start|sign|create|unlock|buy|reset|delete|leave|stop|begin|save|skip|check|next|submit|finish|done|try|open|close|comfort|pause|resume|print|copy|install/i;
 let failures = 0;
+const linkStatus = new Map();
 const browser = await chromium.launch();
 for (const viewport of VIEWPORTS) {
   const context = await browser.newContext({ viewport });
   for (const path of PAGES) {
     const page = await context.newPage();
     const tag = `${viewport.width}px ${path}`;
+    const errors = [];
+    page.on("console", (m) => m.type() === "error" && errors.push(`console error: ${m.text().slice(0, 140)}`));
+    page.on("pageerror", (e) => errors.push(`page error: ${String(e).slice(0, 140)}`));
+    page.on("response", (r) => { if (r.status() >= 400 && r.url().startsWith(BASE)) errors.push(`HTTP ${r.status()} ${r.url().replace(BASE, "")}`); });
     try {
       await page.goto(BASE + path, { waitUntil: "networkidle", timeout: 25000 });
       await page.waitForTimeout(1200);
@@ -111,10 +140,18 @@ for (const viewport of VIEWPORTS) {
         if (SKIP_CLICK.test(name) || !(await t.isVisible())) continue;
         await t.scrollIntoViewIfNeeded().catch(() => {});
         await t.click({ timeout: 1500 }).catch(() => {});
-        await page.waitForTimeout(150);
+        await page.mouse.move(0, 0);
+        await page.waitForTimeout(500);
         problems.push(...(await page.evaluate(sweep, false)).filter((p) => p.startsWith("CONTRAST") || p.startsWith("OVERLAP") || p.startsWith("COVERED")));
       }
 
+      // Every internal link on the page must resolve.
+      const hrefs = await page.$$eval("a[href^='/']", (as) => [...new Set(as.map((a) => a.getAttribute("href")))]);
+      for (const href of hrefs) {
+        if (!linkStatus.has(href)) linkStatus.set(href, (await page.request.get(BASE + href).catch(() => ({ status: () => 0 }))).status());
+        if (linkStatus.get(href) >= 400 || linkStatus.get(href) === 0) problems.push(`DEADLINK ${href} -> ${linkStatus.get(href)}`);
+      }
+      problems.push(...errors);
       problems = [...new Set(problems)];
       if (problems.length) { failures += problems.length; console.log(`FAIL ${tag}`); problems.slice(0, 12).forEach((p) => console.log(`   ${p}`)); }
       else console.log(`ok   ${tag}`);
@@ -124,6 +161,27 @@ for (const viewport of VIEWPORTS) {
     await page.close();
   }
   await context.close();
+}
+// The Comfort settings switches must each change something you can see.
+{
+  const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
+  await page.goto(BASE + "/learn", { waitUntil: "networkidle" });
+  await page.waitForTimeout(800);
+  await page.getByRole("button", { name: /comfort settings/i }).first().click();
+  await page.waitForTimeout(400);
+  const dialog = page.getByRole("dialog");
+  const buttons = await dialog.getByRole("button").all();
+  const snap = () => page.evaluate(() => JSON.stringify({ html: document.documentElement.className, fs: getComputedStyle(document.documentElement).fontSize, body: getComputedStyle(document.body).fontFamily + getComputedStyle(document.body).letterSpacing + getComputedStyle(document.body).backgroundColor + getComputedStyle(document.body).fontSize, ls: localStorage.getItem("moye_a11y_settings") }));
+  for (const btn of buttons) {
+    const name = ((await btn.textContent()) || "").trim().replace(/\s+/g, " ").slice(0, 30);
+    if (!name || /close|done|listen|sample|active/i.test(name) || (await btn.getAttribute("aria-pressed")) === "true" || !(await btn.isVisible())) continue;
+    const before = await snap();
+    await btn.click({ timeout: 1500 }).catch(() => {});
+    await page.waitForTimeout(250);
+    if ((await snap()) === before) { failures++; console.log(`FAIL settings switch "${name}" changes nothing you can see or save`); }
+    await btn.click({ timeout: 1500 }).catch(() => {}); // put it back
+  }
+  console.log("checked the Comfort settings switches");
 }
 await browser.close();
 console.log(failures ? `\n${failures} problem(s)` : "\nNo overlaps, contrast failures, tiny text or sideways scroll on any screen");
