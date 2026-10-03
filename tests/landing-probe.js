@@ -85,7 +85,7 @@
 
   // R11 hero mascot really scales up on large screens (inline width used to beat sm:w-[500px])
   const mascot = document.querySelector("button[aria-label*='Moyin']");
-  if (mascot) { const w = mascot.getBoundingClientRect().width; add("R11 hero mascot width scales with viewport", "P1", innerWidth < 768 || w >= 480, `mascot ${Math.round(w)}px wide at ${innerWidth}px viewport (want 480 or more from 768px up)`); }
+  if (mascot) { const w = mascot.getBoundingClientRect().width; add("R11 hero mascot is compact on large screens", "P1", innerWidth < 640 || (w >= 260 && w <= 420), `mascot ${Math.round(w)}px wide at ${innerWidth}px viewport (want 260 to 420 from 640px up: big enough to read, small enough to stay clear of the buttons)`); }
   else add("R11 hero mascot found", "P1", false, "no button with aria-label containing Moyin");
 
   // R12 layout shift
