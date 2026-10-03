@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { getQuestionsForLevel } from "@/lib/lesson-bank";
+import { getQuestionsForLevel, SKILL_TITLES } from "@/lib/lesson-bank";
 import { renderQuestion } from "@/lib/theme-resolver";
 import { updatePKnown, type MasteryUpdateResult } from "@/lib/mastery";
 import { computeHoneyReward, type HoneyRewardResult } from "@/lib/honey";
@@ -12,6 +12,8 @@ import { useAccessibility, type VoiceLanguage } from "@/lib/accessibility-contex
 import { AccessibilitySheet } from "@/components/accessibility-sheet";
 import { useMoyeStore } from "@/lib/moye-store";
 import { playChime } from "@/lib/audio";
+import { scaffoldForQuestion } from "@/lib/scaffolding";
+import { WorkedExamplePanel } from "@/components/worked-example";
 import {
   speakMultilingualText,
   getLocalizedQuestionContent,
@@ -83,6 +85,9 @@ function LessonPlayerContent() {
   const [mascotPose, setMascotPose] = useState<MoyinPose>("body-double");
   const [paused, setPaused] = useState(false);
   const [latestReward, setLatestReward] = useState<HoneyRewardResult | null>(null);
+  // Skills this child has already worked through together. Once a skill is on this list
+  // its steps are taken away (features.md B5).
+  const [skillsWithExample, setSkillsWithExample] = useState<string[]>([]);
 
   const currentRawQ = questionQueue[currentIndex] ?? levelQuestions[0];
   // renderQuestion is pure: memoize so renderedQ.options keeps a stable identity
@@ -96,6 +101,17 @@ function LessonPlayerContent() {
   const activePromptText = localizedContent.prompt;
   const activeHintText = localizedContent.hint;
   const isReviewQuestion = retakeIds.includes(currentRawQ.id);
+
+  const scaffold = scaffoldForQuestion({
+    tier: currentRawQ.tier,
+    prompt: activePromptText,
+    readAloud: localizedContent.readAloud || activePromptText,
+    answer: renderedQ.options.find((o) => o.isCorrect)?.text ?? "",
+    hint: activeHintText,
+    alreadySeenSkill: skillsWithExample.includes(currentRawQ.skillId),
+  });
+  const [exampleSeen, setExampleSeen] = useState(false);
+  const showWorkedExample = scaffold.example !== null && !exampleSeen;
 
   const isLastInQueue = currentIndex >= questionQueue.length - 1;
   const isLevelCompleted =
@@ -271,6 +287,7 @@ function LessonPlayerContent() {
     setHintVisible(false);
     setLatestReward(null);
     setMascotPose("body-double");
+    setExampleSeen(false);
     setCurrentIndex((prev) => prev + 1);
   }, [currentIndex, questionQueue.length, completeLevelAndUnlockNext, activeLevelId, router]);
 
@@ -579,6 +596,20 @@ function LessonPlayerContent() {
                   </div>
                 )}
               </div>
+
+              {/* One worked example before the child tries alone (features.md B5) */}
+              {showWorkedExample && scaffold.example && (
+                <WorkedExamplePanel
+                  example={scaffold.example}
+                  skillTitle={SKILL_TITLES[currentRawQ.skillId] ?? "this skill"}
+                  onContinue={() => {
+                    setSkillsWithExample((prev) =>
+                      prev.includes(currentRawQ.skillId) ? prev : [...prev, currentRawQ.skillId],
+                    );
+                    setExampleSeen(true);
+                  }}
+                />
+              )}
 
               {/* Gentle Hint Box on Mistake */}
               {hintVisible && (

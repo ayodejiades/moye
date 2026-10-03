@@ -883,12 +883,7 @@ export const LESSON_BANK_VERSION: string = (() => {
  * Human titles for each level, in one place so /learn, /start and the placement
  * summary all name a level the same way.
  */
-export const SKILL_TITLES: Record<string, string> = {
-  s1: "Counting and Stories",
-  s2: "Money and Snacks",
-  s3: "Bundles of Ten",
-  s4: "Shapes and Patterns",
-};
+
 
 /** Skill id behind each level, so a level can seed or schedule its own mastery. */
 export const LEVEL_SKILL_IDS: Record<string, string> = {
@@ -896,6 +891,25 @@ export const LEVEL_SKILL_IDS: Record<string, string> = {
   s2: "money-simple",
   s3: "place-value-tens",
   s4: "shapes-geometry",
+};
+
+/**
+ * Skill id to title, for every skill in the bank. Used wherever a skill is named in
+ * front of a child, so a skill is never shown as a raw id.
+ */
+export const SKILL_TITLES: Record<string, string> = {
+  "count-within-10": "Counting to 10",
+  "money-simple": "Money and Snacks",
+  "place-value-tens": "Bundles of Ten",
+  "shapes-geometry": "Shapes and Patterns",
+};
+
+/** Level id to title. Placement names a level, the learning path names the same levels. */
+export const LEVEL_TITLES: Record<string, string> = {
+  s1: "Counting and Stories",
+  s2: "Money and Snacks",
+  s3: "Bundles of Ten",
+  s4: "Shapes and Patterns",
 };
 
 export function getQuestionsForLevel(levelId: string): Question[] {

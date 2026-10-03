@@ -12,7 +12,7 @@
  * placed by a different rule than the one that will teach them. All pure functions.
  */
 
-import { LEVEL_BANKS, SKILL_TITLES } from "./lesson-bank";
+import { LEVEL_BANKS, LEVEL_TITLES } from "./lesson-bank";
 import { updatePKnown, DEFAULT_BKT_PARAMS } from "./mastery";
 import type { Question } from "./content-schema";
 
@@ -96,7 +96,7 @@ export function scorePlacement(answers: PlacementAnswer[], totalRungs = 3): Plac
   return {
     rung,
     startingLevelId,
-    startingLevelTitle: SKILL_TITLES[startingLevelId] ?? "Counting and Stories",
+    startingLevelTitle: LEVEL_TITLES[startingLevelId] ?? "Counting and Stories",
     masterySeed: seedMasteryFromPlacement(answers),
     skillsMeasured: new Set(answers.map((a) => a.skillId)).size,
     allCorrect: answers.length > 0 && answers.every((a) => a.isCorrect),
