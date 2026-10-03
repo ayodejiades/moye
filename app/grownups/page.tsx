@@ -1,6 +1,7 @@
 "use client";
 
 import { ComfortButton } from "@/components/comfort-button";
+import { CopySummaryButton } from "@/components/copy-summary-button";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -116,16 +117,29 @@ export default function GrownupsReportPage() {
                 How {child.name} is learning this week
               </h1>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                if (typeof window !== "undefined") window.print();
-              }}
-              className="btn-3d btn-3d-plum text-xs py-2 px-4 self-start sm:self-auto flex items-center gap-2"
-            >
-              <PrinterIcon size={16} />
-              <span>Print Report</span>
-            </button>
+            <div className="flex flex-col items-start gap-2 sm:items-end">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined") window.print();
+                }}
+                className="btn-3d btn-3d-plum text-base flex items-center gap-2"
+              >
+                <PrinterIcon size={16} />
+                <span>Print Report</span>
+              </button>
+              {/* Copy only: no email, no send, nothing leaves the device (features.md B9) */}
+              <CopySummaryButton
+                summary={{
+                  childName: child.name,
+                  strongSkills: child.strongSkills,
+                  growingSkills: child.growingSkills,
+                  focusMinutes: child.focusDurationMin,
+                  sparks: child.sparks,
+                  curriculum: child.theme === "Dinosaurs" ? "Nigeria UBE" : "England National Curriculum",
+                }}
+              />
+            </div>
           </div>
 
           {/* Key Indicators in Plain Words */}
