@@ -17,6 +17,7 @@ import { ComfortButton } from "@/components/comfort-button";
 import { Reveal } from "@/components/reveal";
 import { InViewFloat } from "@/components/inview-float";
 import { DecisionPreview } from "@/components/decision-preview";
+import { HeroTryQuestion } from "@/components/hero-try-question";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -205,6 +206,13 @@ export default function LandingPage() {
             <HeroMascotInteractive />
           </div>
         </section>
+
+        {/* One real, answerable question, right here (features.md C1) */}
+        <Reveal>
+          <div className="px-6 pb-16 flex justify-center">
+            <HeroTryQuestion />
+          </div>
+        </Reveal>
 
         {/* Curriculum strip */}
         <Reveal>
