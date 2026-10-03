@@ -47,6 +47,9 @@ export interface MoyeAppState {
 
 export const LEVEL_SEQUENCE = ["s1", "s2", "s3", "s4"];
 
+/** Reading levels follow the maths ones (features.md B1, SPEC 6.3 priority 2). */
+export const READING_LEVEL_SEQUENCE = ["r1", "r2", "r3", "r4"];
+
 const STORAGE_KEY = "moye_global_state_v2";
 
 export const DEFAULT_PROFILES: UserProfile[] = [
@@ -80,7 +83,7 @@ const DEFAULT_STATE: MoyeAppState = {
   profiles: DEFAULT_PROFILES,
   honeyBalance: 15,
   streakDays: 4,
-  unlockedLevels: ["s1"],
+  unlockedLevels: ["s1", "r1"],
   completedLevels: [],
   currentLevelId: "s1",
   equippedHat: null,

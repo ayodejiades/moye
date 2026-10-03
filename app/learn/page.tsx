@@ -17,6 +17,7 @@ import {
   CoinIcon,
   BundleBoxIcon,
   DinoShapesIcon,
+  BookshelfIcon,
   HoneyDropIcon,
   LockIcon,
   CheckIcon,
@@ -32,10 +33,14 @@ interface SkillNode {
 }
 
 const SKILL_NODES: SkillNode[] = [
-  { id: "s1", levelNumber: 1, title: "Counting & Stories", subtitle: "Count fossil stones (15 questions)", Icon: StarIcon },
-  { id: "s2", levelNumber: 2, title: "Money & Snacks", subtitle: "Spend plantain chips coins (15 questions)", Icon: CoinIcon },
-  { id: "s3", levelNumber: 3, title: "Bundles of Ten", subtitle: "Place value tens & ones (15 questions)", Icon: BundleBoxIcon },
-  { id: "s4", levelNumber: 4, title: "Dino Shapes", subtitle: "Symmetry & 2D blocks (15 questions)", Icon: DinoShapesIcon },
+  { id: "s1", levelNumber: 1, title: "Counting and Stories", subtitle: "Counting to 10", Icon: StarIcon },
+  { id: "s2", levelNumber: 2, title: "Money and Snacks", subtitle: "Money and prices", Icon: CoinIcon },
+  { id: "s3", levelNumber: 3, title: "Bundles of Ten", subtitle: "Tens and ones", Icon: BundleBoxIcon },
+  { id: "s4", levelNumber: 4, title: "Shapes and Patterns", subtitle: "Symmetry and blocks", Icon: DinoShapesIcon },
+  { id: "r1", levelNumber: 5, title: "First Sounds", subtitle: "Letter sounds", Icon: BookshelfIcon },
+  { id: "r2", levelNumber: 6, title: "Blending Sounds", subtitle: "Putting sounds together", Icon: BookshelfIcon },
+  { id: "r3", levelNumber: 7, title: "Sight Words and Rhyme", subtitle: "Words you just know", Icon: BookshelfIcon },
+  { id: "r4", levelNumber: 8, title: "Syllables and Sentences", subtitle: "Reading a short sentence", Icon: BookshelfIcon },
 ];
 
 /** Mascot encouragement lines based on progress */
@@ -118,8 +123,8 @@ export default function LearnPathPage() {
           {/* Unit Progress Header Card */}
           <div className="bg-white rounded-2xl border-2 border-[var(--border)] p-4 sm:p-6 flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">Unit 1</span>
-              <h1 className="text-xl font-bold mt-0.5">Early Numbers & Money</h1>
+              <span className="text-xs font-bold text-[var(--fg-muted)]">Maths and reading</span>
+              <h1 className="text-xl font-bold mt-0.5">Early Numbers, then First Sounds</h1>
               <p className="text-xs text-[var(--fg-muted)] mt-1">
                 {completedCount} of {SKILL_NODES.length} levels mastered
               </p>

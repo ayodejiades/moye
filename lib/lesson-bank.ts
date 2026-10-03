@@ -1,4 +1,5 @@
 import { type Question, type Skill } from "./content-schema";
+import { READING_BANKS } from "./reading-bank";
 
 export const LEVEL_1_QUESTIONS: Question[] = [
   {
@@ -910,10 +911,23 @@ export const LEVEL_TITLES: Record<string, string> = {
   s2: "Money and Snacks",
   s3: "Bundles of Ten",
   s4: "Shapes and Patterns",
+  r1: "First Sounds",
+  r2: "Blending and Hearing Sounds",
+  r3: "Sight Words and Rhyme",
+  r4: "Syllables and Sentences",
 };
 
+/**
+ * Questions for a level, maths or reading. Reading levels (r1 to r4) live in their own
+ * bank so a child who moves from counting to reading keeps the same lesson player.
+ */
 export function getQuestionsForLevel(levelId: string): Question[] {
-  return LEVEL_BANKS[levelId] || LEVEL_1_QUESTIONS;
+  return LEVEL_BANKS[levelId] || READING_BANKS[levelId] || LEVEL_1_QUESTIONS;
+}
+
+/** True when the level is a reading level rather than a maths one. */
+export function isReadingLevel(levelId: string): boolean {
+  return Boolean(READING_BANKS[levelId]);
 }
 
 export const SAMPLE_MATH_QUESTIONS: Question[] = LEVEL_1_QUESTIONS;
