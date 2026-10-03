@@ -61,12 +61,14 @@ function add(group: string, id: string, claim: string, expected: unknown, actual
 // ---------------------------------------------------------------- mastery
 for (const c of MASTERY_CASES) {
   let p = c.startPKnown;
-  let last = null as ReturnType<typeof updatePKnown> | null;
-  for (const answer of c.answers) {
+  // An empty answer list has no outcome to check, so it is a broken fixture, not a pass.
+  if (c.answers.length === 0) fail(`${c.id}: fixture has no answers`);
+  let last = updatePKnown(c.startPKnown, c.answers[0]);
+  p = last.newPKnown;
+  for (const answer of c.answers.slice(1)) {
     last = updatePKnown(p, answer);
     p = last.newPKnown;
   }
-  if (!last) fail(`${c.id}: no answers`);
   add("Difficulty", c.id, c.claim, c.expectedPKnown, last.newPKnown, c.rationale);
   add("Difficulty", `${c.id}-tier`, `${c.claim} (tier)`, c.expectedTier, last.recommendedTier, c.rationale);
   add("Difficulty", `${c.id}-zone`, `${c.claim} (zone)`, c.expectedZone, last.zone, c.rationale);
