@@ -2,6 +2,9 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import {
+  CalmFocusIllustration,
+  AdaptiveMasteryIllustration,
+  HoneyRewardsIllustration,
   NeurodiversityIllustration,
   DuoStayMotivatedIllustration,
 } from "@/components/ui/svg-icons";
@@ -10,8 +13,6 @@ import { InteractiveAppShowcase } from "@/components/interactive-showcase";
 import { ComfortButton } from "@/components/comfort-button";
 import { Reveal } from "@/components/reveal";
 import { InViewFloat } from "@/components/inview-float";
-import { DecisionPreview } from "@/components/decision-preview";
-import { HeroTryQuestion } from "@/components/hero-try-question";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -191,22 +192,15 @@ export default function LandingPage() {
           {/* Solid plum ground: full bleed arc flush with the section edges */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-52 sm:h-64 bg-[var(--plum-900)] rounded-[50%_50%_0_0/100%_100%_0_0]" />
 
-          {/* Mascot Scene: tall enough for the 560px mascot plus its card, and stacked
+          {/* Mascot Scene: tall enough for the mascot plus its card, and stacked
               below the copy so it can never cover or block the call to action. */}
           <div
             style={step(3)}
-            className="hero-enter relative w-full max-w-5xl mx-auto mt-4 sm:mt-6 h-[440px] sm:h-[540px] md:h-[580px] flex items-end justify-center select-none overflow-visible z-0"
+            className="hero-enter relative w-full max-w-5xl mx-auto mt-4 sm:mt-6 h-[320px] sm:h-[360px] flex items-end justify-center select-none overflow-visible z-0"
           >
             <HeroMascotInteractive />
           </div>
         </section>
-
-        {/* One real, answerable question, right here (features.md C1) */}
-        <Reveal>
-          <div className="px-6 pb-16 flex justify-center">
-            <HeroTryQuestion />
-          </div>
-        </Reveal>
 
         {/* Curriculum strip */}
         <Reveal>
@@ -233,9 +227,48 @@ export default function LandingPage() {
           </div>
         </Reveal>
 
-        {/* Two stories the interactive showcase below does not cover */}
+        {/* Five stories, alternating two column rows */}
         <section className="max-w-5xl mx-auto px-6 py-20">
           <div className="space-y-24">
+            <Reveal>
+              <div className="flex flex-col md:flex-row items-center gap-12">
+                <div className="flex-1 flex justify-center">
+                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
+                    <CalmFocusIllustration size={160} />
+                  </div>
+                </div>
+                <div className="flex-1 space-y-4 text-center md:text-left">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
+                    Short, calm lessons. No timer, no panic.
+                  </h2>
+                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
+                    Many apps rush children with a clock and a buzzer. Moye shows one gentle question at a time, with
+                    big tap targets and no guilt.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal>
+              <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+                <div className="flex-1 flex justify-center">
+                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
+                    <AdaptiveMasteryIllustration size={160} />
+                  </div>
+                </div>
+                <div className="flex-1 space-y-4 text-center md:text-left">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
+                    Meets each child where they are.
+                  </h2>
+                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
+                    Plain code, not a chatbot, decides the difficulty. After every answer Moye checks what the child
+                    has understood and picks the next question: gentle support when stuck, a fresh challenge when
+                    thriving.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
             <Reveal>
               <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 flex justify-center">
@@ -257,6 +290,26 @@ export default function LandingPage() {
 
             <Reveal>
               <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+                <div className="flex-1 flex justify-center">
+                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
+                    <HoneyRewardsIllustration size={160} />
+                  </div>
+                </div>
+                <div className="flex-1 space-y-4 text-center md:text-left">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
+                    Earn honey drops for Moyin&apos;s cozy hive.
+                  </h2>
+                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
+                    Children earn honey only for finished focus work. They spend it on an acorn cap, a knitted scarf,
+                    a honeycomb crown, or a friendly bee to keep Moyin company. A daily cap tells them when they are
+                    done for today.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal>
+              <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 flex justify-center">
                   <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
                     <NeurodiversityIllustration size={160} />
@@ -281,9 +334,6 @@ export default function LandingPage() {
         </Reveal>
 
         {/* One real result from the model, recomputed on the page (features.md C4) */}
-        <Reveal>
-          <DecisionPreview />
-        </Reveal>
 
         {/* Bottom Call to Action */}
         <section className="max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center gap-6">
@@ -374,39 +424,17 @@ export default function LandingPage() {
                 </Link>
               </li>
               <li>
-                <Link href="/proof" className="inline-flex items-center min-h-11 hover:underline">
-                  How Moye Decides
-                </Link>
-              </li>
-              <li>
                 <span className="inline-flex items-center min-h-11">No ads, no tracking</span>
               </li>
-            </ul>
-          </div>
-          <div className="space-y-2">
-            <span className="font-bold text-[var(--plum-900)] text-sm block">Transparency</span>
-            <ul className="space-y-1">
               <li>
-                <span className="inline-flex items-center min-h-11">Rules written in plain code</span>
-              </li>
-              <li>
-                <span className="inline-flex items-center min-h-11">No Countdown Timers</span>
-              </li>
-              <li>
-                <Link
-                  href="/proof"
-                  className="inline-flex items-center min-h-11 hover:underline font-bold text-[var(--plum-700)]"
-                >
-                  How Moye Decides
-                </Link>
+                <span className="inline-flex items-center min-h-11">No countdown timers</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto border-t border-[var(--border)] mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-bold">Moye. Open, free, and calm learning.</span>
-          <span>Made with care for every curious mind</span>
+        <div className="max-w-6xl mx-auto border-t border-[var(--border)] mt-8 pt-6 flex items-center justify-center gap-4">
+          <span>&copy; 2026 Moye</span>
         </div>
       </footer>
     </div>

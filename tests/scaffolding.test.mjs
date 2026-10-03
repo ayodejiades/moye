@@ -6,6 +6,7 @@ import {
   exampleIntro,
   shouldShowSteps,
   SUPPORTED_TIERS,
+  pickExampleSource,
 } from "../lib/scaffolding.ts";
 
 const base = {
@@ -81,4 +82,20 @@ test("[B5] steps are hidden when there is nothing to show", () => {
   const empty = scaffoldForQuestion({ ...base, hint: "" });
   assert.equal(empty.level, "full", "still an example");
   assert.equal(shouldShowSteps(empty), false, "but no empty steps panel");
+});
+
+test("[B5] the worked example is never the question the child is about to answer", () => {
+  const qs = [
+    { id: "a", skillId: "count", tier: 1 },
+    { id: "b", skillId: "count", tier: 1 },
+    { id: "c", skillId: "money", tier: 1 },
+    { id: "d", skillId: "count", tier: 2 },
+  ];
+  for (const current of qs) {
+    const pick = pickExampleSource(qs, current);
+    assert.notEqual(pick?.id, current.id, "must never reuse the current question");
+    if (pick) assert.equal(pick.skillId, current.skillId, "same skill so the idea carries over");
+  }
+  assert.equal(pickExampleSource(qs, qs[2]), null, "a skill with a single question gets no example, not a leaked answer");
+  assert.equal(pickExampleSource(qs, qs[3])?.id, "b", "prefers a same or easier tier, furthest from the current one");
 });

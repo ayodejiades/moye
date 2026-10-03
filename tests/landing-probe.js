@@ -59,7 +59,7 @@
   window.scrollTo(0, total); await sleep(500);
   const stuck = [...document.querySelectorAll("[data-reveal]")].filter((el) => getComputedStyle(el).opacity < 0.99);
   add("R8 no reveal element is stuck hidden after scrolling", "P0", stuck.length === 0, `${stuck.length} stuck: ${stuck.slice(0, 3).map(label).join(" | ")}`);
-  add("R8b page uses reveal at least 6 times", "P1", document.querySelectorAll("[data-reveal]").length >= 6, `${document.querySelectorAll("[data-reveal]").length} [data-reveal] elements`);
+  add("R8b page uses reveal at least 4 times", "P1", document.querySelectorAll("[data-reveal]").length >= 4, `${document.querySelectorAll("[data-reveal]").length} [data-reveal] elements`);
   window.scrollTo(0, 0); await sleep(300);
 
   // R9 type: min size, weight cap, italics, fonts

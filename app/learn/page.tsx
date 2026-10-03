@@ -105,9 +105,12 @@ export default function LearnPathPage() {
               <span aria-hidden="true" className="text-sm leading-none font-semibold">Aa</span>
               <span className="hidden sm:inline text-sm">{dyslexicFont ? "On" : "Comfortable reading"}</span>
             </button>
-            {/* Grown-ups */}
-            <Link href="/grownups" className="text-xs font-bold text-[var(--plum-700)] hover:underline hidden sm:block">
-              Grown-ups
+            {/* Grownups */}
+            <Link
+              href="/grownups"
+              className="hidden sm:inline-flex items-center min-h-11 px-3 rounded-lg border border-[var(--border)] bg-white text-sm font-semibold text-[var(--plum-700)] hover:bg-[var(--plum-100)] transition-colors"
+            >
+              Grownups
             </Link>
             <ComfortButton />
           </div>

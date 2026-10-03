@@ -82,32 +82,30 @@ export function HeroMascotInteractive() {
 
   return (
     <div ref={rootRef} data-inview={inView ? "true" : "false"} className="relative z-10 flex flex-col items-center select-none">
-      {/* Live region: always mounted so screen readers announce each greeting. */}
-      <div role="status" aria-live="polite" className="absolute -top-16 sm:-top-20 md:-top-24 z-30 pointer-events-none">
-        {bubble && (
-          <div className="duo-speech-bubble relative bg-white border-2 border-[var(--border)] rounded-2xl shadow-xl px-4 py-3 max-w-[260px] sm:max-w-sm text-center">
-            <p className="text-sm font-semibold text-[var(--plum-900)] leading-snug">{bubble}</p>
-            <div className="absolute left-1/2 -bottom-2 -translate-x-1/2 w-4 h-4 bg-white border-b-2 border-r-2 border-[var(--border)] rotate-45" />
-          </div>
-        )}
-      </div>
-
       <button
         type="button"
         onClick={greet}
         aria-label="Hear Moyin say hello"
-        className="relative z-20 -mb-6 sm:-mb-8 md:-mb-10 active:translate-y-1 transition-transform duration-200 cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--honey-500)] rounded-2xl"
+        className="relative z-20 -mb-6 sm:-mb-8 active:translate-y-1 transition-transform duration-200 cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--honey-500)] rounded-2xl"
       >
         <MoyinPeeking
           pose={pose}
-          className="w-[min(360px,88vw)] sm:w-[500px] md:w-[560px] drop-shadow-2xl"
+          className="w-[min(240px,70vw)] sm:w-[300px] drop-shadow-xl"
         />
       </button>
 
-      <div className="w-76 sm:w-96 md:w-[460px] rounded-3xl bg-white border-2 border-[var(--border)] shadow-[0_14px_32px_rgba(42,27,77,0.16)] px-4 pb-4 pt-10 sm:px-6 sm:pb-6 sm:pt-12 md:pt-16 text-center relative z-10">
+      <div className="w-72 sm:w-96 rounded-3xl bg-white border-2 border-[var(--border)] shadow-[0_14px_32px_rgba(42,27,77,0.16)] px-4 pb-4 pt-8 sm:px-6 sm:pb-6 sm:pt-10 text-center relative z-10">
         <div className="text-lg font-bold text-balance text-[var(--plum-900)]">calm learning, one step at a time</div>
         <p className="text-sm text-[var(--fg-muted)] mt-1 font-medium text-pretty">No rush. No timers. No shame.</p>
-        <p className="text-sm text-[var(--fg-muted)] mt-2 text-pretty">Tap Moyin to hear a hello.</p>
+        {/* Greeting shows here, inside the card, so it can never cover the buttons above. */}
+        <p
+          key={bubble ?? "hint"}
+          role="status"
+          aria-live="polite"
+          className={`text-sm mt-2 text-pretty min-h-12 ${bubble ? "duo-speech-bubble font-semibold text-[var(--plum-900)]" : "text-[var(--fg-muted)]"}`}
+        >
+          {bubble ?? "Tap Moyin to hear a hello."}
+        </p>
         {/* Sound is off until it is asked for (features.md C5). The label always states
             which way the switch is, so it is never a mystery tap. */}
         <button

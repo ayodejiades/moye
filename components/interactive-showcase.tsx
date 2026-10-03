@@ -10,7 +10,7 @@ import {
   StarIcon,
 } from "@/components/ui/svg-icons";
 import { TABS, type ShowcaseTabId } from "./showcase/showcase-tabs";
-import { renderQuestion, THEME_ORDER, LENS_LOCALES, LOCALES, THEMES } from "@/lib/theme-resolver";
+import { renderQuestion } from "@/lib/theme-resolver";
 import { LEVEL_BANKS } from "@/lib/lesson-bank";
 import { StoryCard, UnderTheHoodCard } from "./showcase/story-cards";
 import { FocusScreen } from "./showcase/focus-screen";
@@ -75,25 +75,12 @@ export function InteractiveAppShowcase() {
   const { dyslexicFont, setDyslexicFont } = useAccessibility();
   const [activeTab, setActiveTab] = useState<ShowcaseTabId>("focus");
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [moneyPick, setMoneyPick] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [pKnown, setPKnown] = useState(0.74);
   const [hat, setHat] = useState<string | null>("hat-acorn");
   const [scarf, setScarf] = useState<string | null>(null);
-  // The demo switches (features.md C2 and C3). These re-skin the same question template
-  // through the real resolver, so what the visitor sees is what the app would serve.
-  const [demoTheme, setDemoTheme] = useState<string>("dinosaurs");
-  const [demoLens, setDemoLens] = useState<string>("ng-ube");
-
-  // Two real questions from the committed bank, both rendered through the real resolver
-  // with whatever theme and locale the visitor picked. Nothing here is typed by hand.
-  // The counting question carries the theme slots, so the theme switch visibly re-skins
-  // it. The money question carries the currency slot, so the curriculum switch visibly
-  // changes the money. The bank keeps theme words and currency in separate levels, so
-  // both are needed to show both switches honestly.
-  const localeId = LENS_LOCALES[demoLens] ?? "en-NG";
-  const demo = renderQuestion(LEVEL_BANKS.s1[0], demoTheme, localeId);
-  const money = renderQuestion(LEVEL_BANKS.s2[0], demoTheme, localeId);
+  // One real question from the committed bank, rendered through the real resolver.
+  const demo = renderQuestion(LEVEL_BANKS.s1[0], "dinosaurs", "en-NG");
 
   useEffect(() => {
     if (!isSpeaking || !("speechSynthesis" in window)) return;
@@ -129,47 +116,6 @@ export function InteractiveAppShowcase() {
         <p className="text-sm sm:text-base text-[var(--fg-muted)] max-w-xl font-medium">
           Try four parts of Moye: calm lessons, difficulty that adjusts, honey rewards, and plain reports for grownups.
         </p>
-
-        {/* The same question, re-skinned. Aligned to these curricula, never official. */}
-        <div className="flex flex-wrap items-center justify-center gap-2" data-demo="showcase-switchers">
-          {THEME_ORDER.map((id) => (
-            <button
-              key={id}
-              type="button"
-              data-demo={`showcase-theme-${id}`}
-              aria-pressed={demoTheme === id}
-              onClick={() => setDemoTheme(id)}
-              className={`text-sm font-semibold px-3 min-h-11 inline-flex items-center gap-2 rounded-lg border transition-colors ${
-                demoTheme === id
-                  ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
-                  : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
-              }`}
-            >
-              {THEMES[id]?.name ?? id}
-            </button>
-          ))}
-          <span aria-hidden="true" className="text-[var(--border)] px-1">|</span>
-          {["ng-ube", "england-nc", "common-core"].map((id) => {
-            const locale = LOCALES[LENS_LOCALES[id]];
-            return (
-              <button
-                key={id}
-                type="button"
-                data-demo={`showcase-lens-${id}`}
-                aria-pressed={demoLens === id}
-                onClick={() => setDemoLens(id)}
-                className={`text-sm font-semibold px-3 min-h-11 inline-flex items-center gap-1 rounded-lg border transition-colors ${
-                  demoLens === id
-                    ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
-                    : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
-                }`}
-              >
-                <span>{locale?.country ?? id}</span>
-                <span aria-hidden="true">{locale?.currencySymbol}</span>
-              </button>
-            );
-          })}
-        </div>
 
         {/* Real tab semantics: arrow keys move, only the selected tab is in the tab order. */}
         <div
@@ -238,14 +184,10 @@ export function InteractiveAppShowcase() {
             {activeTab === "focus" && (
               <FocusScreen
                 countQuestion={demo}
-                moneyQuestion={money}
-                localeName={LOCALES[localeId]?.country ?? "your country"}
                 countPick={selectedOptionId}
-                moneyPick={moneyPick}
                 isSpeaking={isSpeaking}
                 onReadAloud={() => setIsSpeaking(true)}
                 onPickCount={setSelectedOptionId}
-                onPickMoney={setMoneyPick}
               />
             )}
             {activeTab === "mastery" && (

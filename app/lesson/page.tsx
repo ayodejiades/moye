@@ -12,7 +12,7 @@ import { useAccessibility, type VoiceLanguage } from "@/lib/accessibility-contex
 import { AccessibilitySheet } from "@/components/accessibility-sheet";
 import { useMoyeStore } from "@/lib/moye-store";
 import { playChime } from "@/lib/audio";
-import { scaffoldForQuestion } from "@/lib/scaffolding";
+import { scaffoldForQuestion, pickExampleSource } from "@/lib/scaffolding";
 import { WorkedExamplePanel } from "@/components/worked-example";
 import {
   speakMultilingualText,
@@ -103,13 +103,28 @@ function LessonPlayerContent() {
   const activeHintText = localizedContent.hint;
   const isReviewQuestion = retakeIds.includes(currentRawQ.id);
 
+  // The worked example is a DIFFERENT question of the same skill, never the one the child is
+  // about to answer (that would show them the answer). No second question, no example.
+  const exampleSource = pickExampleSource(levelQuestions, currentRawQ);
+  const renderedExample = useMemo(
+    () => (exampleSource ? renderQuestion(exampleSource, theme, locale) : null),
+    [exampleSource, theme, locale],
+  );
+  const localizedExample = exampleSource && renderedExample
+    ? getLocalizedQuestionContent(exampleSource.id, narrationLanguage, {
+        prompt: renderedExample.prompt,
+        hint: renderedExample.hint,
+        readAloud: renderedExample.readAloud,
+      })
+    : null;
+
   const scaffold = scaffoldForQuestion({
     tier: currentRawQ.tier,
-    prompt: activePromptText,
-    readAloud: localizedContent.readAloud || activePromptText,
-    answer: renderedQ.options.find((o) => o.isCorrect)?.text ?? "",
-    hint: activeHintText,
-    alreadySeenSkill: skillsWithExample.includes(currentRawQ.skillId),
+    prompt: localizedExample?.prompt ?? "",
+    readAloud: localizedExample ? localizedExample.readAloud || localizedExample.prompt : "",
+    answer: renderedExample?.options.find((o) => o.isCorrect)?.text ?? "",
+    hint: localizedExample?.hint ?? "",
+    alreadySeenSkill: skillsWithExample.includes(currentRawQ.skillId) || !localizedExample,
   });
   const [exampleSeen, setExampleSeen] = useState(false);
   const showWorkedExample = scaffold.example !== null && !exampleSeen;
@@ -401,23 +416,23 @@ function LessonPlayerContent() {
       <AccessibilitySheet />
 
       {/* Top Header: Progress Bar (15 Questions), Pause, A11y, Honey */}
-      <header className="w-full max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-4 border-b border-[var(--border)]">
+      <header className="w-full max-w-4xl mx-auto px-6 py-3 flex items-center justify-between gap-4 border-b border-[var(--border)]">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setPaused(!paused)}
-            className="rounded-xl border border-[var(--border)] bg-white px-3 py-1.5 text-sm font-semibold text-[var(--plum-900)] hover:bg-[var(--plum-100)] cursor-pointer"
+            className="h-9 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--plum-900)] hover:bg-[var(--plum-100)] cursor-pointer"
           >
             {paused ? "Resume" : "Pause"}
           </button>
           <button
             type="button"
             onClick={handleLeave}
-            className="rounded-xl border border-[var(--border)] bg-white px-3 py-1.5 min-h-11 text-sm font-semibold text-[var(--plum-900)] hover:bg-[var(--plum-100)] cursor-pointer"
+            className="h-9 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--plum-900)] hover:bg-[var(--plum-100)] cursor-pointer"
           >
             Stop for now
           </button>
-          <span className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
+          <span className="text-xs font-semibold text-[var(--fg-muted)]">
             Focus Mode
           </span>
         </div>

@@ -4,7 +4,6 @@ import { ComfortButton } from "@/components/comfort-button";
 import { PlacementQuiz, PlacementSummary } from "@/components/placement-quiz";
 import { useUiLanguage } from "@/lib/ui-language-context";
 import { CONTENT_LENSES, CONTENT_LOCALES, LOCALE_BY_LENS } from "@/lib/content.generated";
-import { UI_LANGUAGES } from "@/lib/ui-strings";
 import { LEVEL_SEQUENCE } from "@/lib/moye-store";
 import { levelsToUnlock, type PlacementResult } from "@/lib/placement";
 
@@ -65,7 +64,7 @@ export default function StartPage() {
   const [loginPasscode, setLoginPasscode] = useState("");
   const [loginRole, setLoginRole] = useState<"learner" | "teacher">("learner");
   const [placement, setPlacement] = useState<PlacementResult | null>(null);
-  const { language, strings, setLanguage } = useUiLanguage();
+  const { strings } = useUiLanguage();
 
   /** Skipping placement is a first class choice, not a failure: start at level one. */
   const handleStartLearning = (startingLevelId = "s1") => {
@@ -147,27 +146,6 @@ export default function StartPage() {
           >
             Sign In
           </button>
-        </div>
-
-        {/* Choose the words on screen, separate from the narration voice (features.md B8) */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-[var(--fg-muted)]">Words on screen</span>
-          {UI_LANGUAGES.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              data-demo={`ui-lang-${option.id}`}
-              aria-pressed={language === option.id}
-              onClick={() => setLanguage(option.id)}
-              className={`text-xs font-semibold px-3 min-h-11 inline-flex items-center rounded-lg border transition-colors ${
-                language === option.id
-                  ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
-                  : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
         </div>
 
         {/* ==================== SIGN UP FLOW ==================== */}

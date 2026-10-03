@@ -5,45 +5,31 @@ import { MoyinMascot } from "@/components/moyin-mascot";
 import { step } from "./step";
 
 /**
- * The Focus tab screen (features.md C2 and C3).
- *
- * Both questions come from the committed lesson bank and are rendered by the real
- * resolver, so the theme and curriculum switches above show exactly what the app would
- * serve: the counting question carries the theme words, the money question carries the
- * currency. A slip gets a gentle retry, never a buzzer.
+ * The Focus tab screen. The question comes from the committed lesson bank and is rendered
+ * by the real resolver. A slip gets a gentle retry, never a buzzer.
  */
 export function FocusScreen({
   countQuestion,
-  moneyQuestion,
-  localeName,
   countPick,
-  moneyPick,
   isSpeaking,
   onReadAloud,
   onPickCount,
-  onPickMoney,
 }: {
   countQuestion: { prompt: string; options: { id: string; text: string; isCorrect: boolean }[] };
-  moneyQuestion: { prompt: string; options: { id: string; text: string; isCorrect: boolean }[] };
-  localeName: string;
   countPick: string | null;
-  moneyPick: string | null;
   isSpeaking: boolean;
   onReadAloud: () => void;
   onPickCount: (id: string) => void;
-  onPickMoney: (id: string) => void;
 }) {
   const countAnswer = countQuestion.options.find((o) => o.isCorrect)?.text ?? "";
-  const moneyAnswer = moneyQuestion.options.find((o) => o.isCorrect)?.text ?? "";
   const countCorrect = countPick !== null && countQuestion.options.find((o) => o.id === countPick)?.isCorrect === true;
-  const moneyCorrect = moneyPick !== null && moneyQuestion.options.find((o) => o.id === moneyPick)?.isCorrect === true;
   const pose: "body-double" | "cheer" | "think" =
     countPick === null ? "body-double" : countCorrect ? "cheer" : "think";
 
   return (
     <div className="p-4 flex-1 flex flex-col justify-between gap-3 overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-bold text-[var(--fg-muted)]">Question 1 of 5, aligned to {localeName}</span>
+        <span className="text-xs font-bold text-[var(--fg-muted)]">Question 1 of 5</span>
         <div className="w-full h-2 bg-[var(--plum-100)] overflow-hidden">
           <div className="h-full bg-[var(--teal-500)] w-[20%]" />
         </div>
@@ -105,46 +91,6 @@ export function FocusScreen({
             </button>
           );
         })}
-      </div>
-
-      {/* Same money question in the chosen curriculum's currency (features.md C3) */}
-      <div className="p-3 bg-white rounded-2xl border-2 border-[var(--border)] flex flex-col gap-2">
-        <span className="text-xs font-bold text-[var(--fg-muted)]">Money, using {localeName} money</span>
-        <p
-          key={moneyQuestion.prompt}
-          className="pop-in text-sm font-semibold text-[var(--plum-900)] text-pretty"
-        >
-          {moneyQuestion.prompt}
-        </p>
-        <div className="grid grid-cols-3 gap-2">
-          {moneyQuestion.options.map((opt) => {
-            const isSelected = moneyPick === opt.id;
-            const cls = isSelected
-              ? opt.isCorrect
-                ? "bg-[var(--teal-500)] border-[var(--teal-700)] text-white"
-                : "bg-[var(--rose-400)] border-[var(--rose-400)] text-[var(--plum-900)]"
-              : "bg-[var(--paper)] border-[var(--border)] text-[var(--plum-900)]";
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                data-demo={opt.isCorrect ? "showcase-money-right" : "showcase-money-wrong"}
-                aria-pressed={isSelected}
-                onClick={() => onPickMoney(opt.id)}
-                className={`h-11 rounded-lg border-2 font-bold text-sm transition-colors ${cls}`}
-              >
-                {opt.text}
-              </button>
-            );
-          })}
-        </div>
-        <p aria-live="polite" className="text-xs font-bold text-[var(--plum-900)]">
-          {moneyPick === null
-            ? "Tap an amount to try."
-            : moneyCorrect
-              ? `Spot on. ${moneyAnswer} is right.`
-              : "Almost. Try the other amount."}
-        </p>
       </div>
 
       {/* Feedback is announced, and a wrong answer is gentle: no shake, no buzzer. */}

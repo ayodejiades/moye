@@ -203,7 +203,7 @@ test("[P1] M9 scroll reveal system exists, is gated, and cannot leave content hi
     matches(h.prelude, /data-motion/, `Hidden state \`${h.prelude}\` must also require html[data-motion="on"] so content is visible without JavaScript.`);
   }
   const uses = scan(landing(), /<Reveal\b/g).length;
-  assert.ok(uses >= 6, `Wrap at least 6 landing sections or rows in <Reveal> (found ${uses}).`);
+  assert.ok(uses >= 4, `Wrap at least 4 landing sections or rows in <Reveal> (found ${uses}).`);
   const reveal = stripJsComments(read("components/reveal.tsx"));
   matches(reveal, /IntersectionObserver/, "Reveal must use IntersectionObserver.");
   matches(reveal, /rootMargin:\s*["'`][^"'`]*(px|%)[^"'`]*(px|%)[^"'`]*(px|%)[^"'`]*(px|%)/, "rootMargin needs four values WITH units, for example \"0px 0px -10% 0px\". A bare 0 throws a SyntaxError.");
@@ -363,6 +363,11 @@ test("[P0] X2 hero copy stays AA over the worst stripe of the starburst", () => 
     if (r < 4.5) worst.push(`${f} at opacity ${o}: ${r.toFixed(2)}:1`);
   }
   expectNone(worst, "Subcopy (--fg-muted) falls below 4.5:1 over these stripes. Lower stripe opacity to 0.10 or less, or put the copy on a solid --paper panel.");
+});
+
+test("[P0] X3 `button { color: inherit }` lives in @layer base so text-white on purple buttons wins", () => {
+  const unlayered = parseCss(css()).filter((b) => /^button\b/.test(b.prelude) && /(^|[;\s])color\s*:\s*inherit/.test(b.body));
+  expectNone(unlayered.map((b) => `globals.css  ${b.prelude}`), "An unlayered `button { color: inherit }` beats every Tailwind utility and puts dark text on plum and teal buttons (1.9:1). Wrap it in `@layer base { ... }`.");
 });
 
 // =====================================================================

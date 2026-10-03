@@ -39,6 +39,27 @@ export interface ScaffoldPlan {
 }
 
 /**
+ * Picks the question to work through as the example.
+ *
+ * It must be a DIFFERENT question from the one the child is about to answer. Showing the
+ * solved version of the very same question gives the answer away and turns the "try one"
+ * into copying. Same skill, so the idea carries over; a different id, so the answer does
+ * not. Prefers the question furthest from the current one so the child is least likely to
+ * see it again soon. Returns null when the skill has no second question, in which case no
+ * example is shown at all (better none than a leaked answer).
+ */
+export function pickExampleSource<T extends { id: string; skillId: string; tier: number }>(
+  questions: readonly T[],
+  current: { id: string; skillId: string; tier: number },
+): T | null {
+  const others = questions.filter((q) => q.skillId === current.skillId && q.id !== current.id);
+  if (others.length === 0) return null;
+  const sameOrEasier = others.filter((q) => q.tier <= current.tier);
+  const pool = sameOrEasier.length > 0 ? sameOrEasier : others;
+  return pool[pool.length - 1];
+}
+
+/**
  * Chooses the scaffold for a question.
  *
  * The worked example is only ever shown for the first time a child meets a skill at a
