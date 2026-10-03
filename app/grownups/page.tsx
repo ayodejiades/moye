@@ -3,6 +3,13 @@
 import { ComfortButton } from "@/components/comfort-button";
 import { CopySummaryButton } from "@/components/copy-summary-button";
 import { useUiLanguage } from "@/lib/ui-language-context";
+import {
+  whoNeedsHelp,
+  joinCodeFor,
+  buildClassroomReport,
+  classSize,
+  type ClassChild,
+} from "@/lib/classroom";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -55,8 +62,28 @@ const SAMPLE_CHILDREN: ChildProgress[] = [
 export default function GrownupsReportPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
   const { strings } = useUiLanguage();
-  const [joinCode] = useState("MOYE-704");
+  const joinCode = joinCodeFor("Year 4");
   const child = SAMPLE_CHILDREN[selectedChildIndex];
+
+  // The classroom views use the same children as the per child report above, so the two
+  // screens can never disagree about a child.
+  const classChildren: ClassChild[] = SAMPLE_CHILDREN.map((c) => ({
+    id: c.name.toLowerCase(),
+    name: c.name,
+    mastery: {
+      // A score in [0, 1], derived from the minutes of focus the card already reports.
+      // Not a judgement of the child: the weakest skill on the card is what gets flagged.
+      [c.name === "Anjola" ? "count-within-10" : "number-line-jumps"]: {
+        pKnown: c.focusDurationMin >= 10 ? 0.8 : 0.35,
+        tier: c.focusDurationMin >= 10 ? 2 : 1,
+      },
+    },
+    attempts: [0, c.focusDurationMin * 60_000],
+    streakDays: c.sparks,
+    honeyBalance: 0,
+  }));
+  const helpList = whoNeedsHelp(classChildren);
+  const classroomReport = buildClassroomReport("Year 4", classChildren);
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--plum-900)]">
@@ -82,6 +109,80 @@ export default function GrownupsReportPage() {
       </header>
 
       <main className="flex-1 max-w-5xl mx-auto px-6 py-8 flex flex-col w-full space-y-8">
+        {/* Classroom mode: the class list and who needs a hand today (features.md B6) */}
+        <section
+          aria-labelledby="classroom-heading"
+          data-demo="classroom"
+          className="bg-white rounded-3xl border-2 border-[var(--border)] p-5 sm:p-6 flex flex-col gap-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 id="classroom-heading" className="text-xl font-bold text-[var(--plum-900)]">
+                Class list
+              </h2>
+              <p className="text-sm text-[var(--fg-muted)] mt-1">
+                {classSize(classChildren)} children, all on this device. Nothing is sent anywhere.
+              </p>
+            </div>
+            <button
+              type="button"
+              data-demo="classroom-print"
+              onClick={() => {
+                if (typeof window === "undefined") return;
+                window.print();
+              }}
+              className="btn-3d btn-3d-card text-base gap-2"
+            >
+              <PrinterIcon size={16} />
+              <span>Print class summary</span>
+            </button>
+          </div>
+
+          {helpList.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              <h3 className="text-sm font-bold text-[var(--plum-900)]">Worth a look together today</h3>
+              <ul className="flex flex-col gap-2">
+                {helpList.map((entry) => (
+                  <li
+                    key={`${entry.childId}-${entry.skillId}`}
+                    className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[var(--paper)] border border-[var(--border)]"
+                  >
+                    <span className="text-sm text-[var(--plum-900)]">
+                      <strong className="font-bold">{entry.childName}</strong> could practise{" "}
+                      {entry.skillId.replace(/-/g, " ")} together, slowly.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedChildIndex(
+                          Math.max(0, SAMPLE_CHILDREN.findIndex((c) => c.name === entry.childName)),
+                        )
+                      }
+                      className="text-xs font-bold text-[var(--plum-700)] hover:underline min-h-11 inline-flex items-center"
+                    >
+                      See report
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-sm text-[var(--fg-muted)]">
+              Nothing needs extra attention right now. That is a good place to be.
+            </p>
+          )}
+
+          {/* Plain text version, so the printed page is the same words as the screen. */}
+          <details className="text-sm">
+            <summary className="font-semibold text-[var(--plum-700)] min-h-11 inline-flex items-center cursor-pointer">
+              Show the printed text
+            </summary>
+            <pre data-demo="classroom-report-text" className="mt-2 p-3 rounded-xl bg-[var(--paper)] border border-[var(--border)] text-[var(--plum-900)] whitespace-pre-wrap font-sans">
+              {classroomReport}
+            </pre>
+          </details>
+        </section>
+
         {/* Child Selector Tabs */}
         <div className="flex items-center gap-3 overflow-x-auto pb-2">
           {SAMPLE_CHILDREN.map((c, idx) => (

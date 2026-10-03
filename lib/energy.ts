@@ -97,15 +97,51 @@ export function energyGreeting(name: string, energy: EnergyLevel): string {
 }
 
 /**
- * The sentence on the Done for today screen, derived from measured attempt timestamps
- * only (features.md B2 asks for the same honesty). Returns whole minutes held, or null
- * when there is nothing measured to report.
+ * Minutes of focus held, from measured attempt timestamps only (features.md B2 asks for
+ * the same honesty). Returns whole minutes, or null when there is nothing measured.
+ *
+ * `maxGapMs` bounds what counts as one sitting. Without it a child who opens the app on
+ * Monday and again on Friday would be reported as having focused for 1440 minutes, which
+ * is simply untrue. Anything longer than the gap is treated as a break and not counted.
  */
-export function focusMinutesHeld(timestamps: number[]): number | null {
+export function focusMinutesHeld(timestamps: number[], maxGapMs = DEFAULT_SESSION_GAP_MS): number | null {
   const valid = timestamps.filter((t) => Number.isFinite(t)).sort((a, b) => a - b);
   if (valid.length < 2) return null;
   const spanMs = valid[valid.length - 1] - valid[0];
   const minutes = Math.round(spanMs / 60_000);
   // Under a minute of real measurement is noise, not focus. Say nothing rather than guess.
+  if (minutes < 1) return null;
+  const gap = Number.isFinite(maxGapMs) && maxGapMs > 0 ? maxGapMs : DEFAULT_SESSION_GAP_MS;
+  return Math.min(minutes, Math.round(gap / 60_000));
+}
+
+/** A gap longer than this means the child stopped, so the span is not one sitting. */
+export const DEFAULT_SESSION_GAP_MS = 90 * 60_000;
+
+/**
+ * Longest single sitting across many timestamps, for a class summary where the whole
+ * history is being looked at at once. Same honesty rules as focusMinutesHeld.
+ */
+export function longestSessionMinutes(
+  timestamps: number[],
+  maxGapMs = DEFAULT_SESSION_GAP_MS,
+): number | null {
+  const valid = timestamps.filter((t) => Number.isFinite(t)).sort((a, b) => a - b);
+  if (valid.length < 2) return null;
+  const gap = Number.isFinite(maxGapMs) && maxGapMs > 0 ? maxGapMs : DEFAULT_SESSION_GAP_MS;
+
+  let best = 0;
+  let start = valid[0];
+  let previous = valid[0];
+  for (const t of valid.slice(1)) {
+    if (t - previous > gap) {
+      best = Math.max(best, previous - start);
+      start = t;
+    }
+    previous = t;
+  }
+  best = Math.max(best, previous - start);
+
+  const minutes = Math.round(best / 60_000);
   return minutes >= 1 ? minutes : null;
 }
