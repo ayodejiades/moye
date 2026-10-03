@@ -1,6 +1,7 @@
 "use client";
 
 import { ComfortButton } from "@/components/comfort-button";
+import { InstallPrompt } from "@/components/install-prompt";
 
 import Link from "next/link";
 import { useMoyeStore } from "@/lib/moye-store";
@@ -288,6 +289,9 @@ export default function LearnPathPage() {
               Visit Hive
             </Link>
           </div>
+
+          {/* Install Moye on this device. A button the visitor chooses, never a popup. */}
+          <InstallPrompt />
 
           {/* Calm Reminder Card */}
           <div className="bg-amber-50/60 rounded-2xl border-2 border-amber-200 p-4 text-center">

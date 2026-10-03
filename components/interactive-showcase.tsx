@@ -306,8 +306,8 @@ export function InteractiveAppShowcase() {
             title="Built to stay calm"
             rows={[
               {
-                heading: "Saves on this device",
-                body: "Progress is kept in your browser on this device. No account and no tracking.",
+                heading: "Works offline",
+                body: "Save Moye to your home screen. After the first visit the lessons open with the network off, and progress stays in this browser.",
               },
               {
                 heading: "Free to use",
