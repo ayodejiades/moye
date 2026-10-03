@@ -3,6 +3,7 @@
 import { ComfortButton } from "@/components/comfort-button";
 import { ReviewCard } from "@/components/review-card";
 import { EnergyCheckIn } from "@/components/energy-checkin";
+import { FocusAndFeelings } from "@/components/focus-and-feelings";
 import { InstallPrompt } from "@/components/install-prompt";
 
 import Link from "next/link";
@@ -150,6 +151,9 @@ export default function LearnPathPage() {
               Check in: how is your energy?
             </button>
           )}
+
+          {/* Focus and feelings: ungraded, optional, never a score (features.md B2) */}
+          <FocusAndFeelings />
 
           {/* Something worth another look, only when something is due (features.md B4) */}
           <ReviewCard onStart={(_skillId, levelId) => router.push(`/lesson?level=${levelId}`)} />
