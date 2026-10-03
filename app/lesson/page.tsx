@@ -148,6 +148,13 @@ function LessonPlayerContent() {
     });
   };
 
+  // The keyboard handler needs the current handleReadAloud without being rebuilt on
+  // every render, so it reads it through a ref instead of taking it as a dependency.
+  const readAloudRef = useRef(handleReadAloud);
+  useEffect(() => {
+    readAloudRef.current = handleReadAloud;
+  });
+
   const evaluateAnswer = useCallback((optionId: string) => {
     const option = renderedQ.options.find((o) => o.id === optionId);
     if (!option) return;
@@ -272,19 +279,37 @@ function LessonPlayerContent() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
-      if (e.key === "1" || e.key === "a" || e.key === "A") {
-        if (renderedQ.options[0]) handleSelectOption(renderedQ.options[0].id);
-      } else if (e.key === "2" || e.key === "b" || e.key === "B") {
-        if (renderedQ.options[1]) handleSelectOption(renderedQ.options[1].id);
-      } else if (e.key === "3" || e.key === "c" || e.key === "C") {
-        if (renderedQ.options[2]) handleSelectOption(renderedQ.options[2].id);
-      } else if (e.key === "Enter" || e.key === " ") {
+      // Answer keys 1 to 4, plus the letter in the same position for muscle memory.
+      const optionIndex = ["1", "2", "3", "4"].indexOf(e.key);
+      const letterIndex = ["a", "b", "c", "d"].indexOf(e.key.toLowerCase());
+      const index = optionIndex !== -1 ? optionIndex : letterIndex;
+
+      if (index !== -1) {
+        const option = renderedQ.options[index];
+        if (option) handleSelectOption(option.id);
+        return;
+      }
+
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (feedbackState === "idle" && selectedOptionId) {
           handleCheckAnswer();
         } else if (feedbackState === "correct" || feedbackState === "wrong") {
           handleNextQuestion();
         }
+        return;
+      }
+
+      // R reads the question aloud, P pauses. Both are listed in the comfort settings.
+      if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        readAloudRef.current(activePromptText);
+        return;
+      }
+
+      if (e.key === "p" || e.key === "P") {
+        e.preventDefault();
+        setPaused((prev) => !prev);
       }
     };
 
@@ -297,6 +322,7 @@ function LessonPlayerContent() {
     handleSelectOption,
     handleCheckAnswer,
     handleNextQuestion,
+    activePromptText,
   ]);
 
   const handlePromptMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -590,8 +616,9 @@ function LessonPlayerContent() {
                       key={option.id}
                       type="button"
                       data-demo={option.isCorrect ? "answer-right" : "answer-wrong"}
+                      aria-pressed={isSelected}
                       onClick={() => handleSelectOption(option.id)}
-                      className={`w-full text-left p-4 rounded-2xl font-bold text-lg transition-all btn-3d justify-start ${customClass}`}
+                      className={`w-full text-left p-4 rounded-2xl font-bold text-lg btn-3d justify-start ${customClass}`}
                     >
                       <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm mr-3.5 shrink-0 border ${
                         feedbackState === "correct" && isRightOpt

@@ -296,6 +296,30 @@ export function AccessibilitySheet() {
             </div>
           </div>
 
+          {/* Keyboard Shortcuts (SPEC section 8: a whole lesson without a mouse) */}
+          <div className="space-y-3 pt-3 border-t border-[var(--border)]">
+            <div>
+              <div className="font-semibold text-base text-[var(--plum-900)]">Keyboard shortcuts</div>
+              <div className="text-xs text-[var(--fg-muted)]">A whole lesson can be done without a mouse.</div>
+            </div>
+            <ul className="flex flex-col gap-2">
+              {[
+                { keys: "1 2 3 4", what: "Choose an answer" },
+                { keys: "Enter", what: "Check the answer, then go to the next question" },
+                { keys: "R", what: "Read the question aloud" },
+                { keys: "P", what: "Pause and resume" },
+                { keys: "Tab", what: "Move between controls" },
+              ].map((row) => (
+                <li key={row.keys} className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-semibold text-[var(--plum-900)] bg-[var(--paper)] border border-[var(--border)] rounded-md px-2 py-1 min-h-11 inline-flex items-center shrink-0">
+                    {row.keys}
+                  </span>
+                  <span className="text-xs text-[var(--fg-muted)]">{row.what}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Speech Rate */}
           <div>
             <div className="flex justify-between text-sm font-semibold mb-1">

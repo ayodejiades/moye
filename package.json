@@ -16,6 +16,8 @@
     "test:integration": "node --import tsx --test tests/integration.test.mjs",
     "test:landing": "node --import tsx --test tests/landing-standards.test.mjs",
     "test:landing:e2e": "node tests/landing.e2e.mjs",
+    "test:demo-path": "node tests/demo-path.e2e.mjs",
+    "test:keyboard": "node tests/keyboard-lesson.e2e.mjs",
     "test:all": "pnpm test && pnpm test:integration && pnpm test:landing"
   },
   "pnpm": {
@@ -42,6 +44,7 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "playwright": "^1.63.0",
     "tailwindcss": "^4",
     "tsx": "4.23.13",
     "typescript": "^5"

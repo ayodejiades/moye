@@ -859,6 +859,26 @@ export const LEVEL_BANKS: Record<string, Question[]> = {
   s4: LEVEL_4_QUESTIONS,
 };
 
+/**
+ * Fingerprint of the committed lesson bank, reported by /api/health so a demo can
+ * assert it is running the questions in this repo rather than a stale cache.
+ * Derived from the content, so it changes whenever the bank does.
+ */
+export const LESSON_BANK_VERSION: string = (() => {
+  const material = Object.entries(LEVEL_BANKS)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([level, qs]) => `${level}:${qs.length}:${qs.map((q) => q.id).join(",")}`)
+    .join("|");
+  // FNV-1a: short, stable, and dependency free.
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < material.length; i++) {
+    hash ^= material.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  const total = Object.values(LEVEL_BANKS).reduce((n, qs) => n + qs.length, 0);
+  return `${total}-${hash.toString(16).padStart(8, "0")}`;
+})();
+
 export function getQuestionsForLevel(levelId: string): Question[] {
   return LEVEL_BANKS[levelId] || LEVEL_1_QUESTIONS;
 }

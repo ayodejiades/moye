@@ -11,6 +11,7 @@
 import { NextResponse } from "next/server";
 import { isDemoMode } from "@/lib/demo-mode";
 import { probeDatabase } from "@/db";
+import { LESSON_BANK_VERSION } from "@/lib/lesson-bank";
 
 // Never cache a health result: a stale "ok" from a warm CDN is the exact bug this fixes.
 export const dynamic = "force-dynamic";
@@ -32,6 +33,7 @@ export async function GET(request: Request) {
     ok: true,
     sha: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GIT_COMMIT ?? "dev",
     demoMode: isDemoMode(),
+    lessonBankVersion: LESSON_BANK_VERSION,
     checkedAt: new Date().toISOString(),
   };
 
