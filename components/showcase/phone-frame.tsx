@@ -35,35 +35,37 @@ export function PhoneFrame({ children, bottomNav, dyslexic = false }: PhoneFrame
 
 export function PhoneStatusBar({ dyslexicFont, onToggleDyslexic }: { dyslexicFont: boolean; onToggleDyslexic: () => void }) {
   return (
-    <div className="px-4 py-3 bg-white border-b border-[var(--border)] flex items-center justify-between gap-2">
-      <div className="flex items-center gap-2">
-        <span className="text-xs font-bold lowercase text-[var(--plum-900)]">moye</span>
-        <span className="text-xs bg-[var(--plum-100)] text-[var(--plum-700)] font-semibold px-2 rounded-md border border-[var(--border)]">
-          maths
-        </span>
+    <div className="px-4 py-2 bg-white border-b border-[var(--border)] flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold lowercase text-[var(--plum-900)]">moye</span>
+          <span className="text-xs bg-[var(--plum-100)] text-[var(--plum-700)] font-semibold px-2 rounded-md border border-[var(--border)]">
+            maths
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1 text-xs font-semibold text-[var(--honey-700)]">
+            <HoneyDropIcon size={14} />
+            <span>14</span>
+          </span>
+          <span className="flex items-center gap-1 text-xs font-semibold text-[var(--plum-700)]">
+            <DuoStreakFlame size={14} />
+            <span>3d</span>
+          </span>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <span className="flex items-center gap-1 text-xs font-semibold text-[var(--honey-700)]">
-          <HoneyDropIcon size={14} />
-          <span>14</span>
-        </span>
-        <span className="flex items-center gap-1 text-xs font-semibold text-[var(--plum-700)]">
-          <DuoStreakFlame size={14} />
-          <span>3d</span>
-        </span>
-        <button
-          type="button"
-          onClick={onToggleDyslexic}
-          aria-pressed={dyslexicFont}
-          className={`text-xs font-semibold px-2 min-h-11 rounded-md border transition-colors ${
-            dyslexicFont
-              ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
-              : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
-          }`}
-        >
-          Dyslexia spacing {dyslexicFont ? "on" : "off"}
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={onToggleDyslexic}
+        aria-pressed={dyslexicFont}
+        className={`w-full min-h-11 text-xs font-semibold rounded-md border transition-colors ${
+          dyslexicFont
+            ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
+            : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
+        }`}
+      >
+        Dyslexia spacing {dyslexicFont ? "on" : "off"}
+      </button>
     </div>
   );
 }

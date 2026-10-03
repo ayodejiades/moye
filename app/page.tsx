@@ -195,10 +195,11 @@ export default function LandingPage() {
           {/* Solid plum ground: full bleed arc flush with the section edges */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-52 sm:h-64 bg-[var(--plum-900)] rounded-[50%_50%_0_0/100%_100%_0_0]" />
 
-          {/* Mascot Scene: overflow visible so Moyin's head clears the top */}
+          {/* Mascot Scene: tall enough for the 560px mascot plus its card, and stacked
+              below the copy so it can never cover or block the call to action. */}
           <div
             style={step(3)}
-            className="hero-enter relative w-full max-w-5xl mx-auto mt-4 sm:mt-6 h-[420px] sm:h-[480px] flex items-end justify-center select-none overflow-visible z-10"
+            className="hero-enter relative w-full max-w-5xl mx-auto mt-4 sm:mt-6 h-[440px] sm:h-[540px] md:h-[580px] flex items-end justify-center select-none overflow-visible z-0"
           >
             <HeroMascotInteractive />
           </div>
