@@ -14,7 +14,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "test:integration": "node --import tsx --test tests/integration.test.mjs",
-    "test:all": "pnpm test && pnpm test:integration"
+    "test:landing": "node --import tsx --test tests/landing-standards.test.mjs",
+    "test:landing:e2e": "node tests/landing.e2e.mjs",
+    "test:all": "pnpm test && pnpm test:integration && pnpm test:landing"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
