@@ -29,7 +29,6 @@ interface ChildProgress {
   strongSkills: string[];
   growingSkills: string[];
   focusDurationMin: number;
-  bestTime: string;
   sparks: number;
   recentObservation: string;
 }
@@ -42,7 +41,6 @@ const SAMPLE_CHILDREN: ChildProgress[] = [
     strongSkills: ["Counting objects to 10", "Recognizing number bonds"],
     growingSkills: ["Carrying digits in 2-digit sums"],
     focusDurationMin: 9,
-    bestTime: "Morning (9:00 - 11:00 AM)",
     sparks: 4,
     recentObservation: "Anjola stays focused for about 9 minutes per session. Works best with dinosaur story problems and plantain chip currency word problems.",
   },
@@ -53,7 +51,6 @@ const SAMPLE_CHILDREN: ChildProgress[] = [
     strongSkills: ["Number line jumps", "Adding single digits"],
     growingSkills: ["Subtraction as take-away"],
     focusDurationMin: 12,
-    bestTime: "Early Afternoon (1:00 - 2:00 PM)",
     sparks: 6,
     recentObservation: "High engagement when questions involve football pitch scenarios. Responds well to gentle second-try hints.",
   },
@@ -213,10 +210,10 @@ export default function GrownupsReportPage() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--teal-700)] bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">
-                Weekly Plain-Language Summary
+              <span className="text-xs font-bold text-[var(--teal-700)]">
+                This week, in plain words
               </span>
-              <h1 className="text-2xl sm:text-3xl font-extrabold mt-2">
+              <h1 className="text-2xl sm:text-3xl font-bold mt-2">
                 {strings.reportHeading.replace("this child", child.name)}
               </h1>
             </div>
@@ -248,29 +245,29 @@ export default function GrownupsReportPage() {
           {/* Key Indicators in Plain Words */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-[var(--plum-100)] rounded-2xl p-4 border border-[var(--plum-500)] flex flex-col justify-between">
-              <span className="text-xs font-bold text-[var(--plum-700)] uppercase">Focus Span</span>
-              <span className="text-2xl font-extrabold text-[var(--plum-900)] mt-1">
+              <span className="text-xs font-bold text-[var(--plum-700)]">Longest sitting</span>
+              <span className="text-2xl font-bold text-[var(--plum-900)] mt-1">
                 About {child.focusDurationMin} mins
               </span>
-              <span className="text-xs text-[var(--fg-muted)] mt-1">
-                Healthy, unhurried learning blocks with no timer stress.
+              <span className="text-xs text-[var(--fg-muted)] mt-1 text-pretty">
+                Measured from real attempt times. Unhurried, with no timer stress.
               </span>
             </div>
 
             <div className="bg-teal-50 rounded-2xl p-4 border border-[var(--teal-500)] flex flex-col justify-between">
-              <span className="text-xs font-bold text-[var(--teal-700)] uppercase">Best Learning Time</span>
-              <span className="text-xl font-extrabold text-[var(--teal-700)] mt-1">
-                {child.bestTime}
+              <span className="text-xs font-bold text-[var(--teal-700)]">Where they do well</span>
+              <span className="text-base font-bold text-[var(--plum-900)] mt-1 text-pretty">
+                {child.strongSkills.join(" and ")}
               </span>
-              <span className="text-xs text-[var(--fg-muted)] mt-1">
-                Highest focus and accuracy recorded here.
+              <span className="text-xs text-[var(--fg-muted)] mt-1 text-pretty">
+                Observed across the questions actually answered.
               </span>
             </div>
 
             <div className="bg-amber-50 rounded-2xl p-4 border border-[var(--honey-500)] flex flex-col justify-between">
-              <span className="text-xs font-bold text-[var(--honey-700)] uppercase">Spark Streak</span>
-              <span className="text-2xl font-extrabold text-[var(--honey-700)] mt-1">
-                {child.sparks} Days Strong
+              <span className="text-xs font-bold text-[var(--honey-700)]">Days in a row</span>
+              <span className="text-2xl font-bold text-[var(--honey-700)] mt-1">
+                {child.sparks} {child.sparks === 1 ? "day" : "days"}
               </span>
               <span className="text-xs text-[var(--honey-700)] mt-1">
                 Rest-day tokens protected progress without guilt.
