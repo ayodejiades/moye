@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, Suspense } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getQuestionsForLevel } from "@/lib/lesson-bank";
@@ -85,7 +85,9 @@ function LessonPlayerContent() {
   const [latestReward, setLatestReward] = useState<HoneyRewardResult | null>(null);
 
   const currentRawQ = questionQueue[currentIndex] ?? levelQuestions[0];
-  const renderedQ = renderQuestion(currentRawQ, theme, locale);
+  // renderQuestion is pure: memoize so renderedQ.options keeps a stable identity
+  // and the answer callback below is not rebuilt on every keystroke.
+  const renderedQ = useMemo(() => renderQuestion(currentRawQ, theme, locale), [currentRawQ, theme, locale]);
   const localizedContent = getLocalizedQuestionContent(currentRawQ.id, narrationLanguage, {
     prompt: renderedQ.prompt,
     hint: renderedQ.hint,
@@ -226,8 +228,7 @@ function LessonPlayerContent() {
     storeState.honeyBalance,
     addHoney,
     logAttempt,
-    currentRawQ.id,
-    currentRawQ.skillId,
+    currentRawQ,
     updateSkillMastery,
     isLastInQueue,
     completeLevelAndUnlockNext,
@@ -237,12 +238,15 @@ function LessonPlayerContent() {
     currentIndex,
   ]);
 
-  const handleSelectOption = (optionId: string) => {
-    if (feedbackState === "correct") return;
-    setSelectedOptionId(optionId);
-    playChime("tap", soundEnabled);
-    evaluateAnswer(optionId);
-  };
+  const handleSelectOption = useCallback(
+    (optionId: string) => {
+      if (feedbackState === "correct") return;
+      setSelectedOptionId(optionId);
+      playChime("tap", soundEnabled);
+      evaluateAnswer(optionId);
+    },
+    [evaluateAnswer, feedbackState, soundEnabled],
+  );
 
   const handleCheckAnswer = useCallback(() => {
     if (!selectedOptionId) return;
@@ -286,7 +290,14 @@ function LessonPlayerContent() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [feedbackState, selectedOptionId, renderedQ.options, handleCheckAnswer, handleNextQuestion]);
+  }, [
+    feedbackState,
+    selectedOptionId,
+    renderedQ.options,
+    handleSelectOption,
+    handleCheckAnswer,
+    handleNextQuestion,
+  ]);
 
   const handlePromptMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!readingRuler || !promptRef.current) return;

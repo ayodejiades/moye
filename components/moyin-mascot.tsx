@@ -29,8 +29,9 @@ export function MoyinMascot({
   const activePet = pet ?? (cosmetic?.startsWith("pet-") ? cosmetic : null);
   return (
     <div
-      className={`relative inline-flex items-center justify-center transition-transform duration-300 ${className}`}
+      className={`relative inline-flex items-center justify-center ${className}`}
       style={{ width: size, height: size }}
+      role="img"
       aria-label={`Moyin the honey badger mascot (${pose} pose)`}
     >
       <svg
@@ -731,21 +732,25 @@ export interface MoyinPeekingProps {
  */
 export function MoyinPeeking({
   className = "",
-  width = 280,
-  height = 200,
+  width,
+  height,
   pose = "smile",
   showPaws = true,
 }: MoyinPeekingProps) {
   return (
     <div
-      className={`relative inline-flex items-center justify-center transition-transform duration-300 ${className}`}
-      style={{ width, height }}
+      className={`relative inline-flex items-center justify-center aspect-[72/52] ${className}`}
+      style={width || height ? { width, height } : undefined}
+      role="img"
       aria-label={`Moyin the honey badger cub peeking warmly (${pose} pose)`}
     >
       <svg
         viewBox="14 16 72 52"
         className="w-full h-full overflow-visible"
+        aria-hidden="true"
       >
+        {/* Breathing group: the head scales slowly so Moyin breathes while idle. */}
+        <g className="moyin-head">
         {/* Badger Ears */}
         <ellipse cx="26" cy="30" rx="10" ry="12" fill="#2A1B4D" />
         <ellipse cx="26" cy="30" rx="6" ry="8" fill="#E88AA6" />
@@ -774,8 +779,15 @@ export function MoyinPeeking({
         <circle cx="37" cy="51" r="5" fill="#E88AA6" opacity="0.8" />
         <circle cx="63" cy="51" r="5" fill="#E88AA6" opacity="0.8" />
 
+        {/* Blink group: eyes squash briefly once every six seconds. */}
+        <g className="moyin-eyes">
         {/* Expressive Eyes According to Pose */}
-        {pose === "sleepy" ? (
+        {pose === "cheer" ? (
+          <>
+            <path d="M 38.5 44.5 Q 43 39.5 47.5 44.5" stroke="#2A1B4D" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+            <path d="M 52.5 44.5 Q 57 39.5 61.5 44.5" stroke="#2A1B4D" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+          </>
+        ) : pose === "sleepy" ? (
           <>
             <path d="M 39 44 Q 43 48 47 44" stroke="#2A1B4D" strokeWidth="2.5" fill="none" strokeLinecap="round" />
             <path d="M 53 44 Q 57 48 61 44" stroke="#2A1B4D" strokeWidth="2.5" fill="none" strokeLinecap="round" />
@@ -802,6 +814,7 @@ export function MoyinPeeking({
             <circle cx="56" cy="45.2" r="0.9" fill="#FFF" />
           </>
         )}
+        </g>
 
         {/* Snout & Nose */}
         <ellipse cx="50" cy="49.5" rx="3.6" ry="2.6" fill="#2A1B4D" />
@@ -814,10 +827,11 @@ export function MoyinPeeking({
         ) : (
           <path d="M 46 52.5 Q 50 57.5 54 52.5" stroke="#2A1B4D" strokeWidth="2.2" fill="#E88AA6" strokeLinecap="round" />
         )}
+        </g>
 
-        {/* Paws Resting on the Edge */}
+        {/* Paws Resting on the Edge. Outside the breathing group so they stay planted. */}
         {showPaws && (
-          <g id="moyin-peeking-paws">
+          <g id="moyin-peeking-paws" className={`moyin-paws ${pose === "cheer" ? "moyin-paws-up" : ""}`}>
             {/* Left Paw */}
             <ellipse cx="32" cy="62" rx="7.5" ry="5.5" fill="#2A1B4D" />
             <circle cx="27" cy="60" r="2.2" fill="#3D2968" />

@@ -18,6 +18,8 @@ const LANDING = [
   "components/hero-mascot-interactive.tsx",
   "components/interactive-showcase.tsx",
   "components/reveal.tsx",
+  "components/comfort-button.tsx",
+  "components/accessibility-sheet.tsx",
 ];
 const MASCOT = ["components/moyin-mascot.tsx", "components/ui/svg-icons.tsx"];
 const CSS_PATH = "app/globals.css";

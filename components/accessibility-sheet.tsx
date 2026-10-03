@@ -37,7 +37,7 @@ export function AccessibilitySheet() {
     { id: "peach", label: "Soft Peach", bgClass: "bg-[#FDF3EB] border-[#E8D3C3] text-[#22143D]" },
     { id: "mint", label: "Pale Mint", bgClass: "bg-[#EFF7F3] border-[#C8DFD4] text-[#22143D]" },
     { id: "sky", label: "Soft Sky", bgClass: "bg-[#EFF5FA] border-[#C8D7E8] text-[#22143D]" },
-    { id: "none", label: "Default", bgClass: "bg-white border-zinc-300 text-zinc-800" },
+    { id: "none", label: "Default", bgClass: "bg-white border-[var(--border)] text-[var(--plum-900)]" },
   ];
 
   return (
@@ -67,7 +67,7 @@ export function AccessibilitySheet() {
           <div className="p-4 rounded-xl border-2 border-[var(--plum-500)]/30 bg-[var(--plum-100)]/40 space-y-4">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="font-bold text-base text-[var(--plum-900)]">Reading-Friendly Spacing</div>
+                <div className="font-bold text-base text-[var(--plum-900)]">Reading friendly spacing</div>
                 <div className="text-xs text-[var(--fg-muted)] leading-relaxed">
                   Enhanced letter spacing, word separation, and line height to prevent visual crowding
                 </div>
@@ -79,7 +79,7 @@ export function AccessibilitySheet() {
                 className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors shrink-0 ${
                   dyslexicFont
                     ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)] shadow-xs"
-                    : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                    : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                 }`}
               >
                 {dyslexicFont ? "ON" : "OFF"}
@@ -91,7 +91,7 @@ export function AccessibilitySheet() {
               <div className="pt-3 border-t border-[var(--border)] space-y-4">
                 {/* Font Choice */}
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)] mb-2">
+                  <div className="text-xs font-bold text-[var(--fg-muted)] mb-2">
                     Dyslexia Font Face
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -101,11 +101,11 @@ export function AccessibilitySheet() {
                       className={`p-3 rounded-xl border text-left transition-colors ${
                         fontChoice === "opendyslexic"
                           ? "bg-white border-[var(--plum-700)] shadow-xs"
-                          : "bg-white/60 border-zinc-200 hover:bg-white"
+                          : "bg-[var(--paper)] border-[var(--border)] hover:bg-white"
                       }`}
                     >
                       <div className="text-xs font-bold text-[var(--plum-900)]">OpenDyslexic</div>
-                      <div className="text-[11px] text-[var(--fg-muted)]">Weighted bottom gravity</div>
+                      <div className="text-xs text-[var(--fg-muted)]">Weighted bottom gravity</div>
                     </button>
 
                     <button
@@ -114,30 +114,30 @@ export function AccessibilitySheet() {
                       className={`p-3 rounded-xl border text-left transition-colors ${
                         fontChoice === "lexend"
                           ? "bg-white border-[var(--plum-700)] shadow-xs"
-                          : "bg-white/60 border-zinc-200 hover:bg-white"
+                          : "bg-[var(--paper)] border-[var(--border)] hover:bg-white"
                       }`}
                     >
                       <div className="text-xs font-bold text-[var(--plum-900)]">Lexend Calm</div>
-                      <div className="text-[11px] text-[var(--fg-muted)]">Expanded letter counters</div>
+                      <div className="text-xs text-[var(--fg-muted)]">Expanded letter counters</div>
                     </button>
                   </div>
                 </div>
 
-                {/* Anti-Glare Color Tint (Irlen relief) */}
+                {/* Softer reading tint (Irlen relief) */}
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)] mb-2">
-                    Anti-Glare Reading Tint (Visual Stress Relief)
+                  <div className="text-xs font-bold text-[var(--fg-muted)] mb-2">
+                    Softer reading tint for visual stress
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {tints.map((t) => (
                       <button
                         key={t.id}
                         type="button"
                         onClick={() => setReadingTint(t.id)}
-                        className={`px-2 py-1 rounded-md text-[11px] font-medium border transition-all cursor-pointer ${t.bgClass} ${
+                        className={`px-2 py-1 rounded-md text-xs font-medium border transition-colors ${t.bgClass} ${
                           readingTint === t.id
                             ? "ring-2 ring-[var(--plum-700)] font-semibold shadow-2xs"
-                            : "opacity-80 hover:opacity-100 hover:border-[var(--plum-400)]"
+                            : "opacity-80 hover:opacity-100 hover:border-[var(--plum-500)]"
                         }`}
                       >
                         {t.label}
@@ -158,7 +158,7 @@ export function AccessibilitySheet() {
                     className={`px-3 py-2 rounded-lg text-xs font-bold border transition-colors ${
                       readingRuler
                         ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
-                        : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                        : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                     }`}
                   >
                     {readingRuler ? "ON" : "OFF"}
@@ -177,7 +177,7 @@ export function AccessibilitySheet() {
                     className={`px-3 py-2 rounded-lg text-xs font-bold border transition-colors ${
                       wordHighlight
                         ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
-                        : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                        : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                     }`}
                   >
                     {wordHighlight ? "ON" : "OFF"}
@@ -199,7 +199,7 @@ export function AccessibilitySheet() {
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 reducedMotion
                   ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
-                  : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                  : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >
               {reducedMotion ? "ON" : "OFF"}
@@ -218,7 +218,7 @@ export function AccessibilitySheet() {
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 largeText
                   ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
-                  : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                  : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >
               {largeText ? "ON" : "OFF"}
@@ -237,7 +237,7 @@ export function AccessibilitySheet() {
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 soundEnabled
                   ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
-                  : "bg-zinc-100 text-zinc-700 border-zinc-300"
+                  : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >
               {soundEnabled ? "ON" : "OFF"}
@@ -262,7 +262,7 @@ export function AccessibilitySheet() {
                       setNarrationLanguage(lang.id);
                       speakMultilingualText(lang.sampleGreeting, lang.id, speechSpeed);
                     }}
-                    className={`p-3 rounded-xl border-2 text-left transition-all ${
+                    className={`p-3 rounded-xl border-2 text-left transition-colors ${
                       isActive
                         ? "bg-white border-[var(--plum-700)] text-[var(--plum-900)] shadow-xs"
                         : "bg-[var(--paper)] border-[var(--border)] text-[var(--fg-muted)] hover:bg-white"
@@ -273,7 +273,7 @@ export function AccessibilitySheet() {
                       {isActive && <span className="text-xs text-[var(--plum-700)] font-semibold">Active</span>}
                     </div>
                     <div className="text-xs opacity-80 mt-1">{lang.nativeLabel}</div>
-                    <div className="text-[11px] text-[var(--fg-muted)] mt-1">{lang.region}</div>
+                    <div className="text-xs text-[var(--fg-muted)] mt-1">{lang.region}</div>
                   </button>
                 );
               })}
@@ -318,7 +318,7 @@ export function AccessibilitySheet() {
           <button
             type="button"
             onClick={() => setPanelOpen(false)}
-            className="w-full btn-3d btn-3d-plum py-2 px-3 text-base"
+            className="w-full btn-3d btn-3d-plum text-base"
           >
             Done
           </button>
