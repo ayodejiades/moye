@@ -15,14 +15,22 @@
 | **Installable App and Offline Cache** | Built | **LIVE_IN_BROWSER** | Web app manifest at `app/manifest.ts` with 192, 512 and maskable icons, plus a cache first service worker at `public/sw.js` that precaches the seven screens on install. Verified by loading `/`, `/learn`, `/hive` and a full lesson with the browser network switched off. |
 | **Self Hosted Fonts** | Built | **LIVE_IN_BROWSER** | Lexend and OpenDyslexic are served from this app, so there are zero requests to any third party and dyslexia spacing works offline. The OpenDyslexic files live in `public/fonts/`. |
 | **Offline DEMO_MODE and Local Fixtures** | Built | **LIVE_FALLBACK** | Operates with Wi Fi disconnected using local in memory fixtures and deterministic logic. Verified by `DEMO_MODE=1` health tests. |
-| **Deterministic Safety Kernel** | Built | **PROVEN_LOCAL_EXECUTION** | Pure function verification of rules and benchmark cases in `lib/kernel.ts` and inspectable on `/proof`. |
+| **How Moye Decides Page** | Built | **PROVEN_LOCAL_EXECUTION** | `/proof` runs the same `lib/mastery.ts`, `lib/honey.ts` and `lib/streak.ts` functions the app uses, on committed cases from `lib/decision-samples.ts`, and shows the input, the working and the result in plain language. |
 | **Multilingual Voice Audio** | Built | **LIVE_IN_BROWSER** | Five supported language voices (English, Nigerian Pidgin, Yoruba, Hausa, Igbo) with Web Speech BCP47 matching, pitch tuning, localized lesson questions, and encouraging companion speech. Lives in `lib/multilingual-voice.ts` and `app/lesson/page.tsx`. |
 
 ## Partial or Roadmap Features
 
 | Feature | Current State | Production Plan |
 |---|---|---|
-| **Supabase Remote Cloud Sync** | **PARTIAL** | Runs completely offline via local storage; syncs to Supabase Postgres pooler when `DATABASE_URL` is configured. |
+| **Optional Postgres Sync** | **PARTIAL** | The app runs entirely on local storage and never needs a database. A Postgres database through Drizzle is wired in `db/` and is used when `DATABASE_URL` is set. There is no cloud account, no hosted sync, and no auth provider. |
+
+## Not Part of Moye
+
+`lib/kernel.ts`, `evidence/campaign-report.json` and `pnpm claim:verify` come from the shared
+project scaffold. They implement a reconciliation kernel for a different domain (integer cent
+arithmetic, evidence excerpt binding, drift detection). They are not Moye's decision logic, and no
+Moye number or claim comes from them. Moye's rules are `lib/mastery.ts`, `lib/honey.ts` and
+`lib/streak.ts`, verified by `pnpm test` and shown on `/proof`.
 
 ## What The App Does Not Do (Boundaries)
 
