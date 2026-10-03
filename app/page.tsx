@@ -497,6 +497,24 @@ export default function LandingPage() {
             </ul>
           </div>
           <div className="space-y-2">
+            <span className="font-bold text-[var(--plum-900)] text-sm block">Privacy</span>
+            <ul className="space-y-1">
+              <li>
+                <Link href="/privacy" className="inline-flex items-center min-h-11 hover:underline">
+                  What Moye keeps
+                </Link>
+              </li>
+              <li>
+                <Link href="/proof" className="inline-flex items-center min-h-11 hover:underline">
+                  How Moye Decides
+                </Link>
+              </li>
+              <li>
+                <span className="inline-flex items-center min-h-11">No ads, no tracking</span>
+              </li>
+            </ul>
+          </div>
+          <div className="space-y-2">
             <span className="font-bold text-[var(--plum-900)] text-sm block">Transparency</span>
             <ul className="space-y-1">
               <li>
