@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   uiStrings,
   normaliseUiLanguage,
@@ -24,9 +24,13 @@ const UiLanguageContext = createContext<UiLanguageContextValue | null>(null);
  * in Yoruba are two different choices.
  */
 export function UiLanguageProvider({ children }: { children: ReactNode }) {
-  // Read the stored choice once, in the lazy initialiser. Reading it in an effect would
-  // paint English first and then switch, which is exactly the flash we want to avoid.
-  const [language, setLanguageState] = useState<UiLanguage>(() => readStoredUiLanguage());
+  // English first so the server and first client render match; the stored choice is applied
+  // right after mount. Reading localStorage during render caused a hydration error.
+  const [language, setLanguageState] = useState<UiLanguage>("en");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing from localStorage after mount
+    setLanguageState(readStoredUiLanguage());
+  }, []);
 
   const setLanguage = useCallback((next: UiLanguage) => {
     const normalised = normaliseUiLanguage(next);

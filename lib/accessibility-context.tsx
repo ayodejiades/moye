@@ -49,53 +49,48 @@ function getInitialA11ySettings() {
 }
 
 export function AccessibilityProvider({ children }: { children: ReactNode }) {
-  const [dyslexicFont, setDyslexicFont] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.dyslexicFont === "boolean" ? s.dyslexicFont : false;
-  });
-  const [fontChoice, setFontChoice] = useState<DyslexiaFontChoice>(() => {
-    const s = getInitialA11ySettings();
-    return s?.fontChoice === "opendyslexic" || s?.fontChoice === "lexend" ? s.fontChoice : "opendyslexic";
-  });
-  const [readingRuler, setReadingRuler] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.readingRuler === "boolean" ? s.readingRuler : false;
-  });
-  const [readingTint, setReadingTint] = useState<ReadingTint>(() => {
-    const s = getInitialA11ySettings();
-    return ["cream", "peach", "mint", "sky", "none"].includes(s?.readingTint) ? s.readingTint : "none";
-  });
-  const [wordHighlight, setWordHighlight] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.wordHighlight === "boolean" ? s.wordHighlight : true;
-  });
-  const [reducedMotion, setReducedMotion] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.reducedMotion === "boolean" ? s.reducedMotion : false;
-  });
-  const [largeText, setLargeText] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.largeText === "boolean" ? s.largeText : false;
-  });
+  // Defaults first, so the server and the first client render match. Saved settings are
+  // applied right after mount (reading localStorage during render caused a hydration error).
+  const [dyslexicFont, setDyslexicFont] = useState(false);
+  const [fontChoice, setFontChoice] = useState<DyslexiaFontChoice>("opendyslexic");
+  const [readingRuler, setReadingRuler] = useState(false);
+  const [readingTint, setReadingTint] = useState<ReadingTint>("none");
+  const [wordHighlight, setWordHighlight] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [largeText, setLargeText] = useState(false);
   // Sound is off until someone turns it on (features.md C5). An unprompted noise is the
   // fastest way to lose a child who is sensitive to sound, and nothing in Moye needs to
   // make a sound to work. Read aloud is a separate, explicit control.
-  const [soundEnabled, setSoundEnabled] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.soundEnabled === "boolean" ? s.soundEnabled : false;
-  });
-  const [speechSpeed, setSpeechSpeed] = useState(() => {
-    const s = getInitialA11ySettings();
-    return typeof s?.speechSpeed === "number" ? s.speechSpeed : 1.0;
-  });
-  const [narrationLanguage, setNarrationLanguage] = useState<VoiceLanguage>(() => {
-    const s = getInitialA11ySettings();
-    return ["en", "pcm", "yo", "ha", "ig", "sw"].includes(s?.narrationLanguage) ? s.narrationLanguage : "en";
-  });
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [speechSpeed, setSpeechSpeed] = useState(1.0);
+  const [narrationLanguage, setNarrationLanguage] = useState<VoiceLanguage>("en");
+  const [hydrated, setHydrated] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
 
-  // Save changes to localStorage
+  // Apply saved settings once, after mount. Syncing from localStorage (an external system) is
+  // exactly what an effect is for, and doing it during render breaks hydration.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
+    const s = getInitialA11ySettings();
+    if (s) {
+      if (typeof s.dyslexicFont === "boolean") setDyslexicFont(s.dyslexicFont);
+      if (s.fontChoice === "opendyslexic" || s.fontChoice === "lexend") setFontChoice(s.fontChoice);
+      if (typeof s.readingRuler === "boolean") setReadingRuler(s.readingRuler);
+      if (["cream", "peach", "mint", "sky", "none"].includes(s.readingTint)) setReadingTint(s.readingTint);
+      if (typeof s.wordHighlight === "boolean") setWordHighlight(s.wordHighlight);
+      if (typeof s.reducedMotion === "boolean") setReducedMotion(s.reducedMotion);
+      if (typeof s.largeText === "boolean") setLargeText(s.largeText);
+      if (typeof s.soundEnabled === "boolean") setSoundEnabled(s.soundEnabled);
+      if (typeof s.speechSpeed === "number") setSpeechSpeed(s.speechSpeed);
+      if (["en", "pcm", "yo", "ha", "ig", "sw"].includes(s.narrationLanguage)) setNarrationLanguage(s.narrationLanguage);
+    }
+    setHydrated(true);
+  }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  // Save changes to localStorage (not before the saved settings have been loaded)
+  useEffect(() => {
+    if (!hydrated) return;
     try {
       localStorage.setItem(
         STORAGE_KEY,
@@ -116,6 +111,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
       // Ignore storage errors
     }
   }, [
+    hydrated,
     dyslexicFont,
     fontChoice,
     readingRuler,

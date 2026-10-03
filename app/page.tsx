@@ -2,13 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import {
-  CalmFocusIllustration,
-  AdaptiveMasteryIllustration,
-  HoneyRewardsIllustration,
   NeurodiversityIllustration,
-  DuoLingotGem,
-  DuoStreakFlame,
-  DuoGoldenTrophy,
   DuoStayMotivatedIllustration,
 } from "@/components/ui/svg-icons";
 import { HeroMascotInteractive } from "@/components/hero-mascot-interactive";
@@ -18,7 +12,6 @@ import { Reveal } from "@/components/reveal";
 import { InViewFloat } from "@/components/inview-float";
 import { DecisionPreview } from "@/components/decision-preview";
 import { HeroTryQuestion } from "@/components/hero-try-question";
-import { ContentStats } from "@/components/content-stats";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -240,118 +233,9 @@ export default function LandingPage() {
           </div>
         </Reveal>
 
-        {/* Real counts taken from content/, not typed by hand (features.md B3) */}
-        <Reveal>
-          <ContentStats />
-        </Reveal>
-
-        {/* Three plain truths about how Moye behaves */}
-        <section className="bg-white border-y border-[var(--border)] py-20 px-6 overflow-hidden relative">
-          <div className="max-w-5xl mx-auto relative z-10">
-            <Reveal>
-              <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-                <h2 className="text-3xl sm:text-5xl font-bold text-[var(--plum-900)] tracking-tight">
-                  Built for honesty. Built for trust.
-                </h2>
-                <p className="text-base text-[var(--fg-muted)] font-medium">
-                  Progress saves on this device. Difficulty and rewards come from plain code. And nothing here ever
-                  shames a child for a wrong answer.
-                </p>
-              </div>
-            </Reveal>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-              <Reveal index={0}>
-                <article className="h-full p-8 rounded-3xl bg-white border-2 border-[var(--teal-500)] shadow-[0_8px_0_var(--teal-500)] flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-[var(--plum-100)] border-2 border-[var(--teal-500)] flex items-center justify-center mb-3">
-                    <DuoLingotGem size={42} />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-5xl font-bold text-[var(--teal-700)] tracking-tight">0</div>
-                    <h3 className="text-lg font-bold text-[var(--plum-900)]">No Countdown Timers</h3>
-                  </div>
-                  <p className="text-sm text-[var(--fg-muted)] font-medium mt-3 leading-relaxed">
-                    No ticking clock and no buzzer. Children take the time they need to think.
-                  </p>
-                </article>
-              </Reveal>
-
-              <Reveal index={1}>
-                <article className="h-full p-8 rounded-3xl bg-white border-2 border-[var(--plum-500)] shadow-[0_8px_0_var(--plum-500)] flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-[var(--plum-100)] border-2 border-[var(--plum-500)] flex items-center justify-center mb-3">
-                    <DuoStreakFlame size={42} />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-5xl font-bold text-[var(--plum-700)] tracking-tight">Open</div>
-                    <h3 className="text-lg font-bold text-[var(--plum-900)]">Rules you can read</h3>
-                  </div>
-                  <p className="text-sm text-[var(--fg-muted)] font-medium mt-3 leading-relaxed">
-                    Difficulty, honey and streaks come from plain code, not a chatbot. See How Moye Decides.
-                  </p>
-                </article>
-              </Reveal>
-
-              <Reveal index={2}>
-                <article className="h-full p-8 rounded-3xl bg-white border-2 border-[var(--rose-400)] shadow-[0_8px_0_var(--rose-400)] flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-[var(--plum-100)] border-2 border-[var(--rose-400)] flex items-center justify-center mb-3">
-                    <DuoGoldenTrophy size={42} />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-5xl font-bold text-[var(--plum-900)] tracking-tight">1</div>
-                    <h3 className="text-lg font-bold text-[var(--plum-900)]">One Calm Mascot</h3>
-                  </div>
-                  <p className="text-sm text-[var(--fg-muted)] font-medium mt-3 leading-relaxed">
-                    Moyin sits right beside your child through every problem, cheering the wins and guiding the
-                    retries.
-                  </p>
-                </article>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* Five stories, alternating two column rows */}
+        {/* Two stories the interactive showcase below does not cover */}
         <section className="max-w-5xl mx-auto px-6 py-20">
           <div className="space-y-24">
-            <Reveal>
-              <div className="flex flex-col md:flex-row items-center gap-12">
-                <div className="flex-1 flex justify-center">
-                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
-                    <CalmFocusIllustration size={160} />
-                  </div>
-                </div>
-                <div className="flex-1 space-y-4 text-center md:text-left">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
-                    Short, calm lessons. No timer, no panic.
-                  </h2>
-                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
-                    Many apps rush children with a clock and a buzzer. Moye shows one gentle question at a time, with
-                    big tap targets and no guilt.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal>
-              <div className="flex flex-col md:flex-row-reverse items-center gap-12">
-                <div className="flex-1 flex justify-center">
-                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
-                    <AdaptiveMasteryIllustration size={160} />
-                  </div>
-                </div>
-                <div className="flex-1 space-y-4 text-center md:text-left">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
-                    Meets each child where they are.
-                  </h2>
-                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
-                    Plain code, not a chatbot, decides the difficulty. After every answer Moye checks what the child
-                    has understood and picks the next question: gentle support when stuck, a fresh challenge when
-                    thriving.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
             <Reveal>
               <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 flex justify-center">
@@ -373,26 +257,6 @@ export default function LandingPage() {
 
             <Reveal>
               <div className="flex flex-col md:flex-row-reverse items-center gap-12">
-                <div className="flex-1 flex justify-center">
-                  <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
-                    <HoneyRewardsIllustration size={160} />
-                  </div>
-                </div>
-                <div className="flex-1 space-y-4 text-center md:text-left">
-                  <h2 className="text-3xl sm:text-4xl font-bold text-[var(--plum-900)] leading-tight">
-                    Earn honey drops for Moyin&apos;s cozy hive.
-                  </h2>
-                  <p className="text-base text-[var(--fg-muted)] leading-relaxed">
-                    Children earn honey only for finished focus work. They spend it on an acorn cap, a knitted scarf,
-                    a honeycomb crown, or a friendly bee to keep Moyin company. A daily cap tells them when they are
-                    done for today.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal>
-              <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 flex justify-center">
                   <div className="p-8 bg-white rounded-3xl border-2 border-[var(--border)]">
                     <NeurodiversityIllustration size={160} />
