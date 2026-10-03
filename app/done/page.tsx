@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useMoyeStore } from "@/lib/moye-store";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import { HoneyJarIcon, SparkIcon, CheckIcon } from "@/components/ui/svg-icons";
+import { ComfortButton } from "@/components/comfort-button";
 
 function DoneContent() {
   const { state } = useMoyeStore();
@@ -23,6 +24,9 @@ function DoneContent() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--paper)] text-[var(--plum-900)] px-6 py-12">
+      <div className="w-full max-w-md flex justify-end mb-4">
+        <ComfortButton />
+      </div>
       <div
         data-demo="done-for-today"
         className="max-w-md w-full bg-white rounded-3xl p-8 border-2 border-[var(--border)] shadow-sm text-center space-y-6"

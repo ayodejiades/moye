@@ -1,5 +1,7 @@
 "use client";
 
+import { ComfortButton } from "@/components/comfort-button";
+
 import { useState } from "react";
 import Link from "next/link";
 import { updatePKnown, simulateStudentTrace } from "@/lib/mastery";
@@ -97,9 +99,10 @@ export default function HowMoyeDecidesPage() {
           </span>
         </div>
         <span className="text-xs bg-teal-50 border-2 border-teal-300 text-teal-800 font-mono px-3.5 py-1.5 rounded-lg font-bold shadow-[0_2px_0_#A7F3D0] inline-flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-sm bg-teal-500 animate-pulse" />
-          <span>100% Deterministic</span>
+          <span className="w-2 h-2 rounded-sm bg-teal-500" />
+          <span>Deterministic</span>
         </span>
+        <ComfortButton />
       </header>
 
       <main className="flex-1 max-w-5xl mx-auto px-6 py-8 flex flex-col w-full space-y-8">

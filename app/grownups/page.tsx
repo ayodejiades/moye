@@ -1,5 +1,7 @@
 "use client";
 
+import { ComfortButton } from "@/components/comfort-button";
+
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -73,6 +75,7 @@ export default function GrownupsReportPage() {
           <span>Class Code:</span>
           <span className="font-mono text-sm text-[var(--plum-700)]">{joinCode}</span>
         </div>
+        <ComfortButton />
       </header>
 
       <main className="flex-1 max-w-5xl mx-auto px-6 py-8 flex flex-col w-full space-y-8">

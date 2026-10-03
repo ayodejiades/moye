@@ -1,5 +1,7 @@
 "use client";
 
+import { ComfortButton } from "@/components/comfort-button";
+
 import Link from "next/link";
 import { useMoyeStore } from "@/lib/moye-store";
 import { useAccessibility } from "@/lib/accessibility-context";
@@ -60,6 +62,7 @@ export default function LearnPathPage() {
             moye
           </Link>
           <div className="flex items-center gap-3">
+            <ComfortButton />
             {/* Spark Streak */}
             <div className="flex items-center gap-1.5 text-sm font-bold text-[var(--plum-700)] bg-[var(--plum-100)] px-3 py-1 rounded-lg border border-[var(--border)]">
               <SparkIcon size={16} />

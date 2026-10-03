@@ -1,5 +1,7 @@
 "use client";
 
+import { ComfortButton } from "@/components/comfort-button";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMoyeStore } from "@/lib/moye-store";
@@ -82,6 +84,9 @@ export default function StartPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--paper)] text-[var(--plum-900)] px-6 py-12">
+      <div className="w-full max-w-lg flex justify-end mb-4">
+        <ComfortButton />
+      </div>
       <div className="w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border-2 border-[var(--border)] shadow-sm space-y-6">
         
         {/* Mascot & Heading */}

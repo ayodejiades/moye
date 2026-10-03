@@ -1,5 +1,7 @@
 "use client";
 
+import { ComfortButton } from "@/components/comfort-button";
+
 import { useState } from "react";
 import Link from "next/link";
 import { useMoyeStore } from "@/lib/moye-store";
@@ -138,6 +140,7 @@ export default function HiveCosmeticsPage() {
           <HoneyDropIcon size={20} />
           <span>{state.honeyBalance} Honey</span>
         </div>
+        <ComfortButton />
       </header>
 
       <main className="flex-1 max-w-4xl mx-auto px-6 py-8 flex flex-col items-center w-full space-y-8">
