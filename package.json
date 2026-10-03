@@ -14,7 +14,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "test:integration": "node --import tsx --test tests/integration.test.mjs",
-    "test:features": "node --import tsx --test tests/review.test.mjs tests/energy.test.mjs tests/placement.test.mjs tests/parent-summary.test.mjs tests/scaffolding.test.mjs tests/focus-feelings.test.mjs",
+    "test:features": "node --import tsx --test tests/review.test.mjs tests/energy.test.mjs tests/placement.test.mjs tests/parent-summary.test.mjs tests/scaffolding.test.mjs tests/focus-feelings.test.mjs tests/ui-strings.test.mjs",
     "test:landing": "node --import tsx --test tests/landing-standards.test.mjs",
     "test:landing:e2e": "node tests/landing.e2e.mjs",
     "test:demo-path": "node tests/demo-path.e2e.mjs",

@@ -2,6 +2,8 @@
 
 import { ComfortButton } from "@/components/comfort-button";
 import { PlacementQuiz, PlacementSummary } from "@/components/placement-quiz";
+import { useUiLanguage } from "@/lib/ui-language-context";
+import { UI_LANGUAGES } from "@/lib/ui-strings";
 import { LEVEL_SEQUENCE } from "@/lib/moye-store";
 import { levelsToUnlock, type PlacementResult } from "@/lib/placement";
 
@@ -54,6 +56,7 @@ export default function StartPage() {
   const [loginPasscode, setLoginPasscode] = useState("");
   const [loginRole, setLoginRole] = useState<"learner" | "teacher">("learner");
   const [placement, setPlacement] = useState<PlacementResult | null>(null);
+  const { language, strings, setLanguage } = useUiLanguage();
 
   /** Skipping placement is a first class choice, not a failure: start at level one. */
   const handleStartLearning = (startingLevelId = "s1") => {
@@ -137,6 +140,27 @@ export default function StartPage() {
           </button>
         </div>
 
+        {/* Choose the words on screen, separate from the narration voice (features.md B8) */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-semibold text-[var(--fg-muted)]">Words on screen</span>
+          {UI_LANGUAGES.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              data-demo={`ui-lang-${option.id}`}
+              aria-pressed={language === option.id}
+              onClick={() => setLanguage(option.id)}
+              className={`text-xs font-semibold px-3 min-h-11 inline-flex items-center rounded-lg border transition-colors ${
+                language === option.id
+                  ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
+                  : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
         {/* ==================== SIGN UP FLOW ==================== */}
         {authMode === "signup" && (
           <div className="space-y-6">
@@ -144,7 +168,7 @@ export default function StartPage() {
               <div className="space-y-6">
                 <div>
                   <label htmlFor="child-name" className="block text-sm font-bold mb-2">
-                    What is your name?
+                    {strings.nameQuestion}
                   </label>
                   <input
                     id="child-name"
@@ -159,7 +183,7 @@ export default function StartPage() {
 
                 <div data-demo="country">
                   <label className="block text-sm font-bold mb-2">
-                    Where do you learn? (School framework)
+                    {strings.schoolQuestion}
                   </label>
                   <div className="space-y-2">
                     {CURRICULA.map((cur) => (
@@ -220,7 +244,7 @@ export default function StartPage() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-bold mb-2">
-                    Pick your favourite story theme:
+                    {strings.themeQuestion}
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {THEMES.map((th) => (

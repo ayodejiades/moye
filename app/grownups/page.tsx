@@ -2,6 +2,7 @@
 
 import { ComfortButton } from "@/components/comfort-button";
 import { CopySummaryButton } from "@/components/copy-summary-button";
+import { useUiLanguage } from "@/lib/ui-language-context";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -53,6 +54,7 @@ const SAMPLE_CHILDREN: ChildProgress[] = [
 
 export default function GrownupsReportPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
+  const { strings } = useUiLanguage();
   const [joinCode] = useState("MOYE-704");
   const child = SAMPLE_CHILDREN[selectedChildIndex];
 
@@ -114,7 +116,7 @@ export default function GrownupsReportPage() {
                 Weekly Plain-Language Summary
               </span>
               <h1 className="text-2xl sm:text-3xl font-extrabold mt-2">
-                How {child.name} is learning this week
+                {strings.reportHeading.replace("this child", child.name)}
               </h1>
             </div>
             <div className="flex flex-col items-start gap-2 sm:items-end">
