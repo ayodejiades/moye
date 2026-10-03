@@ -16,7 +16,6 @@ import {
   LockIcon,
   CheckIcon,
   SparkIcon,
-  SettingsIcon,
 } from "@/components/ui/svg-icons";
 
 interface SkillNode {
@@ -44,7 +43,7 @@ function getMascotMessage(completedCount: number, nextTitle: string | null): str
 
 export default function LearnPathPage() {
   const { state } = useMoyeStore();
-  const { setPanelOpen, dyslexicFont, setDyslexicFont } = useAccessibility();
+  const { dyslexicFont, setDyslexicFont } = useAccessibility();
 
   const completedCount = state.completedLevels.length;
   // Find the first unlocked-but-not-completed level (the "active" one)
@@ -63,7 +62,6 @@ export default function LearnPathPage() {
             moye
           </Link>
           <div className="flex items-center gap-3">
-            <ComfortButton />
             {/* Spark Streak */}
             <div className="flex items-center gap-1.5 text-sm font-bold text-[var(--plum-700)] bg-[var(--plum-100)] px-3 py-1 rounded-lg border border-[var(--border)]">
               <SparkIcon size={16} />
@@ -94,19 +92,11 @@ export default function LearnPathPage() {
               <span aria-hidden="true" className="text-sm leading-none font-semibold">Aa</span>
               <span className="hidden sm:inline text-sm">{dyslexicFont ? "On" : "Comfortable reading"}</span>
             </button>
-            {/* Accessibility Toggle */}
-            <button
-              type="button"
-              onClick={() => setPanelOpen(true)}
-              aria-label="Open accessibility settings"
-              className="h-8 w-8 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center text-[var(--fg-muted)] hover:bg-[var(--plum-100)] hover:text-[var(--plum-700)] transition-colors"
-            >
-              <SettingsIcon size={16} />
-            </button>
             {/* Grown-ups */}
             <Link href="/grownups" className="text-xs font-bold text-[var(--plum-700)] hover:underline hidden sm:block">
               Grown-ups
             </Link>
+            <ComfortButton />
           </div>
         </div>
       </header>
