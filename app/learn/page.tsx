@@ -2,9 +2,11 @@
 
 import { ComfortButton } from "@/components/comfort-button";
 import { ReviewCard } from "@/components/review-card";
+import { EnergyCheckIn } from "@/components/energy-checkin";
 import { InstallPrompt } from "@/components/install-prompt";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMoyeStore } from "@/lib/moye-store";
 import { useAccessibility } from "@/lib/accessibility-context";
@@ -46,6 +48,8 @@ function getMascotMessage(completedCount: number, nextTitle: string | null): str
 export default function LearnPathPage() {
   const { state } = useMoyeStore();
   const router = useRouter();
+  // Energy check in shows once per browser, before the first session of the day.
+  const [energyAsked, setEnergyAsked] = useState(false);
   const { dyslexicFont, setDyslexicFont } = useAccessibility();
 
   const completedCount = state.completedLevels.length;
@@ -132,6 +136,20 @@ export default function LearnPathPage() {
               </div>
             </div>
           </div>
+
+          {/* Energy check in, once per browser, then straight into the path (features.md B10) */}
+          {energyAsked ? (
+            <EnergyCheckIn onStart={() => setEnergyAsked(false)} />
+          ) : (
+            <button
+              type="button"
+              data-demo="energy-open"
+              onClick={() => setEnergyAsked(true)}
+              className="btn-3d btn-3d-card text-base self-start"
+            >
+              Check in: how is your energy?
+            </button>
+          )}
 
           {/* Something worth another look, only when something is due (features.md B4) */}
           <ReviewCard onStart={(_skillId, levelId) => router.push(`/lesson?level=${levelId}`)} />
