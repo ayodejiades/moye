@@ -77,9 +77,12 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     const s = getInitialA11ySettings();
     return typeof s?.largeText === "boolean" ? s.largeText : false;
   });
+  // Sound is off until someone turns it on (features.md C5). An unprompted noise is the
+  // fastest way to lose a child who is sensitive to sound, and nothing in Moye needs to
+  // make a sound to work. Read aloud is a separate, explicit control.
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const s = getInitialA11ySettings();
-    return typeof s?.soundEnabled === "boolean" ? s.soundEnabled : true;
+    return typeof s?.soundEnabled === "boolean" ? s.soundEnabled : false;
   });
   const [speechSpeed, setSpeechSpeed] = useState(() => {
     const s = getInitialA11ySettings();

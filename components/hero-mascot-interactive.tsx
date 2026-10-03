@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MoyinPeeking } from "@/components/moyin-mascot";
 import { useAccessibility } from "@/lib/accessibility-context";
+import { SpeakerIcon } from "@/components/ui/svg-icons";
 
 const GREETINGS = [
   {
@@ -20,7 +21,7 @@ const GREETINGS = [
 ];
 
 export function HeroMascotInteractive() {
-  const { soundEnabled, speechSpeed } = useAccessibility();
+  const { soundEnabled, setSoundEnabled, speechSpeed } = useAccessibility();
   const [index, setIndex] = useState(0);
   const [pose, setPose] = useState<"smile" | "cheer">("smile");
   const [bubble, setBubble] = useState<string | null>(null);
@@ -107,6 +108,18 @@ export function HeroMascotInteractive() {
         <div className="text-lg font-bold text-balance text-[var(--plum-900)]">calm learning, one step at a time</div>
         <p className="text-sm text-[var(--fg-muted)] mt-1 font-medium text-pretty">No rush. No timers. No shame.</p>
         <p className="text-sm text-[var(--fg-muted)] mt-2 text-pretty">Tap Moyin to hear a hello.</p>
+        {/* Sound is off until it is asked for (features.md C5). The label always states
+            which way the switch is, so it is never a mystery tap. */}
+        <button
+          type="button"
+          data-demo="sound-toggle"
+          onClick={() => setSoundEnabled(!soundEnabled)}
+          aria-pressed={soundEnabled}
+          className="mt-3 btn-3d btn-3d-card btn-3d-header gap-2 self-center"
+        >
+          <SpeakerIcon size={16} />
+          <span>{soundEnabled ? "Sound on" : "Sound off"}</span>
+        </button>
       </div>
     </div>
   );
