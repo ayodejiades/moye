@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { MoyinPeeking } from "@/components/moyin-mascot";
 import { useAccessibility } from "@/lib/accessibility-context";
 import { SpeakerIcon } from "@/components/ui/svg-icons";
+import { retainUtterance } from "@/lib/multilingual-voice";
 
 const GREETINGS = [
   {
@@ -68,6 +69,7 @@ export function HeroMascotInteractive() {
       try {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(item.speech);
+        retainUtterance(utterance);
         utterance.rate = speechSpeed;
         utterance.onend = finish;
         utterance.onerror = finish;

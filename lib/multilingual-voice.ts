@@ -424,6 +424,19 @@ export function getVoicesReady(): Promise<SpeechSynthesisVoice[]> {
     window.setTimeout(finish, 1200);
   });
 }
+/**
+ * Chrome can garbage collect an utterance that nothing references while it is still being
+ * spoken. The speech stops partway through a sentence and onend never fires. Holding the
+ * utterance here until it finishes keeps read aloud from cutting off.
+ */
+const liveUtterances = new Set<SpeechSynthesisUtterance>();
+export function retainUtterance(u: SpeechSynthesisUtterance): void {
+  liveUtterances.add(u);
+  const release = () => { liveUtterances.delete(u); };
+  u.addEventListener("end", release);
+  u.addEventListener("error", release);
+}
+
 /** Executes SpeechSynthesis with language tags, pitch, and voice matching */
 export function speakMultilingualText(
   text: string,
@@ -517,6 +530,7 @@ export function speakMultilingualText(
               };
             }
             synth.cancel();
+            retainUtterance(retry);
             synth.speak(retry);
             return;
           } catch {
@@ -527,6 +541,7 @@ export function speakMultilingualText(
       callbacks?.onError?.({ retriedWithEnglish: retryingAsEnglish });
     };
 
+    retainUtterance(utterance);
     synth.speak(utterance);
   };
 

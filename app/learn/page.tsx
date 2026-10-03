@@ -246,11 +246,11 @@ export default function LearnPathPage() {
                       {/* Text */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg-muted)]">
+                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">
                             Level {node.levelNumber}
                           </span>
                           {isCompleted && (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-[var(--teal-700)] bg-teal-100 px-1.5 py-0.5 rounded border border-[var(--teal-500)]">
+                            <span className="inline-flex items-center gap-0.5 text-xs font-bold text-[var(--teal-700)] bg-teal-100 px-1.5 py-0.5 rounded border border-[var(--teal-500)]">
                               Mastered
                             </span>
                           )}

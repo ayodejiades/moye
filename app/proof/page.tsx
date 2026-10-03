@@ -137,7 +137,7 @@ export default function HowMoyeDecidesPage() {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                 activeTab === "mastery" ? "bg-white/20 text-white" : "bg-[var(--plum-100)] text-[var(--plum-700)]"
               }`}>
                 Mastery · Math
@@ -165,7 +165,7 @@ export default function HowMoyeDecidesPage() {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                 activeTab === "honey" ? "bg-white/20 text-white" : "bg-amber-100 text-amber-800"
               }`}>
                 Ledger · Honey
@@ -173,7 +173,7 @@ export default function HowMoyeDecidesPage() {
               <HoneyDropIcon size={18} />
             </div>
             <div className="mt-2.5">
-              <div className="font-black text-sm sm:text-base leading-snug">
+              <div className="font-bold text-sm sm:text-base leading-snug">
                 Honey Economy &amp; Caps
               </div>
               <div className={`text-xs mt-0.5 ${activeTab === "honey" ? "text-amber-100" : "text-[var(--fg-muted)]"}`}>
@@ -193,7 +193,7 @@ export default function HowMoyeDecidesPage() {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
+              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                 activeTab === "streak" ? "bg-white/20 text-white" : "bg-teal-100 text-teal-800"
               }`}>
                 Habit · Streaks
@@ -201,7 +201,7 @@ export default function HowMoyeDecidesPage() {
               <DuoStreakFlame size={18} className={activeTab === "streak" ? "brightness-200" : ""} />
             </div>
             <div className="mt-2.5">
-              <div className="font-black text-sm sm:text-base leading-snug">
+              <div className="font-bold text-sm sm:text-base leading-snug">
                 Guilt-Free Spark Streaks
               </div>
               <div className={`text-xs mt-0.5 ${activeTab === "streak" ? "text-teal-100" : "text-[var(--fg-muted)]"}`}>
@@ -219,10 +219,10 @@ export default function HowMoyeDecidesPage() {
             <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-[var(--border)] shadow-[0_8px_0_#D8CCE8] space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
                 <div>
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[var(--plum-700)] bg-[var(--plum-100)] px-2.5 py-1 rounded-md">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[var(--plum-700)] bg-[var(--plum-100)] px-2.5 py-1 rounded-md">
                     Interactive Live Sandbox
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-black text-[var(--plum-900)] mt-1.5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[var(--plum-900)] mt-1.5">
                     Bayesian Single-Step Update Simulator
                   </h2>
                 </div>
@@ -280,10 +280,10 @@ export default function HowMoyeDecidesPage() {
                       />
                     </svg>
                     <div className="absolute flex flex-col items-center justify-center text-center">
-                      <span className="text-2xl font-black text-[var(--plum-900)]">
+                      <span className="text-2xl font-bold text-[var(--plum-900)]">
                         {Math.round(singleStepResult.newPKnown * 100)}%
                       </span>
-                      <span className="text-[10px] font-black uppercase text-[var(--fg-muted)]">
+                      <span className="text-xs font-bold uppercase text-[var(--fg-muted)]">
                         p_known
                       </span>
                     </div>
@@ -291,7 +291,7 @@ export default function HowMoyeDecidesPage() {
 
                   <div className="mt-3 text-center">
                     <span
-                      className={`text-xs font-black px-3 py-1 rounded-md uppercase tracking-wider inline-block ${
+                      className={`text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider inline-block ${
                         singleStepResult.recommendedTier === 3
                           ? "bg-amber-100 text-amber-800 border border-amber-300"
                           : singleStepResult.recommendedTier === 2
@@ -310,11 +310,11 @@ export default function HowMoyeDecidesPage() {
                     <div className="flex justify-between items-center">
                       <label
                         htmlFor="proof-prior"
-                        className="text-xs font-black uppercase text-[var(--fg-muted)]"
+                        className="text-xs font-bold uppercase text-[var(--fg-muted)]"
                       >
                         Prior Knowledge Probability (p_prior):
                       </label>
-                      <span className="font-mono text-sm font-black text-[var(--plum-900)] bg-[var(--plum-100)] px-2.5 py-0.5 rounded-lg border border-[var(--plum-500)]/20">
+                      <span className="font-mono text-sm font-bold text-[var(--plum-900)] bg-[var(--plum-100)] px-2.5 py-0.5 rounded-lg border border-[var(--plum-500)]/20">
                         p = {initialP.toFixed(2)}
                       </span>
                     </div>
@@ -328,7 +328,7 @@ export default function HowMoyeDecidesPage() {
                       onChange={(e) => setInitialP(parseFloat(e.target.value))}
                       className="w-full accent-[var(--plum-700)] cursor-pointer h-2.5 bg-zinc-200 rounded-lg"
                     />
-                    <div className="flex justify-between text-[11px] text-[var(--fg-muted)] font-mono">
+                    <div className="flex justify-between text-xs text-[var(--fg-muted)] font-mono">
                       <span>0.05 (Beginner)</span>
                       <span className="text-teal-700 font-bold">0.60 – 0.85 (Target Zone)</span>
                       <span>0.95 (Mastered)</span>
@@ -336,7 +336,7 @@ export default function HowMoyeDecidesPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-xs font-black uppercase text-[var(--fg-muted)] block">
+                    <span className="text-xs font-bold uppercase text-[var(--fg-muted)] block">
                       Student Attempt Outcome:
                     </span>
                     <div className="grid grid-cols-2 gap-3">
@@ -344,7 +344,7 @@ export default function HowMoyeDecidesPage() {
                         type="button"
                         onClick={() => setTestAnswer(true)}
                         style={{ color: testAnswer ? "#FFFFFF" : "var(--plum-900)" }}
-                        className={`p-3 rounded-2xl text-xs font-black inline-flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                        className={`p-3 rounded-2xl text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer transition-all ${
                           testAnswer
                             ? "bg-teal-700 !text-white text-white border-2 border-teal-600 shadow-[0_4px_0_#0F766E]"
                             : "bg-white text-[var(--plum-900)] border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] hover:border-teal-400"
@@ -357,7 +357,7 @@ export default function HowMoyeDecidesPage() {
                         type="button"
                         onClick={() => setTestAnswer(false)}
                         style={{ color: !testAnswer ? "#FFFFFF" : "var(--plum-900)" }}
-                        className={`p-3 rounded-2xl text-xs font-black inline-flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                        className={`p-3 rounded-2xl text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer transition-all ${
                           !testAnswer
                             ? "bg-rose-500 !text-white text-white border-2 border-rose-600 shadow-[0_4px_0_#9F1239]"
                             : "bg-white text-[var(--plum-900)] border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] hover:border-rose-400"
@@ -370,7 +370,7 @@ export default function HowMoyeDecidesPage() {
                   </div>
 
                   {/* Mathematical Parameters Row */}
-                  <div className="p-3 bg-[var(--paper)] rounded-2xl border border-[var(--border)] grid grid-cols-4 gap-2 text-center font-mono text-[11px]">
+                  <div className="p-3 bg-[var(--paper)] rounded-2xl border border-[var(--border)] grid grid-cols-4 gap-2 text-center font-mono text-xs">
                     <div>
                       <div className="text-[var(--fg-muted)]">p_learn</div>
                       <div className="font-bold text-[var(--plum-900)]">0.25</div>
@@ -396,19 +396,19 @@ export default function HowMoyeDecidesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 sm:p-7 rounded-[2rem] border-2 border-teal-200 shadow-[0_8px_0_#A7F3D0] space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-teal-800 uppercase bg-teal-100/70 border border-teal-300 px-3 py-1 rounded-md">
+                  <span className="text-xs font-bold text-teal-800 uppercase bg-teal-100/70 border border-teal-300 px-3 py-1 rounded-md">
                     Proof Trace: Strong Learner
                   </span>
                   <span className="text-xs font-mono font-bold text-teal-700">5 Steps</span>
                 </div>
-                <h3 className="font-black text-lg text-[var(--plum-900)]">
+                <h3 className="font-bold text-lg text-[var(--plum-900)]">
                   Smooth advancement from Tier 1 to Tier 3 within 4 steps
                 </h3>
                 <div className="space-y-2 font-mono text-xs pt-1">
                   {strongTrace.map((st, idx) => (
                     <div key={idx} className="flex justify-between items-center p-2.5 rounded-xl bg-teal-50/60 border border-teal-100">
                       <span className="font-bold text-teal-900">Step {idx + 1} (Correct):</span>
-                      <span className="text-teal-700 font-black">p = {st.newPKnown} (Tier {st.recommendedTier})</span>
+                      <span className="text-teal-700 font-bold">p = {st.newPKnown} (Tier {st.recommendedTier})</span>
                     </div>
                   ))}
                 </div>
@@ -416,19 +416,19 @@ export default function HowMoyeDecidesPage() {
 
               <div className="bg-white p-6 sm:p-7 rounded-[2rem] border-2 border-rose-200 shadow-[0_8px_0_#FECDD3] space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-rose-800 uppercase bg-rose-100/70 border border-rose-300 px-3 py-1 rounded-md">
+                  <span className="text-xs font-bold text-rose-800 uppercase bg-rose-100/70 border border-rose-300 px-3 py-1 rounded-md">
                     Proof Trace: Struggling Learner
                   </span>
                   <span className="text-xs font-mono font-bold text-rose-700">4 Steps</span>
                 </div>
-                <h3 className="font-black text-lg text-[var(--plum-900)]">
+                <h3 className="font-bold text-lg text-[var(--plum-900)]">
                   Gentle descent to remedial Tier 1 without shame or buzzer
                 </h3>
                 <div className="space-y-2 font-mono text-xs pt-1">
                   {strugglingTrace.map((st, idx) => (
                     <div key={idx} className="flex justify-between items-center p-2.5 rounded-xl bg-rose-50/60 border border-rose-100">
                       <span className="font-bold text-rose-900">Step {idx + 1} (Not Yet):</span>
-                      <span className="text-rose-700 font-black">p = {st.newPKnown} (Tier {st.recommendedTier})</span>
+                      <span className="text-rose-700 font-bold">p = {st.newPKnown} (Tier {st.recommendedTier})</span>
                     </div>
                   ))}
                 </div>
@@ -445,10 +445,10 @@ export default function HowMoyeDecidesPage() {
             <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-[var(--border)] shadow-[0_8px_0_#D8CCE8] space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
                 <div>
-                  <span className="text-[11px] font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-1 rounded-md">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-1 rounded-md">
                     Deterministic Daily Invariant
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-black text-[var(--plum-900)] mt-1.5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[var(--plum-900)] mt-1.5">
                     Live Honey Pot Simulator &amp; Anti-Burnout Cap
                   </h2>
                 </div>
@@ -511,7 +511,7 @@ export default function HowMoyeDecidesPage() {
                   </div>
 
                   <div className="mt-3">
-                    <div className="text-3xl font-black text-amber-900">
+                    <div className="text-3xl font-bold text-amber-900">
                       {simulatedHoney} <span className="text-sm font-bold text-amber-700">/ 50 drops</span>
                     </div>
                     <div className="text-xs font-bold text-amber-700 mt-0.5">
@@ -522,7 +522,7 @@ export default function HowMoyeDecidesPage() {
 
                 {/* Interactive Action Buttons (Right 7 cols) */}
                 <div className="md:col-span-7 space-y-4">
-                  <div className="text-xs font-black uppercase text-[var(--fg-muted)]">
+                  <div className="text-xs font-bold uppercase text-[var(--fg-muted)]">
                     Simulate Lesson Completion Rewards:
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -532,8 +532,8 @@ export default function HowMoyeDecidesPage() {
                       onClick={() => addHoney(3, "small")}
                       className="p-3 rounded-2xl bg-white border-2 border-amber-300 shadow-[0_4px_0_#FDE68A] hover:bg-amber-50 active:translate-y-1 active:shadow-none transition-all text-left disabled:opacity-50 cursor-pointer"
                     >
-                      <div className="text-xs font-black text-amber-900">+3 Regular Drop</div>
-                      <div className="text-[11px] text-[var(--fg-muted)]">Single lesson completion</div>
+                      <div className="text-xs font-bold text-amber-900">+3 Regular Drop</div>
+                      <div className="text-xs text-[var(--fg-muted)]">Single lesson completion</div>
                     </button>
 
                     <button
@@ -542,14 +542,14 @@ export default function HowMoyeDecidesPage() {
                       onClick={() => addHoney(12, "golden")}
                       className="p-3 rounded-2xl bg-gradient-to-r from-amber-50 to-amber-100 border-2 border-amber-400 shadow-[0_4px_0_#F59E0B] hover:brightness-105 active:translate-y-1 active:shadow-none transition-all text-left disabled:opacity-50 cursor-pointer"
                     >
-                      <div className="text-xs font-black text-amber-900">+12 Golden Drop</div>
-                      <div className="text-[11px] text-[var(--fg-muted)]">Milestone / perfect streak</div>
+                      <div className="text-xs font-bold text-amber-900">+12 Golden Drop</div>
+                      <div className="text-xs text-[var(--fg-muted)]">Milestone / perfect streak</div>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setSimulatedHoney(50)}
-                      className="col-span-2 p-3 rounded-2xl bg-purple-50 border-2 border-purple-300 shadow-[0_4px_0_#E9D5FF] hover:bg-purple-100 active:translate-y-1 active:shadow-none transition-all text-center cursor-pointer font-black text-xs text-[var(--plum-900)]"
+                      className="col-span-2 p-3 rounded-2xl bg-purple-50 border-2 border-purple-300 shadow-[0_4px_0_#E9D5FF] hover:bg-purple-100 active:translate-y-1 active:shadow-none transition-all text-center cursor-pointer font-bold text-xs text-[var(--plum-900)]"
                     >
                       Trigger Max Daily Cap (Set to 50/50)
                     </button>
@@ -560,7 +560,7 @@ export default function HowMoyeDecidesPage() {
                     <div className="p-4 rounded-2xl bg-purple-50 border-2 border-purple-300 flex items-center gap-4 animate-in fade-in duration-300">
                       <MoyinMascot pose="sleepy" size={60} className="shrink-0" />
                       <div className="text-xs space-y-1">
-                        <strong className="text-sm font-black text-[var(--plum-900)] block">
+                        <strong className="text-sm font-bold text-[var(--plum-900)] block">
                           &quot;Done for today!&quot; Trigger Fired
                         </strong>
                         <p className="text-[var(--plum-700)]">
@@ -570,7 +570,7 @@ export default function HowMoyeDecidesPage() {
                     </div>
                   ) : (
                     <div className="p-3 rounded-xl bg-zinc-50 border border-zinc-200 text-xs text-[var(--fg-muted)] flex items-center justify-between">
-                      <span>Last drop awarded: <strong className="text-amber-800 uppercase font-black">{lastDropType}</strong></span>
+                      <span>Last drop awarded: <strong className="text-amber-800 uppercase font-bold">{lastDropType}</strong></span>
                       <span className="font-mono">Cap strictly enforced at 50</span>
                     </div>
                   )}
@@ -621,10 +621,10 @@ export default function HowMoyeDecidesPage() {
             <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-[var(--border)] shadow-[0_8px_0_#D8CCE8] space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
                 <div>
-                  <span className="text-[11px] font-black uppercase tracking-wider text-teal-800 bg-teal-100 px-2.5 py-1 rounded-md">
+                  <span className="text-xs font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2.5 py-1 rounded-md">
                     Zero Guilt State Machine
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-black text-[var(--plum-900)] mt-1.5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[var(--plum-900)] mt-1.5">
                     Spark Resilience &amp; Rest-Token State Machine
                   </h2>
                 </div>
@@ -644,8 +644,8 @@ export default function HowMoyeDecidesPage() {
                       : "bg-white border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] text-zinc-700 hover:border-teal-300"
                   }`}
                 >
-                  <div className="text-xs font-black">1. Consecutive Day</div>
-                  <div className={`text-[11px] mt-0.5 ${streakScenario === "consecutive" ? "text-teal-100" : "text-[var(--fg-muted)]"}`}>
+                  <div className="text-xs font-bold">1. Consecutive Day</div>
+                  <div className={`text-xs mt-0.5 ${streakScenario === "consecutive" ? "text-teal-100" : "text-[var(--fg-muted)]"}`}>
                     Learning Day 1 &rarr; Day 2
                   </div>
                 </button>
@@ -659,8 +659,8 @@ export default function HowMoyeDecidesPage() {
                       : "bg-white border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] text-zinc-700 hover:border-amber-300"
                   }`}
                 >
-                  <div className="text-xs font-black">2. Missed Day (Token Used)</div>
-                  <div className={`text-[11px] mt-0.5 ${streakScenario === "protected" ? "text-amber-100" : "text-[var(--fg-muted)]"}`}>
+                  <div className="text-xs font-bold">2. Missed Day (Token Used)</div>
+                  <div className={`text-xs mt-0.5 ${streakScenario === "protected" ? "text-amber-100" : "text-[var(--fg-muted)]"}`}>
                     Rest token shields streak
                   </div>
                 </button>
@@ -674,8 +674,8 @@ export default function HowMoyeDecidesPage() {
                       : "bg-white border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] text-zinc-700 hover:border-purple-300"
                   }`}
                 >
-                  <div className="text-xs font-black">3. 0 Tokens Left (Warm Reset)</div>
-                  <div className={`text-[11px] mt-0.5 ${streakScenario === "reset" ? "text-purple-200" : "text-[var(--fg-muted)]"}`}>
+                  <div className="text-xs font-bold">3. 0 Tokens Left (Warm Reset)</div>
+                  <div className={`text-xs mt-0.5 ${streakScenario === "reset" ? "text-purple-200" : "text-[var(--fg-muted)]"}`}>
                     No guilt, rests warmly at 1
                   </div>
                 </button>
@@ -715,7 +715,7 @@ export default function HowMoyeDecidesPage() {
 
             {/* 7-Day Habit Stepping Stones */}
             <div className="p-6 bg-white rounded-3xl border-2 border-[var(--border)] shadow-[0_6px_0_#D8CCE8]">
-              <div className="text-xs font-black uppercase text-[var(--fg-muted)] mb-3">
+              <div className="text-xs font-bold uppercase text-[var(--fg-muted)] mb-3">
                 Weekly Habit Chain (Mon &rarr; Sun):
               </div>
               <div className="grid grid-cols-7 gap-2 text-center font-mono">
@@ -733,7 +733,7 @@ export default function HowMoyeDecidesPage() {
                           : "bg-zinc-50 border-zinc-200 text-zinc-400"
                       }`}
                     >
-                      <span className="text-xs font-black">{day}</span>
+                      <span className="text-xs font-bold">{day}</span>
                       <span className="text-xs font-bold text-teal-800">
                         {isLearned ? "Active" : isRestDay ? "Rest" : "·"}
                       </span>
@@ -751,10 +751,10 @@ export default function HowMoyeDecidesPage() {
         <section className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-[var(--border)] shadow-[0_8px_0_#D8CCE8] space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
             <div>
-              <span className="text-[11px] font-black uppercase tracking-wider text-teal-800 bg-teal-100 px-2.5 py-1 rounded-md">
+              <span className="text-xs font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2.5 py-1 rounded-md">
                 Zero Signup Proof Surface
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-[var(--plum-900)] mt-1.5">
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--plum-900)] mt-1.5">
                 Client-Side Verification Ledger
               </h2>
             </div>
@@ -771,50 +771,50 @@ export default function HowMoyeDecidesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-mono text-xs">
             <div className="p-4 rounded-2xl bg-teal-50/80 border-2 border-teal-200 shadow-xs flex flex-col justify-between">
               <div>
-                <span className="font-black text-teal-900 text-xs">INV-1 · BKT</span>
-                <p className="font-sans text-[11px] text-teal-800 mt-1">Mathematical convergence in bounded interval [0, 1].</p>
+                <span className="font-bold text-teal-900 text-xs">INV-1 · BKT</span>
+                <p className="font-sans text-xs text-teal-800 mt-1">Mathematical convergence in bounded interval [0, 1].</p>
               </div>
               <div className="mt-3 flex items-center justify-between font-bold text-teal-700">
                 <span className="inline-flex items-center gap-1"><CheckIcon size={14} /> Pass</span>
-                <span className="text-[10px]">0ms</span>
+                <span className="text-xs">0ms</span>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-amber-50/80 border-2 border-amber-200 shadow-xs flex flex-col justify-between">
               <div>
-                <span className="font-black text-amber-900 text-xs">INV-2 · Honey Cap</span>
-                <p className="font-sans text-[11px] text-amber-800 mt-1">Hard cap strictly clamped at 50 drops daily.</p>
+                <span className="font-bold text-amber-900 text-xs">INV-2 · Honey Cap</span>
+                <p className="font-sans text-xs text-amber-800 mt-1">Hard cap strictly clamped at 50 drops daily.</p>
               </div>
               <div className="mt-3 flex items-center justify-between font-bold text-amber-700">
                 <span className="inline-flex items-center gap-1"><CheckIcon size={14} /> Pass</span>
-                <span className="text-[10px]">0ms</span>
+                <span className="text-xs">0ms</span>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-purple-50/80 border-2 border-purple-200 shadow-xs flex flex-col justify-between">
               <div>
-                <span className="font-black text-[var(--plum-900)] text-xs">INV-3 · Streak Rest</span>
-                <p className="font-sans text-[11px] text-[var(--plum-700)] mt-1">No guilt copy; Spark rests at 1 on break.</p>
+                <span className="font-bold text-[var(--plum-900)] text-xs">INV-3 · Streak Rest</span>
+                <p className="font-sans text-xs text-[var(--plum-700)] mt-1">No guilt copy; Spark rests at 1 on break.</p>
               </div>
               <div className="mt-3 flex items-center justify-between font-bold text-[var(--plum-700)]">
                 <span className="inline-flex items-center gap-1"><CheckIcon size={14} /> Pass</span>
-                <span className="text-[10px]">0ms</span>
+                <span className="text-xs">0ms</span>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-teal-50/80 border-2 border-teal-200 shadow-xs flex flex-col justify-between">
               <div>
-                <span className="font-black text-teal-900 text-xs">INV-4 · Theme Engine</span>
-                <p className="font-sans text-[11px] text-teal-800 mt-1">Deterministic re-skinning across all curriculum lenses.</p>
+                <span className="font-bold text-teal-900 text-xs">INV-4 · Theme Engine</span>
+                <p className="font-sans text-xs text-teal-800 mt-1">Deterministic re-skinning across all curriculum lenses.</p>
               </div>
               <div className="mt-3 flex items-center justify-between font-bold text-teal-700">
                 <span className="inline-flex items-center gap-1"><CheckIcon size={14} /> Pass</span>
-                <span className="text-[10px]">0ms</span>
+                <span className="text-xs">0ms</span>
               </div>
             </div>
           </div>
 
-          <div className="text-[11px] font-mono text-[var(--fg-muted)] flex items-center justify-between pt-1">
+          <div className="text-xs font-mono text-[var(--fg-muted)] flex items-center justify-between pt-1">
             <span>Last audit verification timestamp: {new Date(auditTimestamp).toISOString()}</span>
             <span className="text-teal-700 font-bold">All 4 Invariants Green</span>
           </div>

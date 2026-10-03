@@ -416,7 +416,7 @@ function LessonPlayerContent() {
       <AccessibilitySheet />
 
       {/* Top Header: Progress Bar (15 Questions), Pause, A11y, Honey */}
-      <header className="w-full max-w-4xl mx-auto px-6 py-3 flex items-center justify-between gap-4 border-b border-[var(--border)]">
+      <header className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)]">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -438,7 +438,7 @@ function LessonPlayerContent() {
         </div>
 
         {/* Visual Progress Bar (Reflects Mastered Questions out of 15) */}
-        <div className="flex-1 max-w-xs mx-4">
+        <div className="order-last basis-full sm:order-none sm:basis-auto flex-1 sm:max-w-xs sm:mx-4">
           <div className="h-4 w-full bg-[var(--plum-100)] rounded-full overflow-hidden border border-[var(--border)]">
             <div
               className="h-full bg-[var(--teal-500)] transition-all duration-300 rounded-full"
@@ -542,7 +542,7 @@ function LessonPlayerContent() {
                         ? "Level: Foundational Tier 1"
                         : "Level: Just-Right Tier 2"}
                     </span>
-                    <span className="font-mono text-[10px] text-[var(--fg-muted)] pl-1 border-l border-[var(--plum-500)]/20">
+                    <span className="font-mono text-xs text-[var(--fg-muted)] pl-1 border-l border-[var(--plum-500)]/20">
                       p: {pKnown.toFixed(2)}
                     </span>
                   </div>
@@ -579,9 +579,9 @@ function LessonPlayerContent() {
                     }}
                     aria-label={`Narration language: ${SUPPORTED_VOICE_LANGUAGES.find((l) => l.id === narrationLanguage)?.label ?? narrationLanguage}. Tap to switch language.`}
                     title={`Narration language: ${SUPPORTED_VOICE_LANGUAGES.find((l) => l.id === narrationLanguage)?.label ?? narrationLanguage} — tap to switch`}
-                    className="h-8 w-8 min-w-8 max-w-8 overflow-hidden rounded-md border border-[var(--border)] bg-white text-[var(--plum-900)] hover:bg-[var(--plum-100)] hover:border-[var(--plum-400)] flex items-center justify-center p-0 text-[10px] leading-none font-bold shadow-2xs transition-all cursor-pointer"
+                    className="h-8 w-10 min-w-10 max-w-10 overflow-hidden rounded-md border border-[var(--border)] bg-white text-[var(--plum-900)] hover:bg-[var(--plum-100)] hover:border-[var(--plum-400)] flex items-center justify-center p-0 text-xs leading-none font-bold shadow-2xs transition-all cursor-pointer"
                   >
-                    <span className="block w-full text-center font-bold uppercase leading-none tracking-tighter whitespace-nowrap overflow-hidden text-[10px]">{narrationLanguage}</span>
+                    <span className="block w-full text-center font-bold uppercase leading-none tracking-tighter whitespace-nowrap overflow-hidden text-xs">{narrationLanguage}</span>
                   </button>
 
                   {/* Quick Reading Ruler Toggle — icon only */}
@@ -708,7 +708,7 @@ function LessonPlayerContent() {
                     >
                       <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm mr-3.5 shrink-0 border ${
                         feedbackState === "correct" && isRightOpt
-                          ? "bg-white/20 border-white/40 text-white"
+                          ? "bg-white border-white !text-[var(--teal-700)]"
                           : isSelected
                           ? "bg-[var(--plum-700)] text-white border-[var(--plum-900)]"
                           : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"

@@ -279,7 +279,7 @@ export default function HiveCosmeticsPage() {
           </div>
 
           {/* Save the hive as a picture: drawn on this device, never uploaded (features.md B7) */}
-          <div className="w-full mt-8 bg-white rounded-2xl border-2 border-[var(--border)] p-4 flex flex-col items-start gap-2">
+          <div className="w-full mt-8 bg-white rounded-2xl border-2 border-[var(--border)] p-4 flex flex-col items-center text-center gap-2">
             <h2 className="text-base font-bold text-[var(--plum-900)]">Keep a picture</h2>
             <p className="text-sm text-[var(--fg-muted)]">
               A picture of Moyin with the outfit they are wearing. Saved to this device only.

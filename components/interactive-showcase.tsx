@@ -14,6 +14,7 @@ import { renderQuestion } from "@/lib/theme-resolver";
 import { LEVEL_BANKS } from "@/lib/lesson-bank";
 import { StoryCard, UnderTheHoodCard } from "./showcase/story-cards";
 import { FocusScreen } from "./showcase/focus-screen";
+import { retainUtterance } from "@/lib/multilingual-voice";
 import {
   PhoneFrame,
   PhoneStatusBar,
@@ -86,6 +87,7 @@ export function InteractiveAppShowcase() {
     if (!isSpeaking || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(demo.readAloud);
+    retainUtterance(utterance);
     utterance.rate = 0.9;
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);

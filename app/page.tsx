@@ -337,7 +337,7 @@ export default function LandingPage() {
 
         {/* Bottom Call to Action */}
         <section className="max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center gap-6">
-          <Reveal>
+          <Reveal className="flex w-full flex-col items-center text-center">
             <InViewFloat>
               <MoyinMascot pose="idle" size={130} />
             </InViewFloat>

@@ -21,7 +21,7 @@ type PhoneFrameProps = {
 export function PhoneFrame({ children, bottomNav, dyslexic = false }: PhoneFrameProps) {
   return (
     <div className="relative order-1 lg:order-2 flex flex-col items-center">
-      <div className="w-72 sm:w-84 h-[560px] sm:h-[600px] rounded-[3.2rem] bg-white border-[3px] border-[var(--plum-900)] shadow-[0_20px_50px_rgba(42,27,77,0.18),0_4px_0_var(--plum-900)] overflow-hidden relative flex flex-col p-3">
+      <div className="w-72 sm:w-84 min-h-[560px] sm:min-h-[600px] rounded-[3.2rem] bg-white border-[3px] border-[var(--plum-900)] shadow-[0_20px_50px_rgba(42,27,77,0.18),0_4px_0_var(--plum-900)] overflow-hidden relative flex flex-col p-3">
         <div
           className={`w-full flex-1 rounded-[2.4rem] overflow-hidden flex flex-col bg-[var(--paper)] border border-[var(--border)] ${dyslexic ? "dyslexic-mode font-opendyslexic" : ""}`}
         >

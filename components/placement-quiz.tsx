@@ -12,6 +12,7 @@ import { useMoyeStore } from "@/lib/moye-store";
 import { LEVEL_SEQUENCE } from "@/lib/moye-store";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import { CheckIcon, SpeakerIcon } from "@/components/ui/svg-icons";
+import { retainUtterance } from "@/lib/multilingual-voice";
 
 /**
  * Six questions to find a real starting point (features.md A2, SPEC.md 6.2).
@@ -104,6 +105,7 @@ export function PlacementQuiz({
               if (!("speechSynthesis" in window)) return;
               window.speechSynthesis.cancel();
               const u = new SpeechSynthesisUtterance(rendered.readAloud);
+              retainUtterance(u);
               u.rate = 0.9;
               window.speechSynthesis.speak(u);
             }}

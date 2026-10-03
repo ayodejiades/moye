@@ -4,6 +4,7 @@ import { useState } from "react";
 import { exampleIntro, type WorkedExample } from "@/lib/scaffolding";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import { SpeakerIcon } from "@/components/ui/svg-icons";
+import { retainUtterance } from "@/lib/multilingual-voice";
 
 /**
  * One solved example before the child tries alone (features.md B5, SPEC.md 6.4).
@@ -27,6 +28,7 @@ export function WorkedExamplePanel({
     window.speechSynthesis.cancel();
     const script = [example.prompt, ...example.steps.map((s) => s.label), example.answer].join(". ");
     const utterance = new SpeechSynthesisUtterance(script);
+    retainUtterance(utterance);
     utterance.rate = 0.88;
     utterance.onstart = () => setHeard(true);
     utterance.onend = () => setHeard(false);
