@@ -65,7 +65,13 @@ await page.click("[data-demo='lens-ng-ube']");
 await page.waitForSelector("[data-demo='theme-dinosaurs']", { timeout: 10000 });
 await page.keyboard.press("Tab");
 await page.keyboard.press("Enter");
-await page.waitForSelector("[data-demo='question']", { timeout: 20000 });
+
+// Onboarding placement runs between the theme and the first lesson (features.md A2).
+// Skip it, because skipping is itself a keyboard reachable choice.
+await page.waitForSelector("[data-demo='placement-quiz']", { timeout: 15000 });
+ok("reached the placement check without the mouse");
+await page.getByText("Skip, start from the beginning").click();
+await page.waitForSelector("[data-demo='question']", { timeout: 25000 });
 ok("reached the lesson question without the mouse");
 
 // 3. Every answer button must be focusable and show a visible focus ring.

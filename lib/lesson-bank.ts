@@ -879,6 +879,25 @@ export const LESSON_BANK_VERSION: string = (() => {
   return `${total}-${hash.toString(16).padStart(8, "0")}`;
 })();
 
+/**
+ * Human titles for each level, in one place so /learn, /start and the placement
+ * summary all name a level the same way.
+ */
+export const SKILL_TITLES: Record<string, string> = {
+  s1: "Counting and Stories",
+  s2: "Money and Snacks",
+  s3: "Bundles of Ten",
+  s4: "Shapes and Patterns",
+};
+
+/** Skill id behind each level, so a level can seed or schedule its own mastery. */
+export const LEVEL_SKILL_IDS: Record<string, string> = {
+  s1: "count-within-10",
+  s2: "money-simple",
+  s3: "place-value-tens",
+  s4: "shapes-geometry",
+};
+
 export function getQuestionsForLevel(levelId: string): Question[] {
   return LEVEL_BANKS[levelId] || LEVEL_1_QUESTIONS;
 }

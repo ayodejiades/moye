@@ -241,6 +241,11 @@ export function useMoyeStore() {
     saveMoyeState({ currentLevelId: levelId });
   }, []);
 
+  /** Raw patch write, for callers that need to set several fields at once. */
+  const saveState = useCallback((patch: Partial<MoyeAppState>) => {
+    saveMoyeState(patch);
+  }, []);
+
   const buyAndEquipCosmetic = useCallback((id: string, cost: number, category: "hat" | "glasses" | "scarf" | "pet" | "decor") => {
     const current = getMoyeState();
     if (current.honeyBalance < cost && !current.ownedCosmetics.includes(id)) return false;
@@ -373,6 +378,7 @@ export function useMoyeStore() {
     updateSkillMastery,
     completeLevelAndUnlockNext,
     setCurrentLevel,
+    saveState,
     buyAndEquipCosmetic,
     toggleEquipCosmetic,
     signInProfile,

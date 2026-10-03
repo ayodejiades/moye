@@ -1,6 +1,9 @@
 "use client";
 
 import { ComfortButton } from "@/components/comfort-button";
+import { PlacementQuiz, PlacementSummary } from "@/components/placement-quiz";
+import { LEVEL_SEQUENCE } from "@/lib/moye-store";
+import { levelsToUnlock, type PlacementResult } from "@/lib/placement";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,7 +35,7 @@ const THEMES = [
 
 export default function StartPage() {
   const router = useRouter();
-  const { state, signInProfile, createProfile, signInWithCredentials } = useMoyeStore();
+  const { state, signInProfile, createProfile, signInWithCredentials, saveState } = useMoyeStore();
 
   const [authMode, setAuthMode] = useState<"signup" | "signin">(() => {
     if (typeof window !== "undefined") {
@@ -41,7 +44,7 @@ export default function StartPage() {
     }
     return "signup";
   });
-  const [step, setStep] = useState<"details" | "theme">("details");
+  const [step, setStep] = useState<"details" | "theme" | "placement" | "placement-result">("details");
   const [name, setName] = useState("Anjola");
   const [selectedLens, setSelectedLens] = useState("ng-ube");
   const [selectedTheme, setSelectedTheme] = useState("dinosaurs");
@@ -50,15 +53,21 @@ export default function StartPage() {
   const [loginIdentifier, setLoginIdentifier] = useState("");
   const [loginPasscode, setLoginPasscode] = useState("");
   const [loginRole, setLoginRole] = useState<"learner" | "teacher">("learner");
+  const [placement, setPlacement] = useState<PlacementResult | null>(null);
 
-  const handleStartLearning = () => {
+  /** Skipping placement is a first class choice, not a failure: start at level one. */
+  const handleStartLearning = (startingLevelId = "s1") => {
     createProfile({
       name,
       curriculum: selectedLens,
       theme: selectedTheme,
       role: "learner",
     });
-    router.push("/lesson");
+    saveState({
+      unlockedLevels: levelsToUnlock(startingLevelId, LEVEL_SEQUENCE),
+      currentLevelId: startingLevelId,
+    });
+    router.push(`/lesson?level=${startingLevelId}`);
   };
 
   const handleSavedProfileSignIn = (profileId: string) => {
@@ -188,6 +197,25 @@ export default function StartPage() {
               </div>
             )}
 
+            {/* Six questions to find a real starting point, skippable (features.md A2) */}
+            {step === "placement" && (
+              <PlacementQuiz
+                themeId={selectedTheme}
+                onSkip={() => handleStartLearning()}
+                onFinish={(result) => {
+                  setPlacement(result);
+                  setStep("placement-result");
+                }}
+              />
+            )}
+
+            {step === "placement-result" && placement && (
+              <PlacementSummary
+                result={placement}
+                onContinue={() => handleStartLearning(placement.startingLevelId)}
+              />
+            )}
+
             {step === "theme" && (
               <div className="space-y-6">
                 <div>
@@ -202,7 +230,7 @@ export default function StartPage() {
                         data-demo={`theme-${th.id}`}
                         onClick={() => {
                           setSelectedTheme(th.id);
-                          handleStartLearning();
+                          setStep("placement");
                         }}
                         className={`p-4 rounded-xl border-2 font-bold flex flex-col items-center gap-2 transition-all ${
                           selectedTheme === th.id
@@ -227,7 +255,7 @@ export default function StartPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={handleStartLearning}
+                    onClick={() => handleStartLearning()}
                     className="btn-3d btn-3d-plum flex-1 text-base font-semibold py-2 px-3 flex items-center justify-center"
                   >
                     Start Learning
