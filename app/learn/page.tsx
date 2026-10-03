@@ -224,17 +224,17 @@ export default function LearnPathPage() {
                           ? "bg-teal-50/70 border-[var(--teal-500)]"
                           : isActive
                           ? "bg-white border-[var(--plum-700)] shadow-md"
-                          : "bg-zinc-50 border-zinc-200 opacity-60"
+                          : "bg-zinc-50 border-zinc-200"
                       }`}
                     >
                       {/* Node Circle (sits on the spine) */}
                       <div
                         className={`h-[40px] w-[40px] rounded-xl flex items-center justify-center shrink-0 ${
                           isCompleted
-                            ? "bg-[var(--teal-500)] text-white"
+                            ? "bg-[var(--teal-700)] text-white"
                             : isActive
                             ? "bg-[var(--plum-100)] text-[var(--plum-700)]"
-                            : "bg-zinc-200 text-zinc-400"
+                            : "bg-zinc-200 text-[var(--fg-muted)]"
                         }`}
                       >
                         {isCompleted ? <CheckIcon size={20} /> : <node.Icon size={22} />}
@@ -273,7 +273,7 @@ export default function LearnPathPage() {
                             Start
                           </Link>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 bg-zinc-200 px-3 py-1.5 rounded-xl">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-600 bg-zinc-200 px-3 py-1.5 rounded-xl">
                             <LockIcon size={13} />
                             <span>Locked</span>
                           </span>

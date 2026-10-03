@@ -308,7 +308,10 @@ export default function HowMoyeDecidesPage() {
                 <div className="lg:col-span-8 space-y-5">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <label className="text-xs font-black uppercase text-[var(--fg-muted)]">
+                      <label
+                        htmlFor="proof-prior"
+                        className="text-xs font-black uppercase text-[var(--fg-muted)]"
+                      >
                         Prior Knowledge Probability (p_prior):
                       </label>
                       <span className="font-mono text-sm font-black text-[var(--plum-900)] bg-[var(--plum-100)] px-2.5 py-0.5 rounded-lg border border-[var(--plum-500)]/20">
@@ -316,6 +319,7 @@ export default function HowMoyeDecidesPage() {
                       </span>
                     </div>
                     <input
+                      id="proof-prior"
                       type="range"
                       min="0.05"
                       max="0.95"
@@ -342,7 +346,7 @@ export default function HowMoyeDecidesPage() {
                         style={{ color: testAnswer ? "#FFFFFF" : "var(--plum-900)" }}
                         className={`p-3 rounded-2xl text-xs font-black inline-flex items-center justify-center gap-2 cursor-pointer transition-all ${
                           testAnswer
-                            ? "bg-teal-500 !text-white text-white border-2 border-teal-600 shadow-[0_4px_0_#0F766E]"
+                            ? "bg-teal-700 !text-white text-white border-2 border-teal-600 shadow-[0_4px_0_#0F766E]"
                             : "bg-white text-[var(--plum-900)] border-2 border-[var(--border)] shadow-[0_3px_0_#D8CCE8] hover:border-teal-400"
                         }`}
                       >

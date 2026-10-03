@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useAccessibility, type ReadingTint } from "@/lib/accessibility-context";
 import { SUPPORTED_VOICE_LANGUAGES, speakMultilingualText } from "@/lib/multilingual-voice";
 import { CloseIcon } from "@/components/ui/svg-icons";
@@ -30,6 +31,16 @@ export function AccessibilitySheet() {
     setPanelOpen,
   } = useAccessibility();
 
+  // Escape closes the sheet. The lesson player watches for Escape to leave the lesson and
+  // deliberately stands aside while this dialog is open.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPanelOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [setPanelOpen]);
+
   if (!panelOpen) return null;
 
   const tints: { id: ReadingTint; label: string; bgClass: string }[] = [
@@ -39,6 +50,7 @@ export function AccessibilitySheet() {
     { id: "sky", label: "Soft Sky", bgClass: "bg-[#EFF5FA] border-[#C8D7E8] text-[#22143D]" },
     { id: "none", label: "Default", bgClass: "bg-white border-[var(--border)] text-[var(--plum-900)]" },
   ];
+
 
   return (
     <div
@@ -75,10 +87,12 @@ export function AccessibilitySheet() {
               <button
                 type="button"
                 data-demo="a11y-dyslexia"
+                aria-pressed={dyslexicFont}
+                aria-label="Reading friendly spacing"
                 onClick={() => setDyslexicFont(!dyslexicFont)}
                 className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors shrink-0 ${
                   dyslexicFont
-                    ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)] shadow-xs"
+                    ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)] shadow-xs"
                     : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                 }`}
               >
@@ -157,7 +171,7 @@ export function AccessibilitySheet() {
                     onClick={() => setReadingRuler(!readingRuler)}
                     className={`px-3 py-2 rounded-lg text-xs font-bold border transition-colors ${
                       readingRuler
-                        ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
+                        ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                         : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                     }`}
                   >
@@ -176,7 +190,7 @@ export function AccessibilitySheet() {
                     onClick={() => setWordHighlight(!wordHighlight)}
                     className={`px-3 py-2 rounded-lg text-xs font-bold border transition-colors ${
                       wordHighlight
-                        ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
+                        ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                         : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
                     }`}
                   >
@@ -198,7 +212,7 @@ export function AccessibilitySheet() {
               onClick={() => setReducedMotion(!reducedMotion)}
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 reducedMotion
-                  ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
+                  ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                   : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >
@@ -217,7 +231,7 @@ export function AccessibilitySheet() {
               onClick={() => setLargeText(!largeText)}
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 largeText
-                  ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
+                  ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                   : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >
@@ -236,7 +250,7 @@ export function AccessibilitySheet() {
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={`px-3 py-1 rounded-lg text-xs font-bold border transition-colors ${
                 soundEnabled
-                  ? "bg-[var(--teal-500)] text-white border-[var(--teal-700)]"
+                  ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                   : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
               }`}
             >

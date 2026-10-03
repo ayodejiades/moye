@@ -10,7 +10,9 @@
   --plum-500: #7C5CC4;
   --plum-100: #EFE9FA;
   --honey-500: #F5A524;
-  --honey-700: #B36B00;
+  /* Darkened from #B36B00 so honey text clears WCAG AA 4.5:1 on every surface it
+     is used on (white, amber-50 and plum-100). Verified by pnpm test:a11y. */
+  --honey-700: #8F5600;
   --teal-500: #2BB7A3;
   --teal-700: #12786B;
   --rose-400: #E88AA6;
@@ -208,8 +210,15 @@ body {
 h1, h2, h3 { text-wrap: balance; }
 p, li { text-wrap: pretty; }
 
-button {
-  color: inherit;
+/* Buttons inherit the page colour by default, but this must sit in @layer base:
+   an unlayered rule outranks every Tailwind utility, which silently beat the
+   `text-white` on selected buttons and put dark body text on the plum and teal
+   fills (white on --plum-700 is 8.3:1, dark on it was 1.9:1). Layering it lets the
+   utility win, so call sites no longer need !text-white. Verified by pnpm test:a11y. */
+@layer base {
+  button {
+    color: inherit;
+  }
 }
 
 /* 3D Chunky Buttons (SPEC.md §4) — explicit label colour beats the

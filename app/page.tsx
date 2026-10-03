@@ -217,7 +217,12 @@ export default function LandingPage() {
 
         {/* Curriculum strip */}
         <Reveal>
-          <div className="border-y border-[var(--border)] bg-white py-4 px-6 overflow-x-auto">
+          <div
+            className="border-y border-[var(--border)] bg-white py-4 px-6 overflow-x-auto"
+            tabIndex={0}
+            role="group"
+            aria-label="Curriculum alignment, scrolls sideways on a small screen"
+          >
             <div className="max-w-7xl mx-auto flex items-center gap-4 whitespace-nowrap">
               <span className="text-xs font-bold text-[var(--fg-muted)] shrink-0">Aligned to</span>
               <div className="flex items-center gap-2 text-xs font-bold text-[var(--plum-900)] shrink-0">

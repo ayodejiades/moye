@@ -37,6 +37,7 @@ function LessonPlayerContent() {
   const activeLevelId = searchParams.get("level") || "s1";
 
   const {
+    panelOpen,
     setPanelOpen,
     readingRuler,
     setReadingRuler,
@@ -271,6 +272,12 @@ function LessonPlayerContent() {
     [evaluateAnswer, feedbackState, soundEnabled],
   );
 
+  const handleLeave = useCallback(() => {
+    // Every answer is already written to the store, so there is nothing to save here.
+    // The path map is a warm place to land: the child can see how far they got.
+    router.push("/learn");
+  }, [router]);
+
   const handleCheckAnswer = useCallback(() => {
     if (!selectedOptionId) return;
     evaluateAnswer(selectedOptionId);
@@ -327,6 +334,15 @@ function LessonPlayerContent() {
       if (e.key === "p" || e.key === "P") {
         e.preventDefault();
         setPaused((prev) => !prev);
+        return;
+      }
+
+      // Escape is the way out of a lesson. When the comfort sheet is open, Escape belongs
+      // to the sheet, which closes it instead.
+      if (e.key === "Escape") {
+        if (panelOpen) return;
+        e.preventDefault();
+        handleLeave();
       }
     };
 
@@ -340,6 +356,8 @@ function LessonPlayerContent() {
     handleCheckAnswer,
     handleNextQuestion,
     activePromptText,
+    handleLeave,
+    panelOpen,
   ]);
 
   const handlePromptMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -392,6 +410,13 @@ function LessonPlayerContent() {
           >
             {paused ? "Resume" : "Pause"}
           </button>
+          <button
+            type="button"
+            onClick={handleLeave}
+            className="rounded-xl border border-[var(--border)] bg-white px-3 py-1.5 min-h-11 text-sm font-semibold text-[var(--plum-900)] hover:bg-[var(--plum-100)] cursor-pointer"
+          >
+            Stop for now
+          </button>
           <span className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
             Focus Mode
           </span>
@@ -404,9 +429,11 @@ function LessonPlayerContent() {
               className="h-full bg-[var(--teal-500)] transition-all duration-300 rounded-full"
               style={{ width: `${progressPercent}%` }}
               role="progressbar"
+              aria-label={`Mastery this level: ${masteredIds.length} of ${totalTargetQuestions} questions`}
               aria-valuenow={masteredIds.length}
               aria-valuemin={0}
               aria-valuemax={totalTargetQuestions}
+              aria-valuetext={`${masteredIds.length} of ${totalTargetQuestions} questions answered`}
             />
           </div>
         </div>
@@ -444,10 +471,23 @@ function LessonPlayerContent() {
             <button
               type="button"
               onClick={() => setPaused(false)}
-              className="btn-3d btn-3d-plum"
+              className="btn-3d btn-3d-plum text-base py-2 px-3"
             >
               Resume Lesson
             </button>
+            <div>
+              <button
+                type="button"
+                onClick={handleLeave}
+                className="btn-3d btn-3d-card text-base py-2 px-3"
+              >
+                Stop for now
+              </button>
+              <p className="text-xs text-[var(--fg-muted)] mt-3 text-pretty">
+                Everything you answered is already saved. You can pick this level back up any
+                time from your path.
+              </p>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col space-y-5">
