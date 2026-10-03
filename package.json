@@ -11,7 +11,7 @@
     "content:build": "tsx tools/build-content.ts",
     "content:sync": "tsx tools/sync-content.ts",
     "verify:evidence": "tsx tools/verify-evidence.ts",
-    "claim:verify": "tsx tools/verify-evidence.ts",
+    "claim:verify": "tsx tools/verify-moye-claims.ts",
     "verify:system": "tsx tools/verify.ts && tsx tools/verify-evidence.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

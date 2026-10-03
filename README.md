@@ -59,6 +59,11 @@ account, and no network.
 
 ## How it works
 
+Every number and behaviour claim is re-derived by `pnpm claim:verify`, which runs the real
+functions in `lib/` over committed fixtures and writes
+[`evidence/claim-ledger.md`](evidence/claim-ledger.md). Move a threshold in the code and it fails,
+so nothing on this page can quietly stop being true.
+
 The demo path, step by step:
 
 ```mermaid
