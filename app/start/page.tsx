@@ -3,6 +3,7 @@
 import { ComfortButton } from "@/components/comfort-button";
 import { PlacementQuiz, PlacementSummary } from "@/components/placement-quiz";
 import { useUiLanguage } from "@/lib/ui-language-context";
+import { CONTENT_LENSES, CONTENT_LOCALES, LOCALE_BY_LENS } from "@/lib/content.generated";
 import { UI_LANGUAGES } from "@/lib/ui-strings";
 import { LEVEL_SEQUENCE } from "@/lib/moye-store";
 import { levelsToUnlock, type PlacementResult } from "@/lib/placement";
@@ -22,12 +23,20 @@ import {
   SparkIcon,
 } from "@/components/ui/svg-icons";
 
-const CURRICULA = [
-  { id: "ng-ube", name: "Nigeria Universal Basic Education", country: "Nigeria", region: "West Africa", currency: "₦" },
-  { id: "england-nc", name: "England National Curriculum", country: "United Kingdom", region: "Europe", currency: "£" },
-  { id: "common-core", name: "US Common Core", country: "United States", region: "North America", currency: "$" },
-  { id: "universal", name: "Universal Mastery Curriculum", country: "Global", region: "All", currency: "$" },
-];
+/**
+ * The curriculum lenses come from content/lenses/lenses.json via lib/content-data.ts, so
+ * the onboarding list, the lesson player and the committed content cannot disagree.
+ */
+const CURRICULA = CONTENT_LENSES.map((lens) => {
+  const locale = CONTENT_LOCALES.find((l) => l.id === LOCALE_BY_LENS[lens.id]);
+  return {
+    id: lens.id,
+    name: lens.name,
+    region: lens.region,
+    country: locale?.country ?? lens.region,
+    currency: locale?.currencySymbol ?? "",
+  };
+});
 
 const THEMES = [
   { id: "dinosaurs", name: "Dinosaurs", Icon: DinosaurIcon },

@@ -18,6 +18,7 @@ import { Reveal } from "@/components/reveal";
 import { InViewFloat } from "@/components/inview-float";
 import { DecisionPreview } from "@/components/decision-preview";
 import { HeroTryQuestion } from "@/components/hero-try-question";
+import { ContentStats } from "@/components/content-stats";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -232,6 +233,11 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+        </Reveal>
+
+        {/* Real counts taken from content/, not typed by hand (features.md B3) */}
+        <Reveal>
+          <ContentStats />
         </Reveal>
 
         {/* Three plain truths about how Moye behaves */}
