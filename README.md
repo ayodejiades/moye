@@ -109,11 +109,12 @@ the working, in the product's own words rather than as a wall of maths.
 | `pnpm build` | production build |
 | `pnpm test` | unit tests for the decision logic (10) |
 | `pnpm test:landing` | landing page standards: motion, contrast, honesty, semantics (39) |
-| `pnpm test:features` | the learning logic: placement, review, scaffolding, energy, focus, classroom, content (103) |
+| `pnpm test:features` | the learning logic: placement, review, scaffolding, energy, focus, classroom, content, privacy promises (110) |
 | `pnpm content:sync` | regenerate `content/` from the typed banks, then `pnpm content:build` |
 | `pnpm test:demo-path` | walks `docs/demo-path.json` online **and** with the network off |
 | `pnpm test:keyboard` | completes a lesson with no mouse at all |
 | `pnpm test:landing:e2e` | runs the browser probe at 1280, 768 and 375, with and without reduced motion |
+| `pnpm test:a11y` | axe-core over 10 pages at 1280 and 375; fails on any serious or critical WCAG A/AA finding |
 | `pnpm lint` | eslint, zero warnings |
 | `pnpm claim:verify` | re-derives the scaffold evidence fixtures |
 
@@ -123,6 +124,7 @@ The end to end scripts need a running server and Playwright:
 pnpm build && DEMO_MODE=1 pnpm start -p 3111
 BASE_URL=http://localhost:3111 pnpm test:demo-path
 BASE_URL=http://localhost:3111 pnpm test:keyboard
+BASE_URL=http://localhost:3111 pnpm test:a11y
 ```
 
 ## Where the content lives
@@ -146,7 +148,8 @@ Built in from the first screen, not bolted on afterwards.
   reading line guide, word highlight while reading aloud, Calm Motion, sound, and voice speed.
 - Calm Motion and the operating system's reduced motion setting both stop every animation, pause
   the ambient loops, and force all revealed content visible.
-- Every colour pair on the landing page is checked against WCAG AA by `pnpm test:landing`.
+- Every colour pair on the landing page is checked against WCAG AA by `pnpm test:landing`, and all 10 pages are checked against WCAG A and AA by `pnpm test:a11y`.
+- Any lesson can be left at any time with "Stop for now" or `Escape`, keeping every answer already given. Leaving is never punished.
 - A browser probe runs at 1280, 768 and 375 px, with and without reduced motion, and fails on a
   stuck reveal, a running animation, a console error or a tap target under 44 px.
 - A whole lesson can be finished with the keyboard: `1` to `4` choose an answer, `Enter` moves on,

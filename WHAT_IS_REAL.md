@@ -59,3 +59,12 @@ Moye number or claim comes from them. Moye's rules are `lib/mastery.ts`, `lib/ho
 - **No Runtime LLM Dependency:** Core lessons run from deterministic, pre verified lesson banks without needing live external API keys.
 - **No Monetization or Paid Upgrades:** Honey drops are earned purely through practice; zero microtransactions, subscriptions, or paywalls exist.
 - **No Shame or Guilt Framing:** Incorrect answers offer hints, and broken streaks simply rest without punitive messaging.
+
+## Stopping a lesson
+
+Built. A "Stop for now" control sits beside Pause on every question and on the paused
+screen, and `Escape` leaves the lesson. Every answer is written to the store as it is
+given, so leaving keeps the honey and the mastery already earned. It lands on the path
+map. There is no quit confirmation, no "are you sure" gate and no lost-streak warning,
+because a child who cannot walk away from a lesson is being held, and that would
+contradict the no time pressure rule in SPEC.md section 2.
