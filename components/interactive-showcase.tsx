@@ -2,21 +2,18 @@
 
 import { useEffect, useState, type KeyboardEvent } from "react";
 import { useAccessibility } from "@/lib/accessibility-context";
-import { MoyinMascot } from "@/components/moyin-mascot";
 import {
   HoneyDropIcon,
-  SpeakerIcon,
-  CheckIcon,
-  RetryIcon,
   DuoStreakFlame,
-  DinosaurIcon,
   PrinterIcon,
   TargetIcon,
   StarIcon,
 } from "@/components/ui/svg-icons";
 import { TABS, type ShowcaseTabId } from "./showcase/showcase-tabs";
-import { step } from "./showcase/step";
+import { renderQuestion, THEME_ORDER, LENS_LOCALES, LOCALES, THEMES } from "@/lib/theme-resolver";
+import { LEVEL_BANKS } from "@/lib/lesson-bank";
 import { StoryCard, UnderTheHoodCard } from "./showcase/story-cards";
+import { FocusScreen } from "./showcase/focus-screen";
 import {
   PhoneFrame,
   PhoneStatusBar,
@@ -24,14 +21,6 @@ import {
   HiveScreen,
   GrownupsScreen,
 } from "./showcase/phone-frame";
-
-const QUESTION = "How many friendly dinosaurs are here? Count 3 dinosaurs.";
-
-const OPTIONS = [
-  { val: 2, correct: false },
-  { val: 3, correct: true },
-  { val: 4, correct: false },
-];
 
 type Story = {
   eyebrow: string;
@@ -85,22 +74,37 @@ const STORY: Record<ShowcaseTabId, Story> = {
 export function InteractiveAppShowcase() {
   const { dyslexicFont, setDyslexicFont } = useAccessibility();
   const [activeTab, setActiveTab] = useState<ShowcaseTabId>("focus");
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [moneyPick, setMoneyPick] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [pKnown, setPKnown] = useState(0.74);
   const [hat, setHat] = useState<string | null>("hat-acorn");
   const [scarf, setScarf] = useState<string | null>(null);
+  // The demo switches (features.md C2 and C3). These re-skin the same question template
+  // through the real resolver, so what the visitor sees is what the app would serve.
+  const [demoTheme, setDemoTheme] = useState<string>("dinosaurs");
+  const [demoLens, setDemoLens] = useState<string>("ng-ube");
+
+  // Two real questions from the committed bank, both rendered through the real resolver
+  // with whatever theme and locale the visitor picked. Nothing here is typed by hand.
+  // The counting question carries the theme slots, so the theme switch visibly re-skins
+  // it. The money question carries the currency slot, so the curriculum switch visibly
+  // changes the money. The bank keeps theme words and currency in separate levels, so
+  // both are needed to show both switches honestly.
+  const localeId = LENS_LOCALES[demoLens] ?? "en-NG";
+  const demo = renderQuestion(LEVEL_BANKS.s1[0], demoTheme, localeId);
+  const money = renderQuestion(LEVEL_BANKS.s2[0], demoTheme, localeId);
 
   useEffect(() => {
     if (!isSpeaking || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(QUESTION);
+    const utterance = new SpeechSynthesisUtterance(demo.readAloud);
     utterance.rate = 0.9;
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
     return () => window.speechSynthesis.cancel();
-  }, [isSpeaking]);
+  }, [isSpeaking, demo.readAloud]);
 
   function onTabKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const i = TABS.findIndex((t) => t.id === activeTab);
@@ -115,7 +119,6 @@ export function InteractiveAppShowcase() {
   }
 
   const story = STORY[activeTab];
-  const pose = selectedAnswer === 3 ? "cheer" : selectedAnswer !== null ? "think" : "body-double";
 
   return (
     <section className="relative overflow-hidden bg-[var(--plum-100)] border-y border-[var(--border)] py-16 sm:py-24 px-4 sm:px-6 text-center select-none">
@@ -126,6 +129,47 @@ export function InteractiveAppShowcase() {
         <p className="text-sm sm:text-base text-[var(--fg-muted)] max-w-xl font-medium">
           Try four parts of Moye: calm lessons, difficulty that adjusts, honey rewards, and plain reports for grownups.
         </p>
+
+        {/* The same question, re-skinned. Aligned to these curricula, never official. */}
+        <div className="flex flex-wrap items-center justify-center gap-2" data-demo="showcase-switchers">
+          {THEME_ORDER.map((id) => (
+            <button
+              key={id}
+              type="button"
+              data-demo={`showcase-theme-${id}`}
+              aria-pressed={demoTheme === id}
+              onClick={() => setDemoTheme(id)}
+              className={`text-sm font-semibold px-3 min-h-11 inline-flex items-center gap-2 rounded-lg border transition-colors ${
+                demoTheme === id
+                  ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
+                  : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
+              }`}
+            >
+              {THEMES[id]?.name ?? id}
+            </button>
+          ))}
+          <span aria-hidden="true" className="text-[var(--border)] px-1">|</span>
+          {["ng-ube", "england-nc", "common-core"].map((id) => {
+            const locale = LOCALES[LENS_LOCALES[id]];
+            return (
+              <button
+                key={id}
+                type="button"
+                data-demo={`showcase-lens-${id}`}
+                aria-pressed={demoLens === id}
+                onClick={() => setDemoLens(id)}
+                className={`text-sm font-semibold px-3 min-h-11 inline-flex items-center gap-1 rounded-lg border transition-colors ${
+                  demoLens === id
+                    ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
+                    : "bg-white text-[var(--plum-900)] border-[var(--border)] hover:bg-[var(--plum-100)]"
+                }`}
+              >
+                <span>{locale?.country ?? id}</span>
+                <span aria-hidden="true">{locale?.currencySymbol}</span>
+              </button>
+            );
+          })}
+        </div>
 
         {/* Real tab semantics: arrow keys move, only the selected tab is in the tab order. */}
         <div
@@ -192,93 +236,17 @@ export function InteractiveAppShowcase() {
           <PhoneStatusBar dyslexicFont={dyslexicFont} onToggleDyslexic={() => setDyslexicFont(!dyslexicFont)} />
           <div key={activeTab} className="panel-in flex-1 flex flex-col">
             {activeTab === "focus" && (
-              <div className="p-4 flex-1 flex flex-col justify-between gap-3 overflow-y-auto">
-                <div className="flex flex-col gap-2">
-                  <span className="text-xs font-bold text-[var(--fg-muted)]">Question 2 of 5</span>
-                  <div className="w-full h-2 bg-[var(--plum-100)] overflow-hidden">
-                    <div className="h-full bg-[var(--teal-500)] w-[40%]" />
-                  </div>
-                </div>
-
-                <div className="p-3 bg-white rounded-2xl border-2 border-[var(--border)] flex flex-col gap-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[var(--fg-muted)]">Count and match</span>
-                    <button
-                      type="button"
-                      onClick={() => setIsSpeaking(true)}
-                      className={`px-2 py-1 min-h-11 rounded-md border flex items-center gap-1 text-xs font-semibold transition-colors ${
-                        isSpeaking
-                          ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
-                          : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
-                      }`}
-                    >
-                      <SpeakerIcon size={12} />
-                      <span>{isSpeaking ? "Reading" : "Read aloud"}</span>
-                    </button>
-                  </div>
-
-                  <h4 className="text-base font-bold text-[var(--plum-900)] leading-tight">
-                    How many friendly dinosaurs are here?
-                  </h4>
-
-                  {/* One shot entrance, 60ms apart. No looping bounce. */}
-                  <div className="flex items-center justify-center gap-4 py-2 bg-[var(--paper)] rounded-xl border border-[var(--border)]">
-                    {[0, 1, 2].map((n) => (
-                      <div key={n} className="pop-in" style={step(n)}>
-                        <DinosaurIcon size={28} className="text-[var(--teal-700)]" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2">
-                  {OPTIONS.map((opt) => {
-                    const isSelected = selectedAnswer === opt.val;
-                    let btnClasses =
-                      "bg-white border-2 border-[var(--border)] shadow-[0_3px_0_var(--border)] text-[var(--plum-900)]";
-                    if (isSelected) {
-                      btnClasses = opt.correct
-                        ? "bg-[var(--teal-500)] border-2 border-[var(--teal-700)] shadow-[0_3px_0_var(--teal-700)] text-white"
-                        : "bg-[var(--rose-400)] border-2 border-[var(--rose-400)] shadow-[0_3px_0_var(--plum-700)] text-[var(--plum-900)]";
-                    }
-                    return (
-                      <button
-                        key={opt.val}
-                        type="button"
-                        aria-pressed={isSelected}
-                        onClick={() => setSelectedAnswer(opt.val)}
-                        className={`h-12 rounded-xl font-bold text-lg transition-transform active:translate-y-1 flex items-center justify-center ${btnClasses}`}
-                      >
-                        {opt.val}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Feedback is announced, and a wrong answer is gentle: no shake, no buzzer. */}
-                <div
-                  aria-live="polite"
-                  className="pt-2 border-t border-[var(--border)] flex items-center justify-between gap-2 min-h-12"
-                >
-                  {selectedAnswer === 3 ? (
-                    <div className="pop-in flex items-center gap-1 text-xs font-bold text-[var(--teal-700)] bg-[var(--plum-100)] px-2 py-1 rounded-xl">
-                      <CheckIcon size={16} />
-                      <span>Spot on. One honey drop.</span>
-                      <HoneyDropIcon size={14} />
-                    </div>
-                  ) : selectedAnswer !== null ? (
-                    <div className="pop-in flex items-center gap-1 text-xs font-bold text-[var(--plum-900)] bg-[var(--paper)] px-2 py-1 rounded-xl border border-[var(--rose-400)]">
-                      <RetryIcon size={16} />
-                      <span>Almost. Let&apos;s count again.</span>
-                    </div>
-                  ) : (
-                    <span className="text-xs font-bold text-[var(--fg-muted)]">Tap an answer above to try.</span>
-                  )}
-                  <div key={pose} className="pop-in shrink-0">
-                    <MoyinMascot pose={pose} size={52} />
-                  </div>
-                </div>
-              </div>
+              <FocusScreen
+                countQuestion={demo}
+                moneyQuestion={money}
+                localeName={LOCALES[localeId]?.country ?? "your country"}
+                countPick={selectedOptionId}
+                moneyPick={moneyPick}
+                isSpeaking={isSpeaking}
+                onReadAloud={() => setIsSpeaking(true)}
+                onPickCount={setSelectedOptionId}
+                onPickMoney={setMoneyPick}
+              />
             )}
             {activeTab === "mastery" && (
               <MasteryScreen

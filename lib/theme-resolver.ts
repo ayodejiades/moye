@@ -26,9 +26,23 @@ export const FOOTBALL_THEME: ThemeWordBank = {
   },
 };
 
+export const SPACE_THEME: ThemeWordBank = {
+  id: "space",
+  name: "Space",
+  icon: "space",
+  items: {
+    hero: "Comet Moyin",
+    item_plural: "bright stars",
+    item_singular: "bright star",
+    collector: "sky watcher",
+    habitat: "night sky",
+  },
+};
+
 export const THEMES: Record<string, ThemeWordBank> = {
   dinosaurs: DINOSAURS_THEME,
   football: FOOTBALL_THEME,
+  space: SPACE_THEME,
 };
 
 export const LOCALE_NG: LocalePack = {
@@ -53,10 +67,37 @@ export const LOCALE_US: LocalePack = {
   unitWeight: "pounds",
 };
 
+export const LOCALE_GB: LocalePack = {
+  id: "en-GB",
+  name: "England (English)",
+  country: "United Kingdom",
+  currencySymbol: "\u00a3",
+  coinName: "pence",
+  foodName: "crisps",
+  unitDistance: "metres",
+  unitWeight: "kilograms",
+};
+
 export const LOCALES: Record<string, LocalePack> = {
   "en-NG": LOCALE_NG,
   "en-US": LOCALE_US,
+  "en-GB": LOCALE_GB,
 };
+
+/**
+ * Curriculum lens to the locale whose words and money it uses. The landing page demos
+ * the same money question in three places so the curriculum strip is a demonstration
+ * rather than decoration (features.md C3). Aligned to, never official.
+ */
+export const LENS_LOCALES: Record<string, string> = {
+  "ng-ube": "en-NG",
+  "england-nc": "en-GB",
+  "common-core": "en-US",
+  universal: "en-NG",
+};
+
+/** The theme ids, in the order the demo switcher shows them. */
+export const THEME_ORDER = ["dinosaurs", "football", "space"] as const;
 
 /**
  * Kid names that appear inside question stories. Rendered through the

@@ -20,6 +20,11 @@ const LANDING = [
   "components/reveal.tsx",
   "components/comfort-button.tsx",
   "components/accessibility-sheet.tsx",
+  // Showcase parts. fixes.md C4 requires the split, so these are audited in their own right.
+  "components/showcase/showcase-tabs.tsx",
+  "components/showcase/focus-screen.tsx",
+  "components/showcase/phone-frame.tsx",
+  "components/showcase/story-cards.tsx",
 ];
 const MASCOT = ["components/moyin-mascot.tsx", "components/ui/svg-icons.tsx"];
 const CSS_PATH = "app/globals.css";
@@ -396,7 +401,12 @@ test("[P1] A5 the accessibility sheet is reachable from the landing page (SPEC 5
 });
 
 test("[P2] A6 showcase answers expose state to assistive tech", () => {
-  const s = stripJsComments(read("components/interactive-showcase.tsx"));
+  // Read every showcase part: fixes.md C4 splits these across files, so checking only
+  // the orchestrator would miss the markup entirely.
+  const s = ["components/interactive-showcase.tsx", ...LANDING.filter((p) => p.includes("/showcase/"))]
+    .filter((p) => existsSync(resolve(ROOT, p)))
+    .map((p) => stripJsComments(read(p)))
+    .join("\n");
   matches(s, /aria-pressed|aria-checked/, "Answer buttons need aria-pressed.");
   matches(s, /aria-live/, "Feedback (Spot on / Almost) must be in an aria-live region.");
 });
