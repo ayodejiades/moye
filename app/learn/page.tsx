@@ -1,9 +1,11 @@
 "use client";
 
 import { ComfortButton } from "@/components/comfort-button";
+import { ReviewCard } from "@/components/review-card";
 import { InstallPrompt } from "@/components/install-prompt";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMoyeStore } from "@/lib/moye-store";
 import { useAccessibility } from "@/lib/accessibility-context";
 import { MoyinMascot } from "@/components/moyin-mascot";
@@ -43,6 +45,7 @@ function getMascotMessage(completedCount: number, nextTitle: string | null): str
 
 export default function LearnPathPage() {
   const { state } = useMoyeStore();
+  const router = useRouter();
   const { dyslexicFont, setDyslexicFont } = useAccessibility();
 
   const completedCount = state.completedLevels.length;
@@ -129,6 +132,9 @@ export default function LearnPathPage() {
               </div>
             </div>
           </div>
+
+          {/* Something worth another look, only when something is due (features.md B4) */}
+          <ReviewCard onStart={(_skillId, levelId) => router.push(`/lesson?level=${levelId}`)} />
 
           {/* ─── Connected Path with Spine ─── */}
           <div className="relative w-full">
