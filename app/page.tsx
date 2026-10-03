@@ -192,11 +192,11 @@ export default function LandingPage() {
           {/* Solid plum ground: full bleed arc flush with the section edges */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-52 sm:h-64 bg-[var(--plum-900)] rounded-[50%_50%_0_0/100%_100%_0_0]" />
 
-          {/* Mascot Scene: tall enough for the mascot plus its card, and stacked
-              below the copy so it can never cover or block the call to action. */}
+          {/* Mascot Scene: no fixed height, so it always sits below the copy and buttons
+              and can never cover them, whatever the card inside grows to. */}
           <div
             style={step(3)}
-            className="hero-enter relative w-full max-w-5xl mx-auto mt-4 sm:mt-6 h-[320px] sm:h-[360px] flex items-end justify-center select-none overflow-visible z-0"
+            className="hero-enter relative w-full max-w-5xl mx-auto mt-8 flex justify-center select-none z-0"
           >
             <HeroMascotInteractive />
           </div>

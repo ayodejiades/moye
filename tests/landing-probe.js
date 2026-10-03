@@ -102,6 +102,14 @@
   add("R14 hero loops pause when scrolled away", "P1", heroLoops.length === 0, heroLoops.map((a) => a.animationName).join(", "));
   window.scrollTo(0, 0);
 
+  // R15 the hero mascot never overlaps the buttons above it
+  const heroBtns = [...document.querySelectorAll("main a")].filter((a) => /Get Started|How Moye Decides/.test(a.textContent)).slice(0, 2);
+  const moy = document.querySelector("button[aria-label*='Moyin']");
+  if (moy && heroBtns.length) {
+    const lowest = Math.max(...heroBtns.map((b) => b.getBoundingClientRect().bottom));
+    add("R15 hero mascot sits below the buttons, never over them", "P0", moy.getBoundingClientRect().top >= lowest, `mascot top ${Math.round(moy.getBoundingClientRect().top)} vs buttons bottom ${Math.round(lowest)}`);
+  }
+
   const failed = out.filter((r) => !r.pass);
   console.table(out.map((r) => ({ id: r.id, pri: r.pri, result: r.pass ? "PASS" : "FAIL", detail: r.detail })));
   return { viewport: `${innerWidth}x${innerHeight}`, passed: out.length - failed.length, failed: failed.length, results: out };
