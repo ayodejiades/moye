@@ -203,17 +203,25 @@ body {
   letter-spacing: var(--font-letter-spacing);
 }
 
+/* No orphaned words: balance headings, keep body copy even (fixes.md D7). */
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+
 button {
   color: inherit;
 }
 
-/* 3D Chunky Buttons (SPEC.md §4) — explicit white text beats the
+/* 3D Chunky Buttons (SPEC.md §4) — explicit label colour beats the
    `button { color: inherit }` reset above, even when a text-* utility
-   only sets a parent colour. Direct text node inherits from the button. */
+   only sets a parent colour. Direct text node inherits from the button.
+   Ratios verified in WCAG AA (fixes.md X1): white on --plum-700 8.2:1,
+   white on --teal-700 5.3:1, --plum-900 on --honey-500 7.5:1. */
 .btn-3d-plum,
-.btn-3d-teal,
-.btn-3d-honey {
+.btn-3d-teal {
   color: #FFFFFF !important;
+}
+.btn-3d-honey {
+  color: var(--plum-900) !important;
 }
 .btn-3d-plum *,
 .btn-3d-teal *,
@@ -221,7 +229,9 @@ button {
   color: inherit;
 }
 
-/* 3D Chunky Buttons (SPEC.md §4) */
+/* 3D Chunky Buttons (SPEC.md §4). Padding is 8px 12px and min-height 56px
+   so the tap target clears SPEC; unlayered CSS beats Tailwind utilities, so
+   padding utilities on a .btn-3d element are dead and must not be used. */
 .btn-3d {
   position: relative;
   display: inline-flex;
@@ -230,7 +240,7 @@ button {
   font-weight: 700;
   border-radius: 1rem;
   min-height: 56px;
-  padding: 0.75rem 1.75rem;
+  padding: 0.5rem 0.75rem;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   user-select: none;
   cursor: pointer;
@@ -241,9 +251,10 @@ button {
   box-shadow: 0 0 0 transparent !important;
 }
 
+/* Header buttons stay text-sm but keep a 44px hit area (fixes.md A7). */
 .btn-3d-sm,
 .btn-3d-header {
-  min-height: 36px !important;
+  min-height: 44px !important;
   padding: 0.5rem 0.75rem !important;
   font-size: 0.875rem !important;
   font-weight: 600 !important;
@@ -268,7 +279,7 @@ button {
 
 .btn-3d-honey {
   background-color: var(--honey-500);
-  color: #FFFFFF;
+  color: var(--plum-900);
   box-shadow: 0 4px 0 var(--honey-700);
 }
 .btn-3d-honey:hover:not(:disabled) {
@@ -276,9 +287,9 @@ button {
 }
 
 .btn-3d-teal {
-  background-color: var(--teal-500);
+  background-color: var(--teal-700);
   color: #FFFFFF;
-  box-shadow: 0 4px 0 var(--teal-700);
+  box-shadow: 0 4px 0 var(--plum-900);
 }
 .btn-3d-teal:hover:not(:disabled) {
   filter: brightness(1.05);
@@ -302,241 +313,144 @@ button {
 }
 
 /* =========================================================================
-   DUOLINGO-INSPIRED CHUNKY & SPRINGY MOTION SYSTEM (docs/SPEC.md §4)
-   Gentle, tactile, springy, respecting prefers-reduced-motion.
+   MOYE CALM MOTION (docs/SPEC.md section 4)
+   Rules: animate transform and opacity only. One shot motion is 300ms or less.
+   Ambient loops are 3s or longer, tiny, and paused while off screen.
+   Everything below is switched off by the OS setting AND by the in app Calm Motion toggle.
    ========================================================================= */
 
-@keyframes duo-float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(1deg);
-  }
+@keyframes hero-rise {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes duo-speech-pop {
-  0% {
-    transform: scale(0.92) translateY(4px);
-    opacity: 0.7;
+  0%   { opacity: 0.7; transform: scale(0.92) translateY(4px); }
+  60%  { opacity: 1;   transform: scale(1.03) translateY(-2px); }
+  100% { opacity: 1;   transform: scale(1) translateY(0); }
+}
+
+@keyframes duo-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -4px, 0); }
+}
+
+@keyframes moyin-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
+
+@keyframes moyin-blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  97%           { transform: scaleY(0.1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hero entrance: set style={{ "--i": n }} on each element, n = 0, 1, 2, 3 */
+  .hero-enter {
+    animation: hero-rise 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
-  60% {
-    transform: scale(1.03) translateY(-2px);
-    opacity: 1;
+
+  .pop-in {
+    animation: pop-in 240ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 1;
+
+  .panel-in {
+    animation: panel-in 200ms ease-out both;
+  }
+
+  .duo-speech-bubble {
+    animation: duo-speech-pop 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .duo-mascot-float {
+    animation: duo-float 4.2s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .moyin-head {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: moyin-breathe 4.8s ease-in-out infinite;
+  }
+
+  .moyin-eyes {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: moyin-blink 6s ease-in-out infinite;
+  }
+
+  /* Pause ambient loops while their section is off screen (set data-inview on the wrapper) */
+  [data-inview="false"] .moyin-head,
+  [data-inview="false"] .moyin-eyes,
+  [data-inview="false"].duo-mascot-float {
+    animation-play-state: paused;
+  }
+
+  /* Scroll reveal. Content stays visible without JavaScript: the hidden state needs html[data-motion="on"], set by <Reveal>. */
+  [data-reveal] {
+    transition: opacity 240ms ease-out, transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  html[data-motion="on"] [data-reveal]:not([data-visible]) {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
   }
 }
 
-@keyframes duo-wiggle {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-3deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
-}
-
-@keyframes duo-spark-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 1;
-    filter: drop-shadow(0 2px 8px rgba(245, 165, 36, 0.4));
-  }
-}
-
-@keyframes duo-burst-float-1 {
-  0%, 100% {
-    transform: translateY(0px) rotate(-6deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(-2deg);
-  }
-}
-
-@keyframes duo-burst-float-2 {
-  0%, 100% {
-    transform: translateY(0px) rotate(8deg);
-  }
-  50% {
-    transform: translateY(-16px) rotate(14deg);
-  }
-}
-
-@keyframes duo-burst-float-3 {
-  0%, 100% {
-    transform: translateY(0px) rotate(-10deg);
-  }
-  50% {
-    transform: translateY(-9px) rotate(-4deg);
-  }
-}
-
-@keyframes duo-peep {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-/* Moyin leaping/traversing across the phone screens (Duolingo playful mascot motion) */
-@keyframes duo-mascot-traverse {
-  0% {
-    /* Screen 1: peeking behind phone 1 */
-    left: 4%;
-    top: 32%;
-    transform: scale(0.95) rotate(-14deg);
-    opacity: 1;
-    z-index: 5;
-  }
-  20% {
-    /* Leaping out of phone 1 over the gap */
-    left: 20%;
-    top: 14%;
-    transform: scale(1.1) rotate(6deg) translateY(-24px);
-    opacity: 1;
-    z-index: 30;
-  }
-  28% {
-    /* Land & peek behind Phone 2 */
-    left: 31%;
-    top: 36%;
-    transform: scale(0.95) rotate(-6deg);
-    opacity: 1;
-    z-index: 5;
-  }
-  48% {
-    /* Leap from Phone 2 to Phone 3 */
-    left: 48%;
-    top: 16%;
-    transform: scale(1.15) rotate(12deg) translateY(-30px);
-    opacity: 1;
-    z-index: 30;
-  }
-  56% {
-    /* Peek behind Phone 3 */
-    left: 61%;
-    top: 38%;
-    transform: scale(0.95) rotate(10deg);
-    opacity: 1;
-    z-index: 5;
-  }
-  76% {
-    /* Leap to Phone 4 */
-    left: 76%;
-    top: 18%;
-    transform: scale(1.1) rotate(-8deg) translateY(-24px);
-    opacity: 1;
-    z-index: 30;
-  }
-  84% {
-    /* Peek behind Phone 4 */
-    left: 88%;
-    top: 32%;
-    transform: scale(0.95) rotate(16deg);
-    opacity: 1;
-    z-index: 5;
-  }
-  94% {
-    /* Leap back across canvas */
-    left: 50%;
-    top: 8%;
-    transform: scale(0.85) rotate(-10deg) translateY(-36px);
-    opacity: 0.9;
-    z-index: 30;
-  }
-  100% {
-    left: 4%;
-    top: 32%;
-    transform: scale(0.95) rotate(-14deg);
-    opacity: 1;
-    z-index: 5;
-  }
-}
-
-.duo-moye-traveller {
-  animation: duo-mascot-traverse 14s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  position: absolute;
-  pointer-events: auto;
-  cursor: pointer;
-  will-change: left, top, transform;
-}
-.duo-moye-traveller:hover {
-  animation-play-state: paused;
-}
-
-/* Mascot floating idle movement */
-.duo-mascot-float {
-  animation: duo-float 3.6s ease-in-out infinite;
-  transform-origin: center bottom;
-}
-
-.duo-burst-item-1 {
-  animation: duo-burst-float-1 3.2s ease-in-out infinite;
-}
-
-.duo-burst-item-2 {
-  animation: duo-burst-float-2 4.1s ease-in-out infinite;
-  animation-delay: 0.4s;
-}
-
-.duo-burst-item-3 {
-  animation: duo-burst-float-3 3.7s ease-in-out infinite;
-  animation-delay: 0.8s;
-}
-
-.duo-phone-peep {
-  animation: duo-peep 3.5s ease-in-out infinite;
-}
-
-/* Speech bubble bounce-in and float */
-.duo-speech-bubble {
-  animation: duo-speech-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* Interactive bouncy card hover */
+/* Interactive hover motion (only on real links and buttons) */
 .duo-card-hover {
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.2s ease;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms ease, border-color 200ms ease;
 }
 .duo-card-hover:hover {
   transform: translateY(-4px);
 }
 
-/* Subtle sparkle animation */
-.duo-sparkle {
-  animation: duo-spark-pulse 2.4s ease-in-out infinite;
+/* Moyin cheer: paws lift */
+.moyin-paws {
+  transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.moyin-paws-up {
+  transform: translateY(-3px);
 }
 
-/* Duolingo Wiggle on hover for pills & illustrations */
-.duo-hover-wiggle:hover {
-  animation: duo-wiggle 0.4s ease-in-out;
-}
-
-/* Respect prefers-reduced-motion as required by SPEC.md */
+/* Reduced motion: the OS setting ... */
 @media (prefers-reduced-motion: reduce) {
-  .duo-mascot-float,
-  .duo-speech-bubble,
-  .duo-sparkle,
-  .duo-hover-wiggle,
-  .duo-burst-item-1,
-  .duo-burst-item-2,
-  .duo-burst-item-3,
-  .duo-phone-peep {
+  *, *::before, *::after {
     animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
   .duo-card-hover:hover {
     transform: none !important;
   }
 }
 
+/* ... and the in app Calm Motion toggle (adds .reduced-motion-mode to <html>) */
+.reduced-motion-mode *,
+.reduced-motion-mode *::before,
+.reduced-motion-mode *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+.reduced-motion-mode .duo-card-hover:hover {
+  transform: none !important;
+}
+.reduced-motion-mode [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
