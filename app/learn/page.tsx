@@ -70,46 +70,44 @@ export default function LearnPathPage() {
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--plum-900)]">
       {/* ─── Top Header ─── */}
       <header className="w-full border-b border-[var(--border)] bg-white">
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-2">
           <Link href="/" className="text-2xl font-bold tracking-tight text-[var(--plum-900)] lowercase select-none">
             moye
           </Link>
-          <div className="flex items-center gap-3">
-            {/* Spark Streak */}
-            <div className="flex items-center gap-1.5 text-sm font-bold text-[var(--plum-700)] bg-[var(--plum-100)] px-3 py-1 rounded-lg border border-[var(--border)]">
-              <SparkIcon size={16} />
+          <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+            {/* Counters are labels, not buttons, so they carry no border or fill. */}
+            <span
+              className="inline-flex items-center gap-2 min-h-11 text-sm font-bold text-[var(--plum-700)]"
+              title="Days in a row"
+            >
+              <SparkIcon size={18} />
               <span>{state.streakDays}</span>
-            </div>
-            {/* Honey */}
+              <span className="sr-only">day streak</span>
+            </span>
             <Link
               href="/hive"
-              className="flex items-center gap-1.5 text-sm font-bold text-[var(--honey-700)] bg-amber-50 px-3 py-1 rounded-lg border border-amber-300"
+              className="inline-flex items-center gap-2 min-h-11 text-sm font-bold text-[var(--honey-700)] hover:underline"
+              title="Honey. Open Moyin's hive"
             >
               <HoneyDropIcon size={18} />
               <span>{state.honeyBalance}</span>
+              <span className="sr-only">honey, open the hive</span>
             </Link>
-            {/* Direct dyslexia toggle (one tap comfortable reading) */}
+
+            {/* The controls: one style, one height. */}
             <button
               type="button"
               onClick={() => setDyslexicFont(!dyslexicFont)}
               aria-label={dyslexicFont ? "Turn off comfortable reading" : "Turn on comfortable reading"}
               aria-pressed={dyslexicFont}
               data-demo="a11y-dyslexia-quick"
-              title={dyslexicFont ? "Comfortable reading on" : "Comfortable reading off"}
-              className={`h-8 px-3 rounded-lg border text-sm font-semibold flex items-center gap-1.5 transition-colors ${
-                dyslexicFont
-                  ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
-                  : "bg-white text-[var(--plum-700)] border-[var(--border)] hover:bg-[var(--plum-100)]"
-              }`}
+              title={dyslexicFont ? "Comfortable reading is on" : "Comfortable reading is off"}
+              className={`btn-3d btn-3d-card btn-3d-header gap-2 ${dyslexicFont ? "selected" : ""}`}
             >
-              <span aria-hidden="true" className="text-sm leading-none font-semibold">Aa</span>
-              <span className="hidden sm:inline text-sm">{dyslexicFont ? "On" : "Comfortable reading"}</span>
+              <span aria-hidden="true">Aa</span>
+              <span className="hidden sm:inline">Comfortable reading</span>
             </button>
-            {/* Grownups */}
-            <Link
-              href="/grownups"
-              className="hidden sm:inline-flex items-center min-h-11 px-3 rounded-lg border border-[var(--border)] bg-white text-sm font-semibold text-[var(--plum-700)] hover:bg-[var(--plum-100)] transition-colors"
-            >
+            <Link href="/grownups" className="btn-3d btn-3d-card btn-3d-header hidden sm:inline-flex">
               Grownups
             </Link>
             <ComfortButton />

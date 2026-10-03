@@ -1,29 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { useMoyeStore } from "@/lib/moye-store";
-import { HoneyDropIcon } from "@/components/ui/svg-icons";
+import { MoyinMascot } from "@/components/moyin-mascot";
+import {
+  HoneyDropIcon,
+  HoneycombLampIcon,
+  HologramGlobeIcon,
+  CushionNookIcon,
+  BookshelfIcon,
+} from "@/components/ui/svg-icons";
 
 /**
  * Save the hive as a picture (features.md B7).
  *
- * Drawn locally on a canvas and handed to the browser as a download. Nothing is
- * uploaded, there is no account, and the picture never leaves the device.
+ * The picture is made from the SAME components the hive page shows (the real Moyin with
+ * whatever is equipped, and the real decor icons), so what you save is what you see. It is
+ * drawn on this device and handed to the browser as a download. Nothing is uploaded.
  */
 export function HiveShareImage() {
   const { state } = useMoyeStore();
-  const [status, setStatus] = useState<"idle" | "saved" | "failed">("idle");
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "failed">("idle");
 
   async function save() {
-    setStatus("idle");
+    setStatus("saving");
     try {
-      const dataUrl = renderHiveImage(state);
+      const blob = await renderHiveImage(state);
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = `moye-hive-${state.activeProfileName.toLowerCase() || "moyin"}.png`;
+      link.href = url;
+      link.download = `moye-hive-${(state.activeProfileName || "moyin").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
       setStatus("saved");
     } catch {
       setStatus("failed");
@@ -31,143 +42,146 @@ export function HiveShareImage() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col items-center gap-2">
       <button
         type="button"
         data-demo="save-hive-picture"
         onClick={save}
-        className="btn-3d btn-3d-card text-base gap-2 self-start"
+        disabled={status === "saving"}
+        className="btn-3d btn-3d-card text-base gap-2"
       >
         <HoneyDropIcon size={16} />
-        <span>Save picture</span>
+        <span>{status === "saving" ? "Making picture" : "Save picture"}</span>
       </button>
-      {status === "saved" && (
-        <p className="text-sm text-[var(--fg-muted)]">Picture saved to this device.</p>
-      )}
-      {status === "failed" && (
-        <p className="text-sm text-[var(--fg-muted)]">
-          This browser would not save the picture. Everything else on this page still works.
-        </p>
-      )}
+      <p aria-live="polite" className="text-sm text-[var(--fg-muted)] min-h-6">
+        {status === "saved" && "Picture saved to this device."}
+        {status === "failed" && "This browser would not save the picture. Everything else on this page still works."}
+      </p>
     </div>
   );
 }
 
-/**
- * Draws the hive card on a canvas: Moyin with whatever is equipped, the honey balance,
- * and the streak. Kept separate from the component so it can be reasoned about (and it
- * has no React in it).
- */
-export function renderHiveImage(state: {
+type HiveState = {
   activeProfileName: string;
   honeyBalance: number;
   streakDays: number;
   equippedHat: string | null;
+  equippedGlasses: string | null;
   equippedScarf: string | null;
-  ownedCosmetics: string[];
-}): string {
-  const size = 640;
+  equippedPet: string | null;
+  equippedDecor: string | null;
+};
+
+const SIZE = 640; // logical pixels, drawn at 2x for a sharp picture
+
+/** Turns a React icon into the markup of its <svg>, placed at x, y with a fixed size. */
+function svgAt(node: ReactElement, x: number, y: number, w: number, h: number): string {
+  const html = renderToStaticMarkup(node);
+  const match = html.match(/<svg[\s\S]*<\/svg>/);
+  if (!match) return "";
+  let svg = match[0];
+  // Replace the opening tag's own size so the picture decides the size, and add the namespace.
+  svg = svg.replace(/^<svg([^>]*)>/, (_m, attrs: string) => {
+    const clean = attrs.replace(/\s(width|height|class|style)="[^"]*"/g, "");
+    return `<svg xmlns="http://www.w3.org/2000/svg"${clean} x="${x}" y="${y}" width="${w}" height="${h}" overflow="visible">`;
+  });
+  // A picture has no page around it: resolve colours that would have come from the page.
+  const text = getComputedStyle(document.documentElement);
+  svg = svg.replace(/var\((--[\w-]+)\)/g, (_m, name: string) => text.getPropertyValue(name).trim() || "#2A1B4D");
+  svg = svg.replace(/currentColor/g, "#2A1B4D");
+  return svg;
+}
+
+function decorMarkup(decor: string | null): string {
+  switch (decor) {
+    case "decor-honeycomb-lamp":
+      return svgAt(<HoneycombLampIcon size={96} />, 70, 330, 96, 96);
+    case "decor-cushion-pile":
+      return svgAt(<CushionNookIcon size={96} />, 70, 330, 96, 96);
+    case "decor-hologram-globe":
+      return svgAt(<HologramGlobeIcon size={110} />, 460, 90, 110, 110);
+    case "decor-bookshelf":
+      return svgAt(<BookshelfIcon size={96} />, 474, 330, 96, 96);
+    default:
+      return "";
+  }
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("the picture could not be drawn"));
+    img.src = src;
+  });
+}
+
+/**
+ * Draws the hive card: Moyin exactly as shown on the hive page (same component, same
+ * equipped hat, glasses, scarf and pet), the room decor, the name, the honey and the streak.
+ */
+export async function renderHiveImage(state: HiveState): Promise<Blob> {
+  const moyin = svgAt(
+    <MoyinMascot
+      pose="cheer"
+      size={300}
+      hat={state.equippedHat}
+      glasses={state.equippedGlasses}
+      scarf={state.equippedScarf}
+      pet={state.equippedPet}
+    />,
+    170,
+    110,
+    300,
+    300,
+  );
+
+  const scene = `<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">${decorMarkup(state.equippedDecor)}${moyin}</svg>`;
+  const img = await loadImage(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(scene)}`);
+
+  // Fonts used for the words must be ready, or the canvas silently draws a fallback.
+  if (document.fonts?.ready) await document.fonts.ready;
+  const family = getComputedStyle(document.body).fontFamily || "sans-serif";
+
+  const scale = 2;
   const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
+  canvas.width = SIZE * scale;
+  canvas.height = SIZE * scale;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("canvas is not available");
+  ctx.scale(scale, scale);
 
-  // Background and card, in the product's own tokens.
   ctx.fillStyle = "#FBF8FF";
-  ctx.fillRect(0, 0, size, size);
+  ctx.fillRect(0, 0, SIZE, SIZE);
   ctx.fillStyle = "#FFFFFF";
-  roundRect(ctx, 40, 40, size - 80, size - 80, 32);
+  roundRect(ctx, 24, 24, SIZE - 48, SIZE - 48, 32);
   ctx.fill();
   ctx.strokeStyle = "#D8CCE8";
   ctx.lineWidth = 4;
-  roundRect(ctx, 40, 40, size - 80, size - 80, 32);
+  roundRect(ctx, 24, 24, SIZE - 48, SIZE - 48, 32);
   ctx.stroke();
 
-  // Moyin, drawn from the same shapes the mascot uses.
-  const cx = size / 2;
-  const cy = 250;
-  ctx.fillStyle = "#2A1B4D";
-  ctx.beginPath();
-  ctx.ellipse(cx - 62, cy - 58, 30, 36, 0, 0, Math.PI * 2);
-  ctx.ellipse(cx + 62, cy - 58, 30, 36, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#E88AA6";
-  ctx.beginPath();
-  ctx.ellipse(cx - 62, cy - 58, 18, 24, 0, 0, Math.PI * 2);
-  ctx.ellipse(cx + 62, cy - 58, 18, 24, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.drawImage(img, 0, 0, SIZE, SIZE);
 
-  ctx.fillStyle = "#2A1B4D";
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, 84, 78, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#FFFDF7";
-  ctx.beginPath();
-  ctx.ellipse(cx, cy + 14, 60, 54, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Honey forehead stripe: a warm band down the middle of the white blaze, drawn before
-  // the face so the face sits on top of it.
-  ctx.fillStyle = "#FFFDF7";
-  ctx.fillRect(cx - 20, cy - 72, 40, 96);
-  ctx.fillStyle = "#F5A524";
-  ctx.beginPath();
-  ctx.moveTo(cx - 11, cy - 72);
-  ctx.lineTo(cx + 11, cy - 72);
-  ctx.lineTo(cx + 8, cy + 6);
-  ctx.lineTo(cx - 8, cy + 6);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = "#2A1B4D";
-  ctx.beginPath();
-  ctx.arc(cx - 22, cy + 6, 13, 0, Math.PI * 2);
-  ctx.arc(cx + 22, cy + 6, 13, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#FFFFFF";
-  ctx.beginPath();
-  ctx.arc(cx - 17, cy + 1, 5, 0, Math.PI * 2);
-  ctx.arc(cx + 27, cy + 1, 5, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#E88AA6";
-  ctx.beginPath();
-  ctx.arc(cx - 44, cy + 34, 15, 0, Math.PI * 2);
-  ctx.arc(cx + 44, cy + 34, 15, 0, Math.PI * 2);
-  ctx.fill();
-
-  if (state.equippedHat) {
-    ctx.fillStyle = "#B36B00";
-    ctx.beginPath();
-    ctx.ellipse(cx, cy - 74, 46, 16, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#7A4600";
-    ctx.beginPath();
-    ctx.arc(cx, cy - 84, 18, Math.PI, 0);
-    ctx.fill();
-  }
-  if (state.equippedScarf) {
-    ctx.fillStyle = "#12786B";
-    ctx.fillRect(cx - 52, cy + 78, 104, 18);
-  }
-
-  // Text: what Moyin is called and the two numbers the app actually holds.
-  ctx.fillStyle = "#2A1B4D";
-  ctx.textAlign = "center";
-  ctx.font = "bold 34px Lexend, sans-serif";
   const name = state.activeProfileName.trim() || "Moyin";
-  ctx.fillText(`${name}'s hive`, cx, 420);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#2A1B4D";
+  ctx.font = `700 36px ${family}`;
+  ctx.fillText(`${name}'s hive`, SIZE / 2, 470, SIZE - 120);
 
-  ctx.font = "26px Lexend, sans-serif";
   ctx.fillStyle = "#594875";
-  ctx.fillText(`${state.honeyBalance} honey  ${state.streakDays} day streak`, cx, 462);
+  ctx.font = `500 26px ${family}`;
+  ctx.fillText(`${state.honeyBalance} honey`, SIZE / 2 - 90, 520);
+  ctx.fillText(`${state.streakDays} day streak`, SIZE / 2 + 90, 520);
 
-  ctx.font = "20px Lexend, sans-serif";
   ctx.fillStyle = "#5B3A9E";
-  ctx.fillText("moye", cx, 520);
+  ctx.font = `700 22px ${family}`;
+  ctx.fillText("moye", SIZE / 2, 580);
 
-  return canvas.toDataURL("image/png");
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("the picture could not be saved"))), "image/png"),
+  );
 }
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {

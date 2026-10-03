@@ -529,10 +529,10 @@ function LessonPlayerContent() {
                     <span>Moyin is learning alongside you</span>
                   )}
                 </div>
-                <div className="mt-1.5 flex items-center gap-2">
+                <div className="mt-1.5 flex flex-wrap items-center gap-2">
                   <div
                     data-demo="difficulty-indicator"
-                    className="inline-flex items-center gap-1.5 bg-[var(--plum-100)] text-[var(--plum-900)] px-2 py-1 rounded-lg text-xs font-bold border border-[var(--border)] whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 bg-[var(--plum-100)] text-[var(--plum-900)] px-2 py-1 rounded-lg text-xs font-bold border border-[var(--border)] max-w-full flex-wrap"
                   >
                     <TargetIcon size={14} className="shrink-0" />
                     <span>

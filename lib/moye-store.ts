@@ -54,15 +54,6 @@ const STORAGE_KEY = "moye_global_state_v2";
 
 export const DEFAULT_PROFILES: UserProfile[] = [
   {
-    id: "profile-anjola",
-    name: "Anjola",
-    role: "learner",
-    curriculum: "ng-ube",
-    theme: "dinosaurs",
-    honeyBalance: 15,
-    streakDays: 4,
-  },
-  {
     id: "profile-ayodeji",
     name: "Ayodeji",
     role: "learner",
@@ -74,15 +65,15 @@ export const DEFAULT_PROFILES: UserProfile[] = [
 ];
 
 const DEFAULT_STATE: MoyeAppState = {
-  currentProfileId: "profile-anjola",
-  activeProfileName: "Anjola",
+  currentProfileId: "profile-ayodeji",
+  activeProfileName: "Ayodeji",
   userRole: "learner",
   userEmail: "",
   selectedCurriculum: "ng-ube",
-  selectedTheme: "dinosaurs",
+  selectedTheme: "football",
   profiles: DEFAULT_PROFILES,
-  honeyBalance: 15,
-  streakDays: 4,
+  honeyBalance: 24,
+  streakDays: 6,
   unlockedLevels: ["s1", "r1"],
   completedLevels: [],
   currentLevelId: "s1",
@@ -115,31 +106,37 @@ export function getMoyeState(): MoyeAppState {
     if (raw === cachedRaw) return cachedState;
 
     const parsed = JSON.parse(raw);
-    const updatedProfiles = (parsed.profiles || DEFAULT_PROFILES).map((p: UserProfile) => {
+    const updatedProfiles = (parsed.profiles || DEFAULT_PROFILES)
+      .map((p: UserProfile) => {
       if (p.name?.toLowerCase() === "ada") return { ...p, id: "profile-anjola", name: "Anjola" };
       if (p.name?.toLowerCase() === "chidi") return { ...p, id: "profile-ayodeji", name: "Ayodeji" };
       return p;
-    });
+    })
+    // the retired seeded profile, including a legacy "Ada" that was renamed to it
+    .filter((p: UserProfile) => p.id !== "profile-anjola");
     const activeProfileName =
       parsed.activeProfileName === "Ada"
         ? "Anjola"
         : parsed.activeProfileName === "Chidi"
         ? "Ayodeji"
-        : parsed.activeProfileName || "Anjola";
+        : parsed.activeProfileName || "Ayodeji";
     const currentProfileId =
       parsed.currentProfileId === "profile-ada"
         ? "profile-anjola"
         : parsed.currentProfileId === "profile-chidi"
         ? "profile-ayodeji"
-        : parsed.currentProfileId || "profile-anjola";
+        : parsed.currentProfileId || "profile-ayodeji";
+
+    const activeStillExists = updatedProfiles.some((p: UserProfile) => p.id === currentProfileId);
+    const fallback = updatedProfiles[0];
 
     cachedRaw = raw;
     cachedState = {
       ...DEFAULT_STATE,
       ...parsed,
       profiles: updatedProfiles,
-      activeProfileName,
-      currentProfileId,
+      activeProfileName: activeStillExists || !fallback ? activeProfileName : fallback.name,
+      currentProfileId: activeStillExists || !fallback ? currentProfileId : fallback.id,
     };
     return cachedState;
   } catch {

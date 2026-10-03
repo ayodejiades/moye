@@ -83,7 +83,7 @@ export default function GrownupsReportPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--plum-900)]">
       {/* Top Header */}
-      <header className="w-full max-w-5xl mx-auto px-6 py-4 flex items-center justify-between border-b border-[var(--border)]">
+      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)]">
         <div className="flex items-center gap-2.5">
           <Link
             href="/learn"
@@ -179,7 +179,7 @@ export default function GrownupsReportPage() {
         </section>
 
         {/* Child Selector Tabs */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-2">
+        <div className="flex flex-wrap items-center gap-3 pb-2">
           {SAMPLE_CHILDREN.map((c, idx) => (
             <button
               key={c.name}

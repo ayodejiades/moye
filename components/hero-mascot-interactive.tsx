@@ -6,19 +6,11 @@ import { useAccessibility } from "@/lib/accessibility-context";
 import { SpeakerIcon } from "@/components/ui/svg-icons";
 import { retainUtterance } from "@/lib/multilingual-voice";
 
+// One string per greeting: the words on the card are exactly the words Moyin speaks.
 const GREETINGS = [
-  {
-    speech: "Hi there! I'm Moyin the honey badger. Let's do five calm minutes together today.",
-    bubble: "Hi! I'm Moyin. Let's do five calm minutes.",
-  },
-  {
-    speech: "Welcome to Moye. Take all the time you need. There are no timers here.",
-    bubble: "Take your time. There are no timers here.",
-  },
-  {
-    speech: "Learning at your own pace is wonderful. Ready to earn some honey?",
-    bubble: "Ready to earn some honey?",
-  },
+  "Hi there! I'm Moyin the honey badger. Let's do five calm minutes together today.",
+  "Welcome to Moye. Take all the time you need. There are no timers here.",
+  "Learning at your own pace is wonderful. Ready to earn some honey?",
 ];
 
 export function HeroMascotInteractive() {
@@ -55,7 +47,7 @@ export function HeroMascotInteractive() {
   const greet = () => {
     const item = GREETINGS[index % GREETINGS.length];
     setIndex((i) => i + 1);
-    setBubble(item.bubble);
+    setBubble(item);
     setPose("cheer");
     timers.current.forEach((t) => window.clearTimeout(t));
     timers.current = [];
@@ -68,7 +60,7 @@ export function HeroMascotInteractive() {
     if (soundEnabled && "speechSynthesis" in window) {
       try {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(item.speech);
+        const utterance = new SpeechSynthesisUtterance(item);
         retainUtterance(utterance);
         utterance.rate = speechSpeed;
         utterance.onend = finish;

@@ -124,7 +124,7 @@ export default function HiveCosmeticsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--plum-900)]">
       {/* Header */}
-      <header className="w-full max-w-4xl mx-auto px-6 py-4 flex items-center justify-between border-b border-[var(--border)]">
+      <header className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)]">
         <div className="flex items-center gap-2.5">
           <Link
             href="/learn"

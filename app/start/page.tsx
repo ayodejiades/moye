@@ -58,7 +58,7 @@ export default function StartPage() {
   const [selectedLens, setSelectedLens] = useState("ng-ube");
   const [selectedTheme, setSelectedTheme] = useState("dinosaurs");
 
-  const [selectedProfileId, setSelectedProfileId] = useState("profile-anjola");
+  const [selectedProfileId, setSelectedProfileId] = useState("profile-ayodeji");
   const [loginIdentifier, setLoginIdentifier] = useState("");
   const [loginPasscode, setLoginPasscode] = useState("");
   const [loginRole, setLoginRole] = useState<"learner" | "teacher">("learner");
