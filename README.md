@@ -27,14 +27,25 @@ shames a wrong answer.
 - **One question at a time.** No countdown, no buzzer, no red flashing. Read aloud on every question.
 - **Difficulty that adapts.** After each answer the app updates what the child has understood and
   picks the next question from that. It is arithmetic in `lib/mastery.ts`, not a model call.
+- **Placement that finds the real starting point.** Six skippable questions before the first lesson,
+  scored by the same estimator the lessons use, so a child who is further on starts further on.
+- **A worked example, then it fades.** One solved example per skill, read aloud, then the steps are
+  taken away as the child gets it.
+- **Maths and reading.** 90 questions across 14 skills and 8 levels, including a full phonics and
+  reading path: letter sounds, blending, sight words, rhyme, syllables and reading a sentence.
+- **Review that comes back gently.** A skill that slipped, or has been quiet for a week, is offered
+  once more. No streak pressure and no red.
+- **Focus and feelings.** Breathe with Moyin, name a feeling, or split the work into small chunks.
+  None of it is graded.
 - **Honey rewards with a daily cap.** Children earn honey only for finished focus work and spend it
   on Moyin's hive. A daily cap tells them when they are done for today.
 - **Calm Motion, dyslexia spacing, tinted backgrounds, voice speed.** One Comfort settings button on
   every screen, and the settings follow the child from page to page.
+- **Words on screen in English, Nigerian Pidgin or Yoruba**, chosen separately from the voice.
 - **Works offline.** Save Moye to the home screen. After the first visit the lessons open with the
   network switched off, and there is not a single request to a third party.
-- **Plain reports for grownups.** Where the child was confident, what needs gentle support, and how
-  that maps to the classroom curriculum.
+- **Plain reports for grownups.** A class list, who needs a hand today, a copyable weekly summary and
+  a printable page. All of it measured from real attempt times, never estimated.
 
 ## Try it
 
@@ -93,6 +104,8 @@ the working, in the product's own words rather than as a wall of maths.
 | `pnpm build` | production build |
 | `pnpm test` | unit tests for the decision logic (10) |
 | `pnpm test:landing` | landing page standards: motion, contrast, honesty, semantics (39) |
+| `pnpm test:features` | the learning logic: placement, review, scaffolding, energy, focus, classroom, content (103) |
+| `pnpm content:sync` | regenerate `content/` from the typed banks, then `pnpm content:build` |
 | `pnpm test:demo-path` | walks `docs/demo-path.json` online **and** with the network off |
 | `pnpm test:keyboard` | completes a lesson with no mouse at all |
 | `pnpm test:landing:e2e` | runs the browser probe at 1280, 768 and 375, with and without reduced motion |
@@ -107,6 +120,17 @@ BASE_URL=http://localhost:3111 pnpm test:demo-path
 BASE_URL=http://localhost:3111 pnpm test:keyboard
 ```
 
+## Where the content lives
+
+`content/` is the source of truth that ships: the curriculum lenses, the locales, the story themes and
+every level with its questions, all as JSON validated against the zod schemas in
+`lib/content-schema.ts`. `pnpm content:build` generates `lib/content.generated.ts` from it, and
+`pnpm test:features` proves the two never drift apart and that every question renders with no
+unfilled placeholder in every theme and locale.
+
+That is also where the counts on the landing page come from, so a number on screen always matches
+what is actually in the repository.
+
 ## Accessibility
 
 Built in from the first screen, not bolted on afterwards.
@@ -118,6 +142,8 @@ Built in from the first screen, not bolted on afterwards.
 - Calm Motion and the operating system's reduced motion setting both stop every animation, pause
   the ambient loops, and force all revealed content visible.
 - Every colour pair on the landing page is checked against WCAG AA by `pnpm test:landing`.
+- A browser probe runs at 1280, 768 and 375 px, with and without reduced motion, and fails on a
+  stuck reveal, a running animation, a console error or a tap target under 44 px.
 - A whole lesson can be finished with the keyboard: `1` to `4` choose an answer, `Enter` moves on,
   `R` reads the question aloud, `P` pauses. The list is in Comfort settings.
 
