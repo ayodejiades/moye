@@ -16,6 +16,7 @@ import { InteractiveAppShowcase } from "@/components/interactive-showcase";
 import { ComfortButton } from "@/components/comfort-button";
 import { Reveal } from "@/components/reveal";
 import { InViewFloat } from "@/components/inview-float";
+import { DecisionPreview } from "@/components/decision-preview";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -394,6 +395,11 @@ export default function LandingPage() {
 
         <Reveal>
           <InteractiveAppShowcase />
+        </Reveal>
+
+        {/* One real result from the model, recomputed on the page (features.md C4) */}
+        <Reveal>
+          <DecisionPreview />
         </Reveal>
 
         {/* Bottom Call to Action */}
