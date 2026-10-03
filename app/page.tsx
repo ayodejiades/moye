@@ -15,6 +15,7 @@ import { HeroMascotInteractive } from "@/components/hero-mascot-interactive";
 import { InteractiveAppShowcase } from "@/components/interactive-showcase";
 import { ComfortButton } from "@/components/comfort-button";
 import { Reveal } from "@/components/reveal";
+import { InViewFloat } from "@/components/inview-float";
 
 /** Stagger index for the hero entrance. Read by .hero-enter in app/globals.css. */
 const step = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -87,7 +88,7 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col bg-[var(--paper)] text-[var(--plum-900)]">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 btn-3d btn-3d-plum text-base"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 inline-flex items-center justify-center min-h-11 min-w-11 focus:px-4 bg-[var(--plum-900)] text-white font-semibold text-base"
       >
         Skip to content
       </a>
@@ -264,11 +265,7 @@ export default function LandingPage() {
                     <h3 className="text-lg font-bold text-[var(--plum-900)]">Rules you can read</h3>
                   </div>
                   <p className="text-sm text-[var(--fg-muted)] font-medium mt-3 leading-relaxed">
-                    Difficulty, honey and streaks come from plain code, not a chatbot. See{" "}
-                    <Link href="/proof" className="font-bold underline text-[var(--plum-700)]">
-                      How Moye Decides
-                    </Link>
-                    .
+                    Difficulty, honey and streaks come from plain code, not a chatbot. See How Moye Decides.
                   </p>
                 </article>
               </Reveal>
@@ -401,9 +398,9 @@ export default function LandingPage() {
         {/* Bottom Call to Action */}
         <section className="max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center gap-6">
           <Reveal>
-            <div className="duo-mascot-float">
+            <InViewFloat>
               <MoyinMascot pose="idle" size={130} />
-            </div>
+            </InViewFloat>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[var(--plum-900)] mt-6">
               Start learning with Moye today.
             </h2>

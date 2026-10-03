@@ -55,7 +55,7 @@ export function PhoneStatusBar({ dyslexicFont, onToggleDyslexic }: { dyslexicFon
           type="button"
           onClick={onToggleDyslexic}
           aria-pressed={dyslexicFont}
-          className={`text-xs font-semibold px-2 rounded-md border transition-colors ${
+          className={`text-xs font-semibold px-2 min-h-11 rounded-md border transition-colors ${
             dyslexicFont
               ? "bg-[var(--plum-700)] text-white border-[var(--plum-700)]"
               : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"

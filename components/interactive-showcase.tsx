@@ -206,7 +206,7 @@ export function InteractiveAppShowcase() {
                     <button
                       type="button"
                       onClick={() => setIsSpeaking(true)}
-                      className={`px-2 py-1 rounded-md border flex items-center gap-1 text-xs font-semibold transition-colors ${
+                      className={`px-2 py-1 min-h-11 rounded-md border flex items-center gap-1 text-xs font-semibold transition-colors ${
                         isSpeaking
                           ? "bg-[var(--teal-700)] text-white border-[var(--teal-700)]"
                           : "bg-[var(--plum-100)] text-[var(--plum-900)] border-[var(--border)]"
