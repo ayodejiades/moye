@@ -2,7 +2,6 @@
 
 import { ComfortButton } from "@/components/comfort-button";
 import { PlacementQuiz, PlacementSummary } from "@/components/placement-quiz";
-import { useUiLanguage } from "@/lib/ui-language-context";
 import { CONTENT_LENSES, CONTENT_LOCALES, LOCALE_BY_LENS } from "@/lib/content.generated";
 import { LEVEL_SEQUENCE } from "@/lib/moye-store";
 import { levelsToUnlock, type PlacementResult } from "@/lib/placement";
@@ -64,7 +63,6 @@ export default function StartPage() {
   const [loginPasscode, setLoginPasscode] = useState("");
   const [loginRole, setLoginRole] = useState<"learner" | "teacher">("learner");
   const [placement, setPlacement] = useState<PlacementResult | null>(null);
-  const { strings } = useUiLanguage();
 
   /** Skipping placement is a first class choice, not a failure: start at level one. */
   const handleStartLearning = (startingLevelId = "s1") => {
@@ -155,7 +153,7 @@ export default function StartPage() {
               <div className="space-y-6">
                 <div>
                   <label htmlFor="child-name" className="block text-sm font-bold mb-2">
-                    {strings.nameQuestion}
+                    What is your name?
                   </label>
                   <input
                     id="child-name"
@@ -170,7 +168,7 @@ export default function StartPage() {
 
                 <div data-demo="country">
                   <label className="block text-sm font-bold mb-2">
-                    {strings.schoolQuestion}
+                    Where do you learn?
                   </label>
                   <div className="space-y-2">
                     {CURRICULA.map((cur) => (
@@ -231,7 +229,7 @@ export default function StartPage() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-bold mb-2">
-                    {strings.themeQuestion}
+                    Pick your favourite story theme:
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {THEMES.map((th) => (

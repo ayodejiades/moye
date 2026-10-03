@@ -370,6 +370,11 @@ test("[P0] X3 `button { color: inherit }` lives in @layer base so text-white on 
   expectNone(unlayered.map((b) => `globals.css  ${b.prelude}`), "An unlayered `button { color: inherit }` beats every Tailwind utility and puts dark text on plum and teal buttons (1.9:1). Wrap it in `@layer base { ... }`.");
 });
 
+test("[P0] X4 the Extra Large Text switch has real CSS behind it (.large-text-mode)", () => {
+  const hit = rules().filter((r) => r.prelude.includes(".large-text-mode") && /font-size/.test(r.body));
+  assert.ok(hit.length > 0, "lib/accessibility-context.tsx adds `large-text-mode` to <html> but app/globals.css has no font-size rule for it, so the switch does nothing.");
+});
+
 // =====================================================================
 // ACCESSIBILITY / SEMANTICS
 // =====================================================================

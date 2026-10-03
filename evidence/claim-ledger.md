@@ -6,7 +6,7 @@ If a threshold in `lib/` changes, this file fails to regenerate.
 
 - Result: **PASS**
 - Checks run: **40**, passed: **40**
-- Verified at: 2026-10-03T18:34:30.751Z
+- Verified at: 2026-10-03T18:39:06.949Z
 - Ledger digest: `6d9074c8dadee2be`
 
 ## What this does not verify

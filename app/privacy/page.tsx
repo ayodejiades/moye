@@ -54,11 +54,7 @@ export default function PrivacyPage() {
               {
                 what: "Comfort settings",
                 detail:
-                  "Dyslexia spacing, text size, reading tint, Calm Motion, sound and voice speed. Stored as moye_a11y_settings.11y_settings.",
-              },
-              {
-                what: "Your chosen language",
-                detail: "English, Nigerian Pidgin or Yoruba for the words on screen. Stored as moye_ui_language.",
+                  "Dyslexia spacing, text size, reading tint, Calm Motion, sound and voice speed. Stored as moye_a11y_settings.",
               },
               {
                 what: "Your last energy check in",

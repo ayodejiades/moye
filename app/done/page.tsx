@@ -7,11 +7,9 @@ import { useMoyeStore } from "@/lib/moye-store";
 import { MoyinMascot } from "@/components/moyin-mascot";
 import { HoneyJarIcon, SparkIcon, CheckIcon } from "@/components/ui/svg-icons";
 import { ComfortButton } from "@/components/comfort-button";
-import { useUiLanguage } from "@/lib/ui-language-context";
 
 function DoneContent() {
   const { state } = useMoyeStore();
-  const { strings } = useUiLanguage();
   const searchParams = useSearchParams();
   const levelParam = searchParams.get("level") || "s1";
 
@@ -44,7 +42,7 @@ function DoneContent() {
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-[var(--plum-900)]">
-            {strings.doneForToday}
+            Done for today. Rest anytime.
           </h1>
           <p className="text-base text-[var(--fg-muted)] leading-relaxed">
             All 15 questions mastered. Next level unlocked automatically! Moyin is proud of you.

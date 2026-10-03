@@ -221,6 +221,15 @@ p, li { text-wrap: pretty; }
   }
 }
 
+/* Extra Large Text switch (accessibility sheet): lib/accessibility-context.tsx adds
+   .large-text-mode to <html>. rem based sizes scale with the root, the body size is a px token. */
+html.large-text-mode {
+  font-size: 125%;
+}
+html.large-text-mode body {
+  font-size: calc(var(--font-body-size) * 1.25);
+}
+
 /* 3D Chunky Buttons (SPEC.md §4) — explicit label colour beats the
    `button { color: inherit }` reset above, even when a text-* utility
    only sets a parent colour. Direct text node inherits from the button.

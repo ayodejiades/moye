@@ -303,9 +303,9 @@ export function AccessibilitySheet() {
                     speakMultilingualText(current.sampleGreeting, current.id, speechSpeed);
                   }
                 }}
-                className="text-xs font-semibold text-[var(--plum-700)] hover:underline"
+                className="text-xs font-semibold text-[var(--plum-700)] hover:underline inline-flex items-center gap-1"
               >
-                Listen Sample
+                Listen
               </button>
             </div>
           </div>

@@ -101,7 +101,7 @@ test("[D4] every storage key named on the privacy page is a real one", () => {
   // <key>." rather than a narrower pattern avoids missing a key whose name simply has a
   // different shape from the ones being guessed at.
   const claimed = [...page.matchAll(/Stored as (moye_[a-z0-9_]+)\./g)].map((m) => m[1]);
-  assert.ok(claimed.length >= 4, `expected at least four named keys, found ${claimed.length}`);
+  assert.ok(claimed.length >= 3, `expected at least three named keys, found ${claimed.length}`);
 
   const source = execSync(
     "grep -rhoE '\"moye_[a-z_0-9]+\"' app components lib | sort -u",

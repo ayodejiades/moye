@@ -349,9 +349,6 @@ evidence/          committed cases and the generated claim ledger
 and the boundaries are stated plainly: no timers, no runtime model calls, no monetisation, no guilt
 framing and no cloud account.
 
-The Nigerian Pidgin and Yoruba interface strings are written and shipped, but they have not been
-reviewed by a native speaker, so treat them as a first pass rather than a finished translation.
-
 ## FAQ
 
 **Does Moye use AI to decide anything?**
