@@ -1,6 +1,7 @@
 "use client";
 
 import { ComfortButton } from "@/components/comfort-button";
+import { HiveShareImage } from "@/components/hive-share-image";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -275,6 +276,15 @@ export default function HiveCosmeticsPage() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Save the hive as a picture: drawn on this device, never uploaded (features.md B7) */}
+          <div className="w-full max-w-2xl bg-white rounded-2xl border-2 border-[var(--border)] p-4 flex flex-col gap-2">
+            <h2 className="text-base font-bold text-[var(--plum-900)]">Keep a picture</h2>
+            <p className="text-sm text-[var(--fg-muted)]">
+              A picture of Moyin with the outfit they are wearing. Saved to this device only.
+            </p>
+            <HiveShareImage />
           </div>
         </div>
       </main>
